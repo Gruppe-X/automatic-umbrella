@@ -21,6 +21,7 @@ public class GUI extends Application
     private TextField searchBooks;
     private ObservableList<String> books;
     private TableView<String> boooks;
+    private TableView tableViewAnsatt;
     
     public static void main(String[] args)
     {
@@ -134,8 +135,12 @@ public class GUI extends Application
     {
         Tab ansattTab = new Tab("Ansatt");
         BorderPane ansattBorderPane = new BorderPane();
+        HBox ansattHBox = createAnsattHBox();
+        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
         
         ansattTab.setContent(ansattBorderPane);
+        ansattBorderPane.setTop(ansattHBox);
+        ansattBorderPane.setBottom(utlanBorderPaneBottom);
         
         ansattTab.setClosable(false);
         
@@ -163,11 +168,29 @@ public class GUI extends Application
      * 
      * @return 
      */
+    private HBox createAnsattHBox()
+    {
+        HBox ansattHBox = new HBox();
+        tableViewAnsatt = new TableView();
+        
+        TableColumn fornavnCol = new TableColumn("Fornavn");
+        TableColumn etternavnCol = new TableColumn("Etternavn");
+        TableColumn telefonCol = new TableColumn("Telefon");
+        tableViewAnsatt.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        
+        ansattHBox.getChildren().add(tableViewAnsatt);
+        
+        return ansattHBox;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
     private HBox createUtlanHBoxTop()
     {
         HBox utlanHBoxTop = new HBox();
         searchBooks = new TextField();
-        
         
         searchBooks.setPromptText("Søk etter ISBN, Tittel, Forfatter...");
         
