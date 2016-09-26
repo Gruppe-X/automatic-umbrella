@@ -21,6 +21,9 @@ public class GUI extends Application
     private TextField searchBooks;
     private ObservableList<String> books;
     private TableView<String> boooks;
+    private TableView tableViewKopi;
+    private TableView tableViewBeholdning;
+    private TableView tableViewKunde;
     private TableView tableViewAnsatt;
     
     public static void main(String[] args)
@@ -87,8 +90,12 @@ public class GUI extends Application
     {
         Tab kopiTab = new Tab("Kopi");
         BorderPane kopiBorderPane = new BorderPane();
+        HBox kopiHBox = createKopiHBox();
+        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
         
         kopiTab.setContent(kopiBorderPane);
+        kopiBorderPane.setTop(kopiHBox);
+        kopiBorderPane.setBottom(utlanBorderPaneBottom);
         
         kopiTab.setClosable(false);
         
@@ -103,8 +110,12 @@ public class GUI extends Application
     {
         Tab beholdningTab = new Tab("Beholdning");
         BorderPane beholdningBorderPane = new BorderPane();
+        HBox beholdningHBox = createBeholdningHBox();
+        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
         
         beholdningTab.setContent(beholdningBorderPane);
+        beholdningBorderPane.setTop(beholdningHBox);
+        beholdningBorderPane.setBottom(utlanBorderPaneBottom);
         
         beholdningTab.setClosable(false);
         
@@ -119,8 +130,12 @@ public class GUI extends Application
     {
         Tab kundeTab = new Tab("Kunde");
         BorderPane kundeBorderPane = new BorderPane();
+        HBox kundeHBox = createKundeHBox();
+        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
         
         kundeTab.setContent(kundeBorderPane);
+        kundeBorderPane.setTop(kundeHBox);
+        kundeBorderPane.setBottom(utlanBorderPaneBottom);
         
         kundeTab.setClosable(false);
         
@@ -168,25 +183,6 @@ public class GUI extends Application
      * 
      * @return 
      */
-    private HBox createAnsattHBox()
-    {
-        HBox ansattHBox = new HBox();
-        tableViewAnsatt = new TableView();
-        
-        TableColumn fornavnCol = new TableColumn("Fornavn");
-        TableColumn etternavnCol = new TableColumn("Etternavn");
-        TableColumn telefonCol = new TableColumn("Telefon");
-        tableViewAnsatt.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-        
-        ansattHBox.getChildren().add(tableViewAnsatt);
-        
-        return ansattHBox;
-    }
-    
-    /**
-     * 
-     * @return 
-     */
     private HBox createUtlanHBoxTop()
     {
         HBox utlanHBoxTop = new HBox();
@@ -199,6 +195,84 @@ public class GUI extends Application
         
         return utlanHBoxTop;
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    private HBox createKopiHBox()
+    {
+        HBox kopiHBox = new HBox();
+        tableViewKopi = new TableView();
+        
+        TableColumn fornavnCol = new TableColumn("N/A");
+        TableColumn etternavnCol = new TableColumn("N/A");
+        TableColumn telefonCol = new TableColumn("N/A");
+        tableViewKopi.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        
+        kopiHBox.getChildren().add(tableViewKopi);
+        
+        return kopiHBox;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    private HBox createBeholdningHBox()
+    {
+        HBox beholdningHBox = new HBox();
+        tableViewBeholdning = new TableView();
+        
+        TableColumn fornavnCol = new TableColumn("N/A");
+        TableColumn etternavnCol = new TableColumn("N/A");
+        TableColumn telefonCol = new TableColumn("N/A");
+        tableViewBeholdning.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        
+        beholdningHBox.getChildren().add(tableViewBeholdning);
+        
+        return beholdningHBox;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    private HBox createKundeHBox()
+    {
+        HBox kundeHBox = new HBox();
+        tableViewKunde = new TableView();
+        
+        TableColumn fornavnCol = new TableColumn("Fornavn");
+        TableColumn etternavnCol = new TableColumn("Etternavn");
+        TableColumn telefonCol = new TableColumn("Telefon");
+        tableViewKunde.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        
+        kundeHBox.getChildren().add(tableViewKunde);
+        
+        return kundeHBox;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    private HBox createAnsattHBox()
+    {
+        HBox ansattHBox = new HBox();
+        tableViewAnsatt = new TableView();
+        
+        TableColumn fornavnCol = new TableColumn("AnsattID");
+        TableColumn etternavnCol = new TableColumn("Fornavn");
+        TableColumn telefonCol = new TableColumn("Etternavn");
+        tableViewAnsatt.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        
+        ansattHBox.getChildren().add(tableViewAnsatt);
+        
+        return ansattHBox;
+    }
+    
+    
 
     /**
      * 
