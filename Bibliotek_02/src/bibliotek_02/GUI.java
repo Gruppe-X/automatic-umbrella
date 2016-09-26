@@ -50,6 +50,7 @@ public class GUI extends Application
         mainBorderPane.setCenter(tabPane);
         
         Scene scene = new Scene(mainBorderPane, 1280, 720);
+        scene.getStylesheets().add("stylesheet.css");
         primaryStage.setTitle("Bibliotek X");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -71,14 +72,10 @@ public class GUI extends Application
         BorderPane utlanBorderPane = new BorderPane();
         HBox utlanHBoxTop = createUtlanHBoxTop();
         BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
-        VBox utlanVBoxBottomLeft = createUtlanVBoxBottomLeft();
-        VBox utlanVBoxBottomRight = createUtlanVBoxBottomRight();
         
         utlanTab.setContent(utlanBorderPane);
         utlanBorderPane.setTop(utlanHBoxTop);
         utlanBorderPane.setBottom(utlanBorderPaneBottom);
-        utlanBorderPaneBottom.setLeft(utlanVBoxBottomLeft);
-        utlanBorderPaneBottom.setRight(utlanVBoxBottomRight);
         
         utlanTab.setClosable(false);
         
@@ -168,30 +165,27 @@ public class GUI extends Application
      */
     private HBox createUtlanHBoxTop()
     {
-        HBox inventoryBorderPane = new HBox();
+        HBox utlanHBoxTop = new HBox();
         searchBooks = new TextField();
         
         
         searchBooks.setPromptText("Søk etter ISBN, Tittel, Forfatter...");
         
-        //inventoryBorderPane.setTop(searchBooks);
+        utlanHBoxTop.getChildren().add(searchBooks);
         
-        return inventoryBorderPane;
+        return utlanHBoxTop;
     }
 
     private BorderPane createUtlanBorderPaneBottom()
     {
-        return new BorderPane();
-    }
-
-    private VBox createUtlanVBoxBottomLeft()
-    {
-        return new VBox();
-    }
-
-    private VBox createUtlanVBoxBottomRight()
-    {
-        return new VBox();
+        BorderPane utlanBorderPaneBottom = new BorderPane();
+        VBox utlanVBoxBottomLeft = new VBox();
+        VBox utlanVBoxBottomRight = new VBox();
+        
+        utlanBorderPaneBottom.setLeft(utlanVBoxBottomLeft);
+        utlanBorderPaneBottom.setRight(utlanVBoxBottomRight);
+        
+        return utlanBorderPaneBottom;
     }
     
     /**
@@ -210,20 +204,18 @@ public class GUI extends Application
         alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
         
         //Deactivate Defaultbehavior for yes-Button:
-        Button yesButton = (Button) alert.getDialogPane().lookupButton( ButtonType.YES );
-        yesButton.setDefaultButton( true );
+        Button yesButton = (Button) alert.getDialogPane().lookupButton(ButtonType.YES);
+        yesButton.setDefaultButton(true);
 
         //Activate Defaultbehavior for no-Button:
-        Button noButton = (Button) alert.getDialogPane().lookupButton( ButtonType.NO );
-        noButton.setDefaultButton( false );
+        Button noButton = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
+        noButton.setDefaultButton(false);
         
         Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.get() == ButtonType.YES)
-        {
+        if (result.get() == ButtonType.YES) {
             System.exit(0);
-        } else
-        {
+        } else {
             // ... user chose CANCEL or closed the dialog
             // then do nothing.
         }
