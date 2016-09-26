@@ -22,7 +22,6 @@ public class DatabaseHandler {
     /**
      * Connects the database handler to the sql server.
      * @return boolean true if connection were successfull, otherwise false.
-     * @throws SQLException if a database access error occur or the url is null.
      */
     private boolean connect() {
         boolean success;
@@ -36,8 +35,8 @@ public class DatabaseHandler {
         }
         return success;
     }
-    
-    public ResultSet query(String statement) throws SQLException {
+    /**
+    public ResultSet executeQuery(String statement) {
         ResultSet results = null;
         try {
             PreparedStatement prepStatement = connection.prepareStatement(statement);
@@ -49,9 +48,60 @@ public class DatabaseHandler {
         return results;
     }
     
-    public PreparedStatement getStatement(String statement) throws SQLException {
-        PreparedStatement prepStatement = connection.prepareStatement(statement);
-        return prepStatement;
+    public ResultSet executeQuery(PreparedStatement statement){
+        ResultSet results = null;
+        try {
+            results = statement.executeQuery();
+        } catch (SQLException SQLEx) {
+            System.out.println(SQLEx.getMessage());
+            SQLEx.printStackTrace();
+        }
+        return results;
+    }
+    **/
+    
+    /**
+     * Search a given table and column for a given String value.
+     * @param table Table to search
+     * @param col Column to search
+     * @param parameter Value to search for.
+     * @return Returns a ResultSet with the results.
+     */
+    public ResultSet searchTableByColumnValString(String table, String col, String parameter){
+        ResultSet results = null;
+        try{
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
+            statement.setString(1, table);
+            statement.setString(2, col);
+            statement.setString(3, parameter);
+            results = statement.executeQuery();
+        } catch (SQLException SQLEx) {
+            System.out.println(SQLEx.getMessage());
+            SQLEx.printStackTrace();
+        }
+        return results;
+    }
+    
+    /**
+     * Search a given table and column for a given Int value.
+     * @param table Table to search
+     * @param col Column to search
+     * @param parameter Value to search for.
+     * @return Returns a ResultSet with the results.
+     */
+    public ResultSet searchTableByColumnValInt(String table, String col, int parameter){
+        ResultSet results = null;
+        try{
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
+            statement.setString(1, table);
+            statement.setString(2, col);
+            statement.setInt(3, parameter);
+            results = statement.executeQuery();
+        } catch (SQLException SQLEx) {
+            System.out.println(SQLEx.getMessage());
+            SQLEx.printStackTrace();
+        }
+        return results;
     }
     
     public ResultSet getResultSet(String preparedStatement){
@@ -61,6 +111,7 @@ public class DatabaseHandler {
             results = statement.executeQuery();
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
+            SQLEx.printStackTrace();
         }
         return results;
     }
@@ -69,9 +120,21 @@ public class DatabaseHandler {
         return getResultSet("SELECT * FROM Ansatt");
     }
     
+    public ResultSet getEmployeesByID(int id){
+        return searchTableByColumnValInt("Ansatt", "AnsattID", id);
+    }
+    
+    public ResultSet getEmployeesByFirstName(String firstName){
+        return searchTableByColumnValString("Ansatt", "Fornavn", firstName);
+    }
+    
+    public ResultSet getEmployeesByLastName(String lastName){
+        return searchTableByColumnValString("Ansatt", "Etternavn", lastName);
+    }
+    
     public ResultSet getBorrowers(){
         return getResultSet("SELECT * FROM Lånetaker");
-    }
+    } 
     
     public ResultSet getBooks(){
         return getResultSet("SELECT * FROM Bok");
