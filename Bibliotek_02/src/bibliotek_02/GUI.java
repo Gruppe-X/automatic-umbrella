@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bibliotek_02;
 
 import java.util.Optional;
@@ -83,6 +78,10 @@ public class GUI extends Application
         return utlanTab;
     }
 
+    /**
+     * 
+     * @return 
+     */
     private Tab createKopiTab()
     {
         Tab kopiTab = new Tab("Kopi");
@@ -178,6 +177,10 @@ public class GUI extends Application
         return utlanHBoxTop;
     }
 
+    /**
+     * 
+     * @return 
+     */
     private BorderPane createUtlanBorderPaneBottom()
     {
         BorderPane utlanBorderPaneBottom = new BorderPane();
