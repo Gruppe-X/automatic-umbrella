@@ -47,9 +47,19 @@ public class DatabaseConnection {
         return results;
     }
     
+    public PreparedStatement getStatement(String statement) throws SQLException {
+        PreparedStatement prepStatement = connection.prepareStatement(statement);
+        return prepStatement;
+    }
     
-    
-    
-    
+    public boolean isConnectionValid(){
+        boolean result;
+        try{
+            result = connection.isValid(0);
+        } catch (SQLException SQLEx) {
+            result = false;
+        }
+        return result;
+    }
     
 }
