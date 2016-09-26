@@ -49,7 +49,7 @@ public class GUI extends Application
         
         mainBorderPane.setCenter(tabPane);
         
-        Scene scene = new Scene(mainBorderPane, 1280, 720);
+        Scene scene = new Scene(mainBorderPane, 800, 450);
         scene.getStylesheets().add("stylesheet.css");
         primaryStage.setTitle("Bibliotek X");
         primaryStage.setScene(scene);
@@ -210,6 +210,8 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("N/A");
         tableViewKopi.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         
+        tableViewKopi.setMinSize(450, 175);
+        tableViewKopi.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         kopiHBox.getChildren().add(tableViewKopi);
         
         return kopiHBox;
@@ -229,6 +231,8 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("N/A");
         tableViewBeholdning.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         
+        tableViewBeholdning.setMinSize(450, 175);
+        tableViewBeholdning.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         beholdningHBox.getChildren().add(tableViewBeholdning);
         
         return beholdningHBox;
@@ -248,6 +252,8 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Telefon");
         tableViewKunde.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         
+        tableViewKunde.setMinSize(450, 175);
+        tableViewKunde.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         kundeHBox.getChildren().add(tableViewKunde);
         
         return kundeHBox;
@@ -262,11 +268,13 @@ public class GUI extends Application
         HBox ansattHBox = new HBox();
         tableViewAnsatt = new TableView();
         
-        TableColumn fornavnCol = new TableColumn("AnsattID");
-        TableColumn etternavnCol = new TableColumn("Fornavn");
-        TableColumn telefonCol = new TableColumn("Etternavn");
-        tableViewAnsatt.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        TableColumn ansattIDCol = new TableColumn("AnsattID");
+        TableColumn fornavnCol = new TableColumn("Fornavn");
+        TableColumn etternavnCol = new TableColumn("Etternavn");
+        tableViewAnsatt.getColumns().addAll(ansattIDCol, fornavnCol, etternavnCol);
         
+        tableViewAnsatt.setMinSize(450, 175);
+        tableViewAnsatt.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         ansattHBox.getChildren().add(tableViewAnsatt);
         
         return ansattHBox;
