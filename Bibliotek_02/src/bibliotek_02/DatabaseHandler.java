@@ -13,7 +13,6 @@ import java.sql.SQLException;
 public class DatabaseHandler {
     
     private final String connString = "jdbc:sqlserver://roberris-prosjektx.uials.no;databaseName=Bibliotek;username=sa;password=password123";
-    private DatabaseConnection conn;
     private Connection connection;
     
     public DatabaseHandler() {
@@ -39,9 +38,14 @@ public class DatabaseHandler {
     }
     
     public ResultSet query(String statement) throws SQLException {
-        ResultSet results;
-        PreparedStatement prepStatement = connection.prepareStatement(statement);
-        results = prepStatement.executeQuery();
+        ResultSet results = null;
+        try {
+            PreparedStatement prepStatement = connection.prepareStatement(statement);
+            results = prepStatement.executeQuery();
+        } catch (SQLException SQLEx) {
+            System.out.println(SQLEx.getMessage());
+            SQLEx.printStackTrace();
+        }
         return results;
     }
     
@@ -50,20 +54,31 @@ public class DatabaseHandler {
         return prepStatement;
     }
     
-    public ResultSet getAnsatte(){
+    public ResultSet getResultSet(String preparedStatement){
         ResultSet results = null;
         try{
-            PreparedStatement statement = conn.getStatement("SELECT * FROM Ansatt");
+            PreparedStatement statement = connection.prepareStatement(preparedStatement);
             results = statement.executeQuery();
-            int i = 0;
-            while(results.next()){
-                System.out.println(results.getString(2));
-                i++;
-            }
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
         }
         return results;
+    }
+    
+    public ResultSet getEmployees(){
+        return getResultSet("SELECT * FROM Ansatt");
+    }
+    
+    public ResultSet getBorrowers(){
+        return getResultSet("SELECT * FROM Lånetaker");
+    }
+    
+    public ResultSet getBooks(){
+        return getResultSet("SELECT * FROM Bok");
+    }
+    
+    public ResultSet getCopys(){
+        return getResultSet("SELECT * FROM Eksemplar");
     }
     
     public boolean isConnectionValid(){
