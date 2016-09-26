@@ -25,6 +25,7 @@ public class GUI extends Application
     
     private TextField searchBooks;
     private ObservableList<String> books;
+    private TableView<String> boooks;
     
     public static void main(String[] args)
     {
@@ -172,6 +173,7 @@ public class GUI extends Application
         searchBooks.setPromptText("Søk etter ISBN, Tittel, Forfatter...");
         
         utlanHBoxTop.getChildren().add(searchBooks);
+        // utlanHBoxTop.getChildren().add(books);
         
         return utlanHBoxTop;
     }
