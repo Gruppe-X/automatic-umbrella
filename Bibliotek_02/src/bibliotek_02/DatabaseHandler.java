@@ -104,6 +104,11 @@ public class DatabaseHandler {
         return results;
     }
     
+    /**
+     * Gets the ResultSet object returned after executing a PreparedStatement object. 
+     * @param preparedStatement 
+     * @return 
+     */
     public ResultSet getResultSet(String preparedStatement){
         ResultSet results = null;
         try{
@@ -134,14 +139,50 @@ public class DatabaseHandler {
     
     public ResultSet getBorrowers(){
         return getResultSet("SELECT * FROM Lånetaker");
-    } 
+    }
+    
+    public ResultSet getBorrowersByID(int id){
+        return searchTableByColumnValInt("Lånetaker", "LånetakerID", id);
+    }
+    
+    public ResultSet getBorrowersByFirstName(String firstName){
+        return searchTableByColumnValString("Lånetaker", "Fornavn", firstName);
+    }
+    
+    public ResultSet getBorrowersByLastName(String lastName){
+        return searchTableByColumnValString("Lånetaker", "Etternavn", lastName);
+    }
     
     public ResultSet getBooks(){
         return getResultSet("SELECT * FROM Bok");
     }
     
+    public ResultSet getBooksByID(String ISBN){
+        return searchTableByColumnValString("Bok", "ISBN", ISBN);
+    }
+    
+    public ResultSet getBooksByTitle(String title){
+        return searchTableByColumnValString("Bok", "Tittel", title);
+    }
+    
+    public ResultSet getBooksByPublisher(String publisher){
+        return searchTableByColumnValString("Bok", "Forlag", publisher);
+    }
+    
+    public ResultSet getBooksByAuthor(String publisher){
+        return searchTableByColumnValString("Bok", "Forlag", publisher);
+    }
+    
     public ResultSet getCopys(){
         return getResultSet("SELECT * FROM Eksemplar");
+    }
+    
+    public ResultSet getCopysByID(int id){
+        return searchTableByColumnValInt("Eksemplar", "EksemplarID", id);
+    }
+    
+    public ResultSet getCopysByIDBN(String ISBN){
+        return searchTableByColumnValString("Eksemplar", "ISBN", ISBN);
     }
     
     public boolean isConnectionValid(){
