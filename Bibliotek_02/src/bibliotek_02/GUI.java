@@ -196,7 +196,7 @@ public class GUI extends Application
         searchBooks = new TextField();
         tableViewUtlanTop = new TableView();
         
-        searchBooks.setPromptText("Søk etter ISBN, Tittel, Forfatter...");
+        searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
         
         TableColumn fornavnCol = new TableColumn("N/A");
         TableColumn etternavnCol = new TableColumn("N/A");
