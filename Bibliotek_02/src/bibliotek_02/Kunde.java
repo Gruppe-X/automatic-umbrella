@@ -2,7 +2,7 @@ package bibliotek_02;
 
 /**
  *
- * @author Oscar Wika
+ * @author Oscar Wika   
  */
 public class Kunde {
     

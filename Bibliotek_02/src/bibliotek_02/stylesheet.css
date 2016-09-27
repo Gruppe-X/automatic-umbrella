@@ -3,3 +3,6 @@
     Author     : Thomas Todal, Oscar Wika
 */
 
+.tree-view {
+    -fx-background-color: #232326;
+}

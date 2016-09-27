@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,7 +14,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author ThomasSTodal
+ * @author Thomas Todal, Oscar Wika
  */
 public class GUI extends Application
 {
@@ -21,10 +22,20 @@ public class GUI extends Application
     private TextField searchBooks;
     private ObservableList<String> books;
     private TableView<String> boooks;
+    
     private TableView tableViewKopi;
     private TableView tableViewBeholdning;
     private TableView tableViewKunde;
-    private TableView tableViewAnsatt;
+    private TableView<Ansatt> tableViewAnsatt;
+    
+    final ObservableList<Ansatt> data = FXCollections.observableArrayList
+        (
+            new Ansatt("1", "Smith", "Smith"),
+            new Ansatt("2", "Johnson", "Johnson"),
+            new Ansatt("3", "Williams", "Ethan-Williams"),
+            new Ansatt("4", "Jones", "Emma"),
+            new Ansatt("5", "Brown", "Michael")
+        );
     
     public static void main(String[] args)
     {
@@ -63,8 +74,8 @@ public class GUI extends Application
     }
 
     /**
-     * 
-     * @return 
+     * Creates tbe "Ultån" tab.
+     * @return The "Utlån" tab.
      */
     private Tab createUtlanTab()
     {
@@ -83,8 +94,8 @@ public class GUI extends Application
     }
 
     /**
-     * 
-     * @return 
+     * Creates the "Kopi" tab.
+     * @return Returns the "Kopi" tab.
      */
     private Tab createKopiTab()
     {
@@ -103,8 +114,8 @@ public class GUI extends Application
     }
 
     /**
-     * 
-     * @return 
+     * Creates the "Beholdning" tab.
+     * @return Returns the "Beholdning" tab.
      */
     private Tab createBeholdningTab()
     {
@@ -123,8 +134,8 @@ public class GUI extends Application
     }
 
     /**
-     * 
-     * @return 
+     * Creates the "Kunde" tab.
+     * @return Returns the "Kunde" tab.
      */
     private Tab createKundeTab()
     {
@@ -143,8 +154,8 @@ public class GUI extends Application
     }
 
     /**
-     * 
-     * @return 
+     * Creates the "Ansatt" tab.
+     * @return Returns the "Ansatt" tab.
      */
     private Tab createAnsattTab()
     {
@@ -163,8 +174,8 @@ public class GUI extends Application
     }
 
     /**
-     * 
-     * @return 
+     * Creates the tab pane.
+     * @return Returns the tab pane.
      */
     private TabPane createTabPane()
     {
@@ -180,8 +191,8 @@ public class GUI extends Application
     }
     
     /**
-     * 
-     * @return 
+     * Creates a search bar in the "Utlån" tab.
+     * @return Return the search bar.
      */
     private HBox createUtlanHBoxTop()
     {
@@ -197,8 +208,8 @@ public class GUI extends Application
     }
     
     /**
-     * 
-     * @return 
+     * Creates the table in the "Kopi" tab.
+     * @return Returns a HBox containing a table for the "Kopi" tab.
      */
     private HBox createKopiHBox()
     {
@@ -218,8 +229,8 @@ public class GUI extends Application
     }
     
     /**
-     * 
-     * @return 
+     * Creates the table in the "Beholdning" tab.
+     * @return Returns a HBox containing a table for the "Beholdning" tab.
      */
     private HBox createBeholdningHBox()
     {
@@ -239,8 +250,8 @@ public class GUI extends Application
     }
     
     /**
-     * 
-     * @return 
+     * Creates the table in the "Kunde" tab.
+     * @return Returns a HBox containing a table for the "Kudne" tab.
      */
     private HBox createKundeHBox()
     {
@@ -260,8 +271,8 @@ public class GUI extends Application
     }
     
     /**
-     * 
-     * @return 
+     * Creates the table in the "Ansatt" tab.   
+     * @return Returns a HBox containing a table for the "Ansatt" tab.
      */
     private HBox createAnsattHBox()
     {
@@ -269,17 +280,24 @@ public class GUI extends Application
         tableViewAnsatt = new TableView();
         
         TableColumn ansattIDCol = new TableColumn("AnsattID");
+        ansattIDCol.setCellValueFactory(new PropertyValueFactory<>("ansattID"));
+        
         TableColumn fornavnCol = new TableColumn("Fornavn");
+        fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
+        
         TableColumn etternavnCol = new TableColumn("Etternavn");
+        etternavnCol.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+        
         tableViewAnsatt.getColumns().addAll(ansattIDCol, fornavnCol, etternavnCol);
         
+        
+        tableViewAnsatt.setItems(data);
         tableViewAnsatt.setMinSize(450, 175);
         tableViewAnsatt.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         ansattHBox.getChildren().add(tableViewAnsatt);
         
         return ansattHBox;
     }
-    
     
 
     /**
