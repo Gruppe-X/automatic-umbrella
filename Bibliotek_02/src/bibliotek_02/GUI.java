@@ -56,7 +56,7 @@ public class GUI extends Application
         
         mainBorderPane.setCenter(tabPane);
         
-        Scene scene = new Scene(mainBorderPane, 800, 450);
+        Scene scene = new Scene(mainBorderPane, 960, 540);
         scene.getStylesheets().add(getClass().getResource("Djstyleshix.css").toExternalForm());
         primaryStage.setTitle("Bibliotek X");
         primaryStage.setScene(scene);
@@ -198,11 +198,18 @@ public class GUI extends Application
         
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
         
-        TableColumn fornavnCol = new TableColumn("N/A");
-        TableColumn etternavnCol = new TableColumn("N/A");
-        TableColumn telefonCol = new TableColumn("N/A");
-        tableViewUtlanTop.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        TableColumn bokIDCol = new TableColumn("Bok-ID");
+        TableColumn tittelCol = new TableColumn("Tittel");
+        TableColumn forfatterCol = new TableColumn("Forfatter");
+        TableColumn forlagCol = new TableColumn("Forlag");
+        TableColumn utgittCol = new TableColumn("Utgitt");
+        TableColumn utgaveCol = new TableColumn("Utgave");
+        TableColumn isbnCol = new TableColumn("ISBN");
+        
+        tableViewUtlanTop.getColumns().addAll(bokIDCol, tittelCol, forfatterCol,
+                                forlagCol, utgittCol, utgaveCol, isbnCol);
         tableViewUtlanTop.setMinSize(450, 150);
+        tableViewUtlanTop.setMaxHeight(200);
         tableViewUtlanTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
         utlanVBoxTop.getChildren().add(searchBooks);
