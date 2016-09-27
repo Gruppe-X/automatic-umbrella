@@ -20,9 +20,7 @@ public class GUI extends Application
 {
     
     private TextField searchBooks;
-    private ObservableList<String> books;
-    private TableView<String> boooks;
-    
+    private TableView tableViewUtlanTop;
     private TableView tableViewKopi;
     private TableView tableViewBeholdning;
     private TableView tableViewKunde;
@@ -51,8 +49,6 @@ public class GUI extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        books = FXCollections.observableArrayList();
-        
         // Window
         BorderPane mainBorderPane = new BorderPane();
         // Menu
@@ -74,7 +70,7 @@ public class GUI extends Application
     }
 
     /**
-     * Creates tbe "Ultån" tab.
+     * Creates the "Utlån" tab.
      * @return The "Utlån" tab.
      */
     private Tab createUtlanTab()
@@ -198,11 +194,19 @@ public class GUI extends Application
     {
         HBox utlanHBoxTop = new HBox();
         searchBooks = new TextField();
+        tableViewUtlanTop = new TableView();
         
         searchBooks.setPromptText("Søk etter ISBN, Tittel, Forfatter...");
         
+        TableColumn fornavnCol = new TableColumn("N/A");
+        TableColumn etternavnCol = new TableColumn("N/A");
+        TableColumn telefonCol = new TableColumn("N/A");
+        tableViewUtlanTop.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewUtlanTop.setMinSize(450, 150);
+        tableViewUtlanTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
         utlanHBoxTop.getChildren().add(searchBooks);
-        // utlanHBoxTop.getChildren().add(books);
+        utlanHBoxTop.getChildren().add(tableViewUtlanTop);
         
         return utlanHBoxTop;
     }
