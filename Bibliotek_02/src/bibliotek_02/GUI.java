@@ -57,7 +57,7 @@ public class GUI extends Application
         mainBorderPane.setCenter(tabPane);
         
         Scene scene = new Scene(mainBorderPane, 800, 450);
-        scene.getStylesheets().add("stylesheet.css");
+        scene.getStylesheets().add("Stylesheet.css");
         primaryStage.setTitle("Bibliotek X");
         primaryStage.setScene(scene);
         primaryStage.show();
