@@ -77,11 +77,11 @@ public class GUI extends Application
     {
         Tab utlanTab = new Tab("Utlån");
         BorderPane utlanBorderPane = new BorderPane();
-        HBox utlanHBoxTop = createUtlanHBoxTop();
+        VBox utlanVBoxTop = createUtlanVBoxTop();
         BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
         
         utlanTab.setContent(utlanBorderPane);
-        utlanBorderPane.setTop(utlanHBoxTop);
+        utlanBorderPane.setTop(utlanVBoxTop);
         utlanBorderPane.setBottom(utlanBorderPaneBottom);
         
         utlanTab.setClosable(false);
@@ -190,9 +190,9 @@ public class GUI extends Application
      * Creates a search bar in the "Utlån" tab.
      * @return Return the search bar.
      */
-    private HBox createUtlanHBoxTop()
+    private VBox createUtlanVBoxTop()
     {
-        HBox utlanHBoxTop = new HBox();
+        VBox utlanVBoxTop = new VBox();
         searchBooks = new TextField();
         tableViewUtlanTop = new TableView();
         
@@ -205,10 +205,10 @@ public class GUI extends Application
         tableViewUtlanTop.setMinSize(450, 150);
         tableViewUtlanTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
-        utlanHBoxTop.getChildren().add(searchBooks);
-        utlanHBoxTop.getChildren().add(tableViewUtlanTop);
+        utlanVBoxTop.getChildren().add(searchBooks);
+        utlanVBoxTop.getChildren().add(tableViewUtlanTop);
         
-        return utlanHBoxTop;
+        return utlanVBoxTop;
     }
     
     /**
