@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -183,6 +185,23 @@ public class DatabaseHandler {
     
     public ResultSet getCopysByIDBN(String ISBN){
         return searchTableByColumnValString("Eksemplar", "ISBN", ISBN);
+    }
+    
+    /**
+     * Returns a List of all borrowers.
+     * @return a List of all borrowers.
+     */
+    public List<Kunde> listBorrowers(){
+        List<Kunde> customers = new ArrayList<>();
+        ResultSet customerSet = getBorrowers();
+        try {
+            while(customerSet.next()){
+                customers.add(new Kunde(customerSet.getString(2), customerSet.getString(3), customerSet.getString(4)));
+            }
+        } catch (SQLException SQLEx) {
+            
+        }
+        return customers;
     }
     
     public boolean isConnectionValid(){
