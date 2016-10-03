@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Oscar Wika, Vinh Tran
  */
-public class Beholdning {
+public class Inventory {
     
     private final SimpleStringProperty bookID;
     private final SimpleStringProperty bookName;
@@ -15,7 +15,7 @@ public class Beholdning {
     //private final SimpleStringProperty bookYear;
     //private final SimpleStringProperty bookPublisher;
     
-    Beholdning(String bookID, String bookName, String bookQuantity)
+    Inventory(String bookID, String bookName, String bookQuantity)
     {
         this.bookID = new SimpleStringProperty(bookID);
         this.bookName = new SimpleStringProperty(bookName);

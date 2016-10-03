@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -23,35 +24,35 @@ public class GUI extends Application
     private TextField searchBooks;
     private TableView tableViewUtlanTop;
     private TableView tableViewKopi;
-    private TableView<Beholdning>tableViewBeholdning;
-    private TableView<Ansatt> tableViewAnsatt;
-    private TableView<Kunde> tableViewKunde;
+    private TableView<Inventory>tableViewInventory;
+    private TableView<Librarian> tableViewLibrarian;
+    private TableView<Borrower> tableViewLåntaker;
 
-    // Filler for the ansatt table
-    final ObservableList<Ansatt> ansattData = FXCollections.observableArrayList(
-            new Ansatt("1", "Smith", "Smith"),
-            new Ansatt("2", "Johnson", "Johnson"),
-            new Ansatt("3", "Williams", "Ethan-Williams"),
-            new Ansatt("4", "Jones", "Emma"),
-            new Ansatt("5", "Brown", "Michael")
+    // Filler for the Librarian table
+    final ObservableList<Librarian> librarianList = FXCollections.observableArrayList
+        (
+            new Librarian("1", "Smith", "Smith"),
+            new Librarian("2", "Johnson", "Johnson"),
+            new Librarian("3", "Williams", "Ethan-Williams"),
+            new Librarian("4", "Jones", "Emma"),
+            new Librarian("5", "Brown", "Michael")
     );
-    //Filler for the Beholdning table
-    final ObservableList<Beholdning> bookData = FXCollections.observableArrayList
-            (
-                new Beholdning("1", "Forest Gum", "10"),
-                new Beholdning("2", "Google", "22"),
-                new Beholdning("3", "Web Design", "15"),
-                new Beholdning("4", "SQL", "4"),
-                new Beholdning("5", "WoW ProTip", "100")
+    //Filler for the Inventory table
+    final ObservableList<Inventory> bookList = FXCollections.observableArrayList
+            (new Inventory("1", "Forest Gum", "10"),
+                new Inventory("2", "Google", "22"),
+                new Inventory("3", "Web Design", "15"),
+                new Inventory("4", "SQL", "4"),
+                new Inventory("5", "WoW ProTip", "100")
                     
             );
     
-    final ObservableList<Kunde> kundeData = FXCollections.observableArrayList(
-            new Kunde("John", "Swagmeister", "99911888"),
-            new Kunde("Peter", "Toppris", "33399111"),
-            new Kunde("Lise", "Imsdal", "99933222"),
-            new Kunde("Cristiano", "Google", "88877333"),
-            new Kunde("Del", "Piero", "88855222")
+    final ObservableList<Borrower> borrowerList = FXCollections.observableArrayList
+        (new Borrower("John", "Swagmeister", "99911888"),
+            new Borrower("Peter", "Toppris", "33399111"),
+            new Borrower("Lise", "Imsdal", "99933222"),
+            new Borrower("Cristiano", "Google", "88877333"),
+            new Borrower("Del", "Piero", "88855222")
     );
 
     public static void main(String[] args)
@@ -131,66 +132,66 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the "Beholdning" tab.
+     * Creates the "Inventory" tab.
      *
-     * @return Returns the "Beholdning" tab.
+     * @return Returns the "Inventory" tab.
      */
-    private Tab createBeholdningTab()
+    private Tab createInventoryTab()
     {
-        Tab beholdningTab = new Tab("Beholdning");
-        BorderPane beholdningBorderPane = new BorderPane();
-        HBox beholdningHBox = createBeholdningHBox();
+        Tab inventoryTab = new Tab("Beholdning");
+        BorderPane inventoryBorderPane = new BorderPane();
+        HBox inventoryHBox = createInventoryHBox();
         BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
 
-        beholdningTab.setContent(beholdningBorderPane);
-        beholdningBorderPane.setTop(beholdningHBox);
-        beholdningBorderPane.setBottom(utlanBorderPaneBottom);
+        inventoryTab.setContent(inventoryBorderPane);
+        inventoryBorderPane.setTop(inventoryHBox);
+        inventoryBorderPane.setBottom(utlanBorderPaneBottom);
 
-        beholdningTab.setClosable(false);
+        inventoryTab.setClosable(false);
 
-        return beholdningTab;
+        return inventoryTab;
     }
 
     /**
-     * Creates the "Kunde" tab.
+     * Creates the "Borrower" tab.
      *
-     * @return Returns the "Kunde" tab.
+     * @return Returns the "Borrower" tab.
      */
-    private Tab createKundeTab()
+    private Tab createBorrowerTab()
     {
-        Tab kundeTab = new Tab("Låntaker");
-        BorderPane kundeBorderPane = new BorderPane();
-        HBox kundeHBox = createKundeHBox();
+        Tab borrowerTab = new Tab("Låntaker");
+        BorderPane borrowerBorderPane = new BorderPane();
+        HBox borrowerHBox = createBorrowerHBox();
         BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
 
-        kundeTab.setContent(kundeBorderPane);
-        kundeBorderPane.setTop(kundeHBox);
-        kundeBorderPane.setBottom(utlanBorderPaneBottom);
+        borrowerTab.setContent(borrowerBorderPane);
+        borrowerBorderPane.setTop(borrowerHBox);
+        borrowerBorderPane.setBottom(utlanBorderPaneBottom);
 
-        kundeTab.setClosable(false);
+        borrowerTab.setClosable(false);
 
-        return kundeTab;
+        return borrowerTab;
     }
 
     /**
-     * Creates the "Ansatt" tab.
+     * Creates the "Librarian" tab.
      *
-     * @return Returns the "Ansatt" tab.
+     * @return Returns the "Librarian" tab.
      */
-    private Tab createAnsattTab()
+    private Tab createLibrarianTab()
     {
-        Tab ansattTab = new Tab("Bibliotekar");
-        BorderPane ansattBorderPane = new BorderPane();
-        HBox ansattHBox = createAnsattHBox();
+        Tab librarianTab = new Tab("Bibliotekar");
+        BorderPane librarianBorderPane = new BorderPane();
+        HBox librarianHBox = createLibrarianHBox();
         BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
 
-        ansattTab.setContent(ansattBorderPane);
-        ansattBorderPane.setTop(ansattHBox);
-        ansattBorderPane.setBottom(utlanBorderPaneBottom);
+        librarianTab.setContent(librarianBorderPane);
+        librarianBorderPane.setTop(librarianHBox);
+        librarianBorderPane.setBottom(utlanBorderPaneBottom);
 
-        ansattTab.setClosable(false);
+        librarianTab.setClosable(false);
 
-        return ansattTab;
+        return librarianTab;
     }
 
     /**
@@ -202,11 +203,11 @@ public class GUI extends Application
     {
         Tab utlan = createUtlanTab();
         Tab kopi = createKopiTab();
-        Tab beholdning = createBeholdningTab();
-        Tab kunde = createKundeTab();
-        Tab ansatt = createAnsattTab();
+        Tab inventory = createInventoryTab();
+        Tab borrower = createBorrowerTab();
+        Tab librarian = createLibrarianTab();
 
-        TabPane tabPane = new TabPane(utlan, kopi, beholdning, kunde, ansatt);
+        TabPane tabPane = new TabPane(utlan, kopi, inventory, borrower, librarian);
 
         return tabPane;
     }
@@ -260,14 +261,14 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the table in the "Beholdning" tab.
+     * Creates the table in the "Inventory" tab.
      *
-     * @return Returns a HBox containing a table for the "Beholdning" tab.
+     * @return Returns a HBox containing a table for the "Inventory" tab.
      */
-    private HBox createBeholdningHBox()
+    private HBox createInventoryHBox()
     {
-        HBox beholdningHBox = new HBox();
-        tableViewBeholdning = new TableView();
+        HBox inventoryHBox = new HBox();
+        tableViewInventory = new TableView();
         
         TableColumn fornavnCol = new TableColumn("ID");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
@@ -278,25 +279,25 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Antall");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("BookQuantity"));
         
-        tableViewBeholdning.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewInventory.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         
-        tableViewBeholdning.setItems(bookData);
-        tableViewBeholdning.setMinSize(450, 175);
-        tableViewBeholdning.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        beholdningHBox.getChildren().add(tableViewBeholdning);
+        tableViewInventory.setItems(bookList);
+        tableViewInventory.setMinSize(450, 175);
+        tableViewInventory.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        inventoryHBox.getChildren().add(tableViewInventory);
 
-        return beholdningHBox;
+        return inventoryHBox;
     }
 
     /**
-     * Creates the table in the "Kunde" tab.
+     * Creates the table in the "Borrower" tab.
      *
-     * @return Returns a HBox containing a table for the "Kudne" tab.
+     * @return Returns a HBox containing a table for the "Borrower" tab.
      */
-    private HBox createKundeHBox()
+    private HBox createBorrowerHBox()
     {
-        HBox kundeHBox = new HBox();
-        tableViewKunde = new TableView();
+        HBox borrowerHBox = new HBox();
+        tableViewLåntaker = new TableView();
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
@@ -307,28 +308,28 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Telefon");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
 
-        tableViewKunde.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewLåntaker.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
 
-        tableViewKunde.setItems(kundeData);
-        tableViewKunde.setMinSize(450, 175);
-        tableViewKunde.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        kundeHBox.getChildren().add(tableViewKunde);
+        tableViewLåntaker.setItems(borrowerList);
+        tableViewLåntaker.setMinSize(450, 175);
+        tableViewLåntaker.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        borrowerHBox.getChildren().add(tableViewLåntaker);
 
-        return kundeHBox;
+        return borrowerHBox;
     }
 
     /**
-     * Creates the table in the "Ansatt" tab.
+     * Creates the table in the "Librarian" tab.
      *
-     * @return Returns a HBox containing a table for the "Ansatt" tab.
+     * @return Returns a HBox containing a table for the "Librarian" tab.
      */
-    private HBox createAnsattHBox()
+    private HBox createLibrarianHBox()
     {
-        HBox ansattHBox = new HBox();
-        tableViewAnsatt = new TableView();
+        HBox librarianHBox = new HBox();
+        tableViewLibrarian = new TableView();
 
-        TableColumn ansattIDCol = new TableColumn("AnsattID");
-        ansattIDCol.setCellValueFactory(new PropertyValueFactory<>("ansattID"));
+        TableColumn librarianIDCol = new TableColumn("AnsattID");
+        librarianIDCol.setCellValueFactory(new PropertyValueFactory<>("ansattID"));
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
@@ -336,14 +337,14 @@ public class GUI extends Application
         TableColumn etternavnCol = new TableColumn("Etternavn");
         etternavnCol.setCellValueFactory(new PropertyValueFactory<>("LastName"));
 
-        tableViewAnsatt.getColumns().addAll(ansattIDCol, fornavnCol, etternavnCol);
+        tableViewLibrarian.getColumns().addAll(librarianIDCol, fornavnCol, etternavnCol);
 
-        tableViewAnsatt.setItems(ansattData);
-        tableViewAnsatt.setMinSize(450, 175);
-        tableViewAnsatt.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        ansattHBox.getChildren().add(tableViewAnsatt);
+        tableViewLibrarian.setItems(librarianList);
+        tableViewLibrarian.setMinSize(450, 175);
+        tableViewLibrarian.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        librarianHBox.getChildren().add(tableViewLibrarian);
 
-        return ansattHBox;
+        return librarianHBox;
     }
 
     /**
