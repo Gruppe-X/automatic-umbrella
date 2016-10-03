@@ -2,7 +2,6 @@ package bibliotek_02;
 
 import java.util.Optional;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -12,12 +11,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 
 /**
@@ -31,8 +24,8 @@ public class GUI extends Application
     private TableView tableViewUtlanTop;
     private TableView tableViewKopi;
     private TableView tableViewBeholdning;
-    private TableView tableViewKunde;
     private TableView<Ansatt> tableViewAnsatt;
+    private TableView<Kunde> tableViewKunde;
 
     // Filler for the ansatt table
     final ObservableList<Ansatt> ansattData = FXCollections.observableArrayList(
@@ -43,12 +36,12 @@ public class GUI extends Application
             new Ansatt("5", "Brown", "Michael")
     );
     // Filler for the ansatt table
-    final ObservableList<Ansatt> kundeData = FXCollections.observableArrayList(
-            new Ansatt("John", "Swagmeister", "99911888"),
-            new Ansatt("Peter", "Toppris", "33399111"),
-            new Ansatt("Lise", "Imsdal", "99933222"),
-            new Ansatt("Cristiano", "Google", "88877333"),
-            new Ansatt("Del", "Piero", "88855222")
+    final ObservableList<Kunde> kundeData = FXCollections.observableArrayList(
+            new Kunde("John", "Swagmeister", "99911888"),
+            new Kunde("Peter", "Toppris", "33399111"),
+            new Kunde("Lise", "Imsdal", "99933222"),
+            new Kunde("Cristiano", "Google", "88877333"),
+            new Kunde("Del", "Piero", "88855222")
     );
 
     public static void main(String[] args)
@@ -289,13 +282,13 @@ public class GUI extends Application
         tableViewKunde = new TableView();
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
-        fornavnCol.setCellValueFactory(new PropertyValueFactory<>("ansattID"));
+        fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
 
         TableColumn etternavnCol = new TableColumn("Etternavn");
-        etternavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
+        etternavnCol.setCellValueFactory(new PropertyValueFactory<>("LastName"));
 
         TableColumn telefonCol = new TableColumn("Telefon");
-        telefonCol.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+        telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
 
         tableViewKunde.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
 
