@@ -158,7 +158,7 @@ public class GUI extends Application
      */
     private Tab createKundeTab()
     {
-        Tab kundeTab = new Tab("Kunde");
+        Tab kundeTab = new Tab("Låntaker");
         BorderPane kundeBorderPane = new BorderPane();
         HBox kundeHBox = createKundeHBox();
         BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
@@ -179,7 +179,7 @@ public class GUI extends Application
      */
     private Tab createAnsattTab()
     {
-        Tab ansattTab = new Tab("Ansatt");
+        Tab ansattTab = new Tab("Bibliotekar");
         BorderPane ansattBorderPane = new BorderPane();
         HBox ansattHBox = createAnsattHBox();
         BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();

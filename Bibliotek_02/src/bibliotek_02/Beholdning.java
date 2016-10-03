@@ -50,6 +50,12 @@ public class Beholdning {
         return bookQuantity.get();
     }
     
+    /*
+    public String getBookAuthor()
+    {
+        return bookAuthor.get();
+    }
+    */
     /**
      * 
      * @param bookID
