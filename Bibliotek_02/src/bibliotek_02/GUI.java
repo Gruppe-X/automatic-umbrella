@@ -2,6 +2,7 @@ package bibliotek_02;
 
 import java.util.Optional;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -26,13 +27,23 @@ public class GUI extends Application
     private TableView tableViewKunde;
     private TableView<Ansatt> tableViewAnsatt;
     
-    final ObservableList<Ansatt> data = FXCollections.observableArrayList
+    // Filler for the ansatt table
+    final ObservableList<Ansatt> ansattData = FXCollections.observableArrayList
         (
             new Ansatt("1", "Smith", "Smith"),
             new Ansatt("2", "Johnson", "Johnson"),
             new Ansatt("3", "Williams", "Ethan-Williams"),
             new Ansatt("4", "Jones", "Emma"),
             new Ansatt("5", "Brown", "Michael")
+        );
+    // Filler for the ansatt table
+    final ObservableList<Ansatt> kundeData = FXCollections.observableArrayList
+        (
+            new Ansatt("John", "Swagmeister", "99911888"),
+            new Ansatt("Peter", "Toppris", "33399111"),
+            new Ansatt("Lise", "Imsdal", "99933222"),
+            new Ansatt("Cristiano", "Google", "88877333"),
+            new Ansatt("Del", "Piero", "88855222")
         );
     
     public static void main(String[] args)
@@ -56,8 +67,8 @@ public class GUI extends Application
         
         mainBorderPane.setCenter(tabPane);
         
-        Scene scene = new Scene(mainBorderPane, 960, 540);
-        scene.getStylesheets().add(getClass().getResource("Djstyleshix.css").toExternalForm());
+        Scene scene = new Scene(mainBorderPane, 800, 450);
+        scene.getStylesheets().add(getClass().getResource("Stylesheet.css").toExternalForm());
         primaryStage.setTitle("Bibliotek X");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -77,11 +88,11 @@ public class GUI extends Application
     {
         Tab utlanTab = new Tab("Utlån");
         BorderPane utlanBorderPane = new BorderPane();
-        VBox utlanVBoxTop = createUtlanVBoxTop();
+        HBox utlanHBoxTop = createUtlanHBoxTop();
         BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
         
         utlanTab.setContent(utlanBorderPane);
-        utlanBorderPane.setTop(utlanVBoxTop);
+        utlanBorderPane.setTop(utlanHBoxTop);
         utlanBorderPane.setBottom(utlanBorderPaneBottom);
         
         utlanTab.setClosable(false);
@@ -190,32 +201,25 @@ public class GUI extends Application
      * Creates a search bar in the "Utlån" tab.
      * @return Return the search bar.
      */
-    private VBox createUtlanVBoxTop()
+    private HBox createUtlanHBoxTop()
     {
-        VBox utlanVBoxTop = new VBox();
+        HBox utlanHBoxTop = new HBox();
         searchBooks = new TextField();
         tableViewUtlanTop = new TableView();
         
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
         
-        TableColumn bokIDCol = new TableColumn("Bok-ID");
-        TableColumn tittelCol = new TableColumn("Tittel");
-        TableColumn forfatterCol = new TableColumn("Forfatter");
-        TableColumn forlagCol = new TableColumn("Forlag");
-        TableColumn utgittCol = new TableColumn("Utgitt");
-        TableColumn utgaveCol = new TableColumn("Utgave");
-        TableColumn isbnCol = new TableColumn("ISBN");
-        
-        tableViewUtlanTop.getColumns().addAll(bokIDCol, tittelCol, forfatterCol,
-                                forlagCol, utgittCol, utgaveCol, isbnCol);
+        TableColumn fornavnCol = new TableColumn("N/A");
+        TableColumn etternavnCol = new TableColumn("N/A");
+        TableColumn telefonCol = new TableColumn("N/A");
+        tableViewUtlanTop.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         tableViewUtlanTop.setMinSize(450, 150);
-        tableViewUtlanTop.setMaxHeight(200);
         tableViewUtlanTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
-        utlanVBoxTop.getChildren().add(searchBooks);
-        utlanVBoxTop.getChildren().add(tableViewUtlanTop);
+        utlanHBoxTop.getChildren().add(searchBooks);
+        utlanHBoxTop.getChildren().add(tableViewUtlanTop);
         
-        return utlanVBoxTop;
+        return utlanHBoxTop;
     }
     
     /**
@@ -270,10 +274,17 @@ public class GUI extends Application
         tableViewKunde = new TableView();
         
         TableColumn fornavnCol = new TableColumn("Fornavn");
+        fornavnCol.setCellValueFactory(new PropertyValueFactory<>("ansattID"));
+            
         TableColumn etternavnCol = new TableColumn("Etternavn");
+        etternavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
+        
         TableColumn telefonCol = new TableColumn("Telefon");
+        telefonCol.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+        
         tableViewKunde.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         
+        tableViewKunde.setItems(kundeData);
         tableViewKunde.setMinSize(450, 175);
         tableViewKunde.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         kundeHBox.getChildren().add(tableViewKunde);
@@ -302,7 +313,7 @@ public class GUI extends Application
         tableViewAnsatt.getColumns().addAll(ansattIDCol, fornavnCol, etternavnCol);
         
         
-        tableViewAnsatt.setItems(data);
+        tableViewAnsatt.setItems(ansattData);
         tableViewAnsatt.setMinSize(450, 175);
         tableViewAnsatt.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         ansattHBox.getChildren().add(tableViewAnsatt);
