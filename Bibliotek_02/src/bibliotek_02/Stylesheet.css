@@ -6,5 +6,17 @@
 .tab-pane .tab
 {
     -fx-background-color: #cc0000;
-
 }
+
+.tab-pane .tab:hover {
+    -fx-background-color: #77ff11;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: violet;
+}
+
+.tab-pane {
+    -fx-background-color: green; 
+}
+
