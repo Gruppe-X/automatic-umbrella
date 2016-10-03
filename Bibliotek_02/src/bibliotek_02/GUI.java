@@ -23,18 +23,10 @@ public class GUI extends Application
     private TextField searchBooks;
     private TableView tableViewUtlanTop;
     private TableView tableViewKopi;
-<<<<<<< HEAD
     private TableView<Beholdning>tableViewBeholdning;
-    private TableView tableViewKunde;
-    private TableView<Ansatt> tableViewAnsatt;
-    
-    
-=======
-    private TableView tableViewBeholdning;
     private TableView<Ansatt> tableViewAnsatt;
     private TableView<Kunde> tableViewKunde;
 
->>>>>>> 5f7654fcadac26cf2579f89102b87bad33c3daa1
     // Filler for the ansatt table
     final ObservableList<Ansatt> ansattData = FXCollections.observableArrayList(
             new Ansatt("1", "Smith", "Smith"),
@@ -43,16 +35,6 @@ public class GUI extends Application
             new Ansatt("4", "Jones", "Emma"),
             new Ansatt("5", "Brown", "Michael")
     );
-    // Filler for the ansatt table
-<<<<<<< HEAD
-    final ObservableList<Ansatt> kundeData = FXCollections.observableArrayList
-        (
-            new Ansatt("John", "Swagmeister", "99911888"),
-            new Ansatt("Peter", "Toppris", "33399111"),
-            new Ansatt("Lise", "Imsdal", "99933222"),
-            new Ansatt("Cristiano", "Google", "88877333"),
-            new Ansatt("Del", "Piero", "88855222")
-        );
     //Filler for the Beholdning table
     final ObservableList<Beholdning> bookData = FXCollections.observableArrayList
             (
@@ -64,8 +46,6 @@ public class GUI extends Application
                     
             );
     
-    
-=======
     final ObservableList<Kunde> kundeData = FXCollections.observableArrayList(
             new Kunde("John", "Swagmeister", "99911888"),
             new Kunde("Peter", "Toppris", "33399111"),
@@ -74,7 +54,6 @@ public class GUI extends Application
             new Kunde("Del", "Piero", "88855222")
     );
 
->>>>>>> 5f7654fcadac26cf2579f89102b87bad33c3daa1
     public static void main(String[] args)
     {
         launch(args);
@@ -289,12 +268,11 @@ public class GUI extends Application
     {
         HBox beholdningHBox = new HBox();
         tableViewBeholdning = new TableView();
-<<<<<<< HEAD
         
         TableColumn fornavnCol = new TableColumn("ID");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
         
-        TableColumn etternavnCol = new TableColumn("Navn");
+        TableColumn etternavnCol = new TableColumn("Bok Navn");
         etternavnCol.setCellValueFactory(new PropertyValueFactory<>("BookName"));
         
         TableColumn telefonCol = new TableColumn("Antall");
@@ -303,14 +281,6 @@ public class GUI extends Application
         tableViewBeholdning.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         
         tableViewBeholdning.setItems(bookData);
-=======
-
-        TableColumn fornavnCol = new TableColumn("N/A");
-        TableColumn etternavnCol = new TableColumn("N/A");
-        TableColumn telefonCol = new TableColumn("N/A");
-        tableViewBeholdning.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-
->>>>>>> 5f7654fcadac26cf2579f89102b87bad33c3daa1
         tableViewBeholdning.setMinSize(450, 175);
         tableViewBeholdning.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         beholdningHBox.getChildren().add(tableViewBeholdning);
