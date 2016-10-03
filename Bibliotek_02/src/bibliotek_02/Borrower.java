@@ -6,13 +6,13 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Oscar Wika, Vinh Tran
  */
-public class Kunde {
+public class Borrower {
     
     private final SimpleStringProperty fornavn;
     private final SimpleStringProperty etternavn; 
     private final SimpleStringProperty telefon;
  
-    Kunde(String fornavn, String etternavn, String telefon)
+    Borrower(String fornavn, String etternavn, String telefon)
     {
         this.fornavn = new SimpleStringProperty(fornavn);
         this.etternavn = new SimpleStringProperty(etternavn);
