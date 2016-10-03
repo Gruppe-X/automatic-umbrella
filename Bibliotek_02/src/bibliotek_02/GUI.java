@@ -38,7 +38,8 @@ public class GUI extends Application
     );
     //Filler for the Inventory table
     final ObservableList<Inventory> bookList = FXCollections.observableArrayList
-            (new Inventory("1", "Forest Gum", "10"),
+        (
+                new Inventory("1", "Forest Gum", "10"),
                 new Inventory("2", "Google", "22"),
                 new Inventory("3", "Web Design", "15"),
                 new Inventory("4", "SQL", "4"),

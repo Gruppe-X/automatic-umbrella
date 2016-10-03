@@ -8,15 +8,15 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Librarian {
     
-    private final SimpleStringProperty ansattID;
-    private final SimpleStringProperty fornavn;
-    private final SimpleStringProperty etternavn;
+    private final SimpleStringProperty employeeID;
+    private final SimpleStringProperty employeeFirstName;
+    private final SimpleStringProperty employeeLastName;
     
-    Librarian(String ansattID, String fornavn, String etternavn)
+    Librarian(String employeeID, String employeeFirstName, String employeeLastName)
     {
-        this.ansattID = new SimpleStringProperty(ansattID);
-        this.fornavn = new SimpleStringProperty(fornavn);
-        this.etternavn = new SimpleStringProperty(etternavn);
+        this.employeeID = new SimpleStringProperty(employeeID);
+        this.employeeFirstName = new SimpleStringProperty(employeeLastName);
+        this.employeeLastName = new SimpleStringProperty(employeeLastName);
     }
     
     /**
@@ -25,7 +25,7 @@ public class Librarian {
      */
     public String getAnsattID()
     {
-        return ansattID.get();
+        return employeeID.get();
     }
     
     /**
@@ -34,7 +34,7 @@ public class Librarian {
      */
     public String getFirstName()
     {
-        return fornavn.get();
+        return employeeFirstName.get();
     }
     
     /**
@@ -43,33 +43,33 @@ public class Librarian {
      */
     public String getLastName()
     {
-        return etternavn.get();
+        return employeeLastName.get();
     }
     
     /**
      * 
-     * @param ansattID 
+     * @param employeeID 
      */
-    public void setAnsattID(String ansattID)
+    public void setAnsattID(String employeeID)
     {
-        this.ansattID.set(ansattID);
+        this.employeeID.set(employeeID);
     }
     
     /**
      * 
-     * @param fornavn 
+     * @param employeeFirstName 
      */
-    public void setFirstName(String fornavn)
+    public void setFirstName(String employeeFirstName)
     {
-        this.fornavn.set(fornavn);
+        this.employeeFirstName.set(employeeFirstName);
     }
     
     /**
      * 
-     * @param etternavn 
+     * @param employeeLastName 
      */
-    public void setLastName(String etternavn)
+    public void setLastName(String employeeLastName)
     {
-        this.etternavn.set(etternavn);
+        this.employeeLastName.set(employeeLastName);
     }
 }

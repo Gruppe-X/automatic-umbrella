@@ -8,15 +8,15 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Borrower {
     
-    private final SimpleStringProperty fornavn;
-    private final SimpleStringProperty etternavn; 
-    private final SimpleStringProperty telefon;
+    private final SimpleStringProperty firstName;
+    private final SimpleStringProperty lastName; 
+    private final SimpleStringProperty telephone;
  
-    Borrower(String fornavn, String etternavn, String telefon)
+    Borrower(String firstName, String lastName, String telephone)
     {
-        this.fornavn = new SimpleStringProperty(fornavn);
-        this.etternavn = new SimpleStringProperty(etternavn);
-        this.telefon = new SimpleStringProperty(telefon);
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
+        this.telephone = new SimpleStringProperty(telephone);
     }
 
     /**
@@ -25,7 +25,7 @@ public class Borrower {
      */
     public String getFirstName()
     {
-        return fornavn.get();
+        return firstName.get();
     }
     
     /**
@@ -34,7 +34,7 @@ public class Borrower {
      */
     public String getLastName()
     {
-       return etternavn.get();
+       return lastName.get();
     }
     
      /**
@@ -43,33 +43,33 @@ public class Borrower {
      */
     public String getTelephone()
     {
-        return telefon.get();
+        return telephone.get();
     }
     
     /**
      * 
-     * @param fornavn 
+     * @param firstName 
      */
-    public void setFirstName(String fornavn)
+    public void setFirstName(String firstName)
     {
-        this.fornavn.set(fornavn);
+        this.firstName.set(firstName);
     }
     
     /**
      * 
-     * @param etternavn 
+     * @param lastName 
      */
-    public void setLastName(String etternavn)
+    public void setLastName(String lastName)
     {
-        this.etternavn.set(etternavn);
+        this.lastName.set(lastName);
     }
     
     /**
      * 
-     * @param telefon 
+     * @param telephone 
      */
-    public void setTelephone(String telefon)
+    public void setTelephone(String telephone)
     {
-        this.telefon.set(telefon);
+        this.telephone.set(telephone);
     }
 }
