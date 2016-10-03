@@ -2,21 +2,48 @@
     Created on : 27.sep.2016, 10:59:40
     Author     : Oscar Wika
 */
-
-.tab-pane .tab
-{
-    -fx-background-color: #cc0000;
+/*
+/* Tab Pane */
+/* Background color of the tab pane */
+.tab-header-area .tab-header-background {
+    
 }
 
+/* Color of the tabs above the table */
+.tab-pane .tab {
+    
+}
+
+/* Color when mouseover on the tabs above the table */
 .tab-pane .tab:hover {
-    -fx-background-color: #77ff11;
 }
 
+/* Color of the currently selected tab*/
 .tab-pane .tab:selected {
-    -fx-background-color: violet;
+    
 }
 
+/* Background color of the window */
 .tab-pane {
-    -fx-background-color: green; 
+    
 }
 
+/* Background color of the table (If it is empty)*/
+.tab-pane .table-view {
+    
+}
+
+/* Color of the rows in the tables */
+.table-row-cell {
+    
+}
+
+/* Color of the odd numbered rows in the tables */
+.table-row-cell:odd {
+    
+}
+
+/* Text color in the table */
+.table-view .table-cell{
+    
+}
