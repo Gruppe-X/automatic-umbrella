@@ -22,7 +22,7 @@ public class GUI extends Application
 {
 
     private TextField searchBooks;
-    private TableView tableViewUtlanTop;
+    private TableView tableViewLoansTop;
     private TableView tableViewKopi;
     private TableView<Inventory>tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
@@ -90,24 +90,24 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the "Utlån" tab.
+     * Creates the "Loans" tab.
      *
-     * @return The "Utlån" tab.
+     * @return The "Loans" tab.
      */
-    private Tab createUtlanTab()
+    private Tab createLoansTab()
     {
-        Tab utlanTab = new Tab("Utlån");
-        BorderPane utlanBorderPane = new BorderPane();
-        VBox utlanVBoxTop = createUtlanVBoxTop();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        Tab loansTab = new Tab("Utlån");
+        BorderPane loansBorderPane = new BorderPane();
+        VBox loansVBoxTop = createLoansVBoxTop();
+        BorderPane loansnBorderPaneBottom = createLoansBorderPaneBottom();
 
-        utlanTab.setContent(utlanBorderPane);
-        utlanBorderPane.setTop(utlanVBoxTop);
-        utlanBorderPane.setBottom(utlanBorderPaneBottom);
+        loansTab.setContent(loansBorderPane);
+        loansBorderPane.setTop(loansVBoxTop);
+        loansBorderPane.setBottom(loansnBorderPaneBottom);
 
-        utlanTab.setClosable(false);
+        loansTab.setClosable(false);
 
-        return utlanTab;
+        return loansTab;
     }
 
     /**
@@ -120,11 +120,11 @@ public class GUI extends Application
         Tab kopiTab = new Tab("Kopi");
         BorderPane kopiBorderPane = new BorderPane();
         HBox kopiHBox = createKopiHBox();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         kopiTab.setContent(kopiBorderPane);
         kopiBorderPane.setTop(kopiHBox);
-        kopiBorderPane.setBottom(utlanBorderPaneBottom);
+        kopiBorderPane.setBottom(loansBorderPaneBottom);
 
         kopiTab.setClosable(false);
 
@@ -141,11 +141,11 @@ public class GUI extends Application
         Tab inventoryTab = new Tab("Beholdning");
         BorderPane inventoryBorderPane = new BorderPane();
         HBox inventoryHBox = createInventoryHBox();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         inventoryTab.setContent(inventoryBorderPane);
         inventoryBorderPane.setTop(inventoryHBox);
-        inventoryBorderPane.setBottom(utlanBorderPaneBottom);
+        inventoryBorderPane.setBottom(loansBorderPaneBottom);
 
         inventoryTab.setClosable(false);
 
@@ -162,11 +162,11 @@ public class GUI extends Application
         Tab borrowerTab = new Tab("Låntaker");
         BorderPane borrowerBorderPane = new BorderPane();
         HBox borrowerHBox = createBorrowerHBox();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         borrowerTab.setContent(borrowerBorderPane);
         borrowerBorderPane.setTop(borrowerHBox);
-        borrowerBorderPane.setBottom(utlanBorderPaneBottom);
+        borrowerBorderPane.setBottom(loansBorderPaneBottom);
 
         borrowerTab.setClosable(false);
 
@@ -183,11 +183,11 @@ public class GUI extends Application
         Tab librarianTab = new Tab("Bibliotekar");
         BorderPane librarianBorderPane = new BorderPane();
         HBox librarianHBox = createLibrarianHBox();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         librarianTab.setContent(librarianBorderPane);
         librarianBorderPane.setTop(librarianHBox);
-        librarianBorderPane.setBottom(utlanBorderPaneBottom);
+        librarianBorderPane.setBottom(loansBorderPaneBottom);
 
         librarianTab.setClosable(false);
 
@@ -201,41 +201,41 @@ public class GUI extends Application
      */
     private TabPane createTabPane()
     {
-        Tab utlan = createUtlanTab();
+        Tab loans = createLoansTab();
         Tab kopi = createKopiTab();
         Tab inventory = createInventoryTab();
         Tab borrower = createBorrowerTab();
         Tab librarian = createLibrarianTab();
 
-        TabPane tabPane = new TabPane(utlan, kopi, inventory, borrower, librarian);
+        TabPane tabPane = new TabPane(loans, kopi, inventory, borrower, librarian);
 
         return tabPane;
     }
 
     /**
-     * Creates a search bar in the "Utlån" tab.
+     * Creates a search bar in the "Loans" tab.
      *
      * @return Return the search bar.
      */
-    private VBox createUtlanVBoxTop()
+    private VBox createLoansVBoxTop()
     {
-        VBox utlanVBoxTop = new VBox();
+        VBox loansVBoxTop = new VBox();
         searchBooks = new TextField();
-        tableViewUtlanTop = new TableView();
+        tableViewLoansTop = new TableView();
 
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
 
         TableColumn fornavnCol = new TableColumn("N/A");
         TableColumn etternavnCol = new TableColumn("N/A");
         TableColumn telefonCol = new TableColumn("N/A");
-        tableViewUtlanTop.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-        tableViewUtlanTop.setMinSize(450, 150);
-        tableViewUtlanTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableViewLoansTop.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewLoansTop.setMinSize(450, 150);
+        tableViewLoansTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        utlanVBoxTop.getChildren().add(searchBooks);
-        utlanVBoxTop.getChildren().add(tableViewUtlanTop);
+        loansVBoxTop.getChildren().add(searchBooks);
+        loansVBoxTop.getChildren().add(tableViewLoansTop);
 
-        return utlanVBoxTop;
+        return loansVBoxTop;
     }
 
     /**
@@ -351,16 +351,16 @@ public class GUI extends Application
      *
      * @return
      */
-    private BorderPane createUtlanBorderPaneBottom()
+    private BorderPane createLoansBorderPaneBottom()
     {
-        BorderPane utlanBorderPaneBottom = new BorderPane();
-        VBox utlanVBoxBottomLeft = new VBox();
-        VBox utlanVBoxBottomRight = new VBox();
+        BorderPane loansBorderPaneBottom = new BorderPane();
+        VBox loansVBoxBottomLeft = new VBox();
+        VBox loansVBoxBottomRight = new VBox();
 
-        utlanBorderPaneBottom.setLeft(utlanVBoxBottomLeft);
-        utlanBorderPaneBottom.setRight(utlanVBoxBottomRight);
+        loansBorderPaneBottom.setLeft(loansVBoxBottomLeft);
+        loansBorderPaneBottom.setRight(loansVBoxBottomRight);
 
-        return utlanBorderPaneBottom;
+        return loansBorderPaneBottom;
     }
 
     /**
