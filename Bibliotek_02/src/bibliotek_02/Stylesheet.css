@@ -1,10 +1,10 @@
 /* 
     Created on : 27.sep.2016, 10:59:40
-    Author     : 148
+    Author     : Oscar Wika
 */
 
 .tab-pane .tab
 {
-    -fx-background-color: greenyellow;
+    -fx-background-color: #cc0000;
 
 }
