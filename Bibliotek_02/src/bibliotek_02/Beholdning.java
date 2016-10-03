@@ -11,6 +11,9 @@ public class Beholdning {
     private final SimpleStringProperty bookID;
     private final SimpleStringProperty bookName;
     private final SimpleStringProperty bookQuantity;
+   // private final SimpleStringProperty bookAuthor;
+    //private final SimpleStringProperty bookYear;
+    //private final SimpleStringProperty bookPublisher;
     
     Beholdning(String bookID, String bookName, String bookQuantity)
     {
