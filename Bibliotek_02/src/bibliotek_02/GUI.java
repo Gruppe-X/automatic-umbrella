@@ -23,9 +23,10 @@ public class GUI extends Application
     private TextField searchBooks;
     private TableView tableViewUtlanTop;
     private TableView tableViewKopi;
-    private TableView tableViewBeholdning;
+    private TableView<Beholdning>tableViewBeholdning;
     private TableView tableViewKunde;
     private TableView<Ansatt> tableViewAnsatt;
+    
     
     // Filler for the ansatt table
     final ObservableList<Ansatt> ansattData = FXCollections.observableArrayList
@@ -45,6 +46,17 @@ public class GUI extends Application
             new Ansatt("Cristiano", "Google", "88877333"),
             new Ansatt("Del", "Piero", "88855222")
         );
+    //Filler for the Beholdning table
+    final ObservableList<Beholdning> bookData = FXCollections.observableArrayList
+            (
+                new Beholdning("1", "Forest Gum", "10"),
+                new Beholdning("2", "Google", "22"),
+                new Beholdning("3", "Web Design", "15"),
+                new Beholdning("4", "SQL", "4"),
+                new Beholdning("5", "WoW ProTip", "100")
+                    
+            );
+    
     
     public static void main(String[] args)
     {
@@ -252,11 +264,18 @@ public class GUI extends Application
         HBox beholdningHBox = new HBox();
         tableViewBeholdning = new TableView();
         
-        TableColumn fornavnCol = new TableColumn("N/A");
-        TableColumn etternavnCol = new TableColumn("N/A");
-        TableColumn telefonCol = new TableColumn("N/A");
+        TableColumn fornavnCol = new TableColumn("ID");
+        fornavnCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
+        
+        TableColumn etternavnCol = new TableColumn("Navn");
+        etternavnCol.setCellValueFactory(new PropertyValueFactory<>("BookName"));
+        
+        TableColumn telefonCol = new TableColumn("Antall");
+        telefonCol.setCellValueFactory(new PropertyValueFactory<>("BookQuantity"));
+        
         tableViewBeholdning.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         
+        tableViewBeholdning.setItems(bookData);
         tableViewBeholdning.setMinSize(450, 175);
         tableViewBeholdning.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         beholdningHBox.getChildren().add(tableViewBeholdning);
