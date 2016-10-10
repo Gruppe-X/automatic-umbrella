@@ -12,9 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 
 /**
  *
@@ -25,6 +22,10 @@ public class GUI extends Application
 
     private DatabaseHandler handler;
     private TextField searchBooks;
+    private TextField searchCopy;
+    private TextField searchInventory;
+    private TextField searchBorrower;
+    private TextField searchLibrarian;
     private TableView tableViewLoansTop;
     private TableView tableViewKopi;
     private TableView tableViewBook;
@@ -111,13 +112,13 @@ public class GUI extends Application
     {
         Tab bookTab = new Tab("Bok");
         BorderPane bookBorderPane = new BorderPane();
-        HBox bookHBox = createBookHBox();
+        VBox bookVBox = createBookVBox();
         BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         bookTab.setContent(bookBorderPane);
-        bookBorderPane.setTop(bookHBox);
+        bookBorderPane.setTop(bookVBox);
         bookBorderPane.setBottom(loansBorderPaneBottom);
-
+        
         bookTab.setClosable(false);
 
         return bookTab;
@@ -132,11 +133,11 @@ public class GUI extends Application
     {
         Tab inventoryTab = new Tab("Beholdning");
         BorderPane inventoryBorderPane = new BorderPane();
-        HBox inventoryHBox = createInventoryHBox();
+        VBox inventoryVBox = createInventoryVBox();
         BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         inventoryTab.setContent(inventoryBorderPane);
-        inventoryBorderPane.setTop(inventoryHBox);
+        inventoryBorderPane.setTop(inventoryVBox);
         inventoryBorderPane.setBottom(loansBorderPaneBottom);
 
         inventoryTab.setClosable(false);
@@ -153,11 +154,11 @@ public class GUI extends Application
     {
         Tab borrowerTab = new Tab("Låntaker");
         BorderPane borrowerBorderPane = new BorderPane();
-        HBox borrowerHBox = createBorrowerHBox();
+        VBox borrowerVBox = createBorrowerVBox();
         BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         borrowerTab.setContent(borrowerBorderPane);
-        borrowerBorderPane.setTop(borrowerHBox);
+        borrowerBorderPane.setTop(borrowerVBox);
         borrowerBorderPane.setBottom(loansBorderPaneBottom);
 
         borrowerTab.setClosable(false);
@@ -174,11 +175,11 @@ public class GUI extends Application
     {
         Tab librarianTab = new Tab("Bibliotekar");
         BorderPane librarianBorderPane = new BorderPane();
-        HBox librarianHBox = createLibrarianHBox();
+        VBox librarianVBox = createLibrarianVBox();
         BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         librarianTab.setContent(librarianBorderPane);
-        librarianBorderPane.setTop(librarianHBox);
+        librarianBorderPane.setTop(librarianVBox);
         librarianBorderPane.setBottom(loansBorderPaneBottom);
 
         librarianTab.setClosable(false);
@@ -235,21 +236,31 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Book" tab.
      */
-    private HBox createBookHBox()
+    private VBox createBookVBox()
     {
-        HBox bookHBox = new HBox();
+        VBox bookVBox = new VBox();
         tableViewBook = new TableView();
+        searchCopy = new TextField();
+        HBox buttonContainer = new HBox();
+        Button addButton = new Button("Add");
+        Button removeButton = new Button("Remove");
+        
+        searchCopy.setPromptText("Search after copy");
 
         TableColumn fornavnCol = new TableColumn("N/A");
         TableColumn etternavnCol = new TableColumn("N/A");
         TableColumn telefonCol = new TableColumn("N/A");
+
         tableViewBook.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
 
         tableViewBook.setMinSize(450, 175);
         tableViewBook.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        bookHBox.getChildren().add(tableViewBook);
+        buttonContainer.getChildren().addAll(addButton, removeButton);
+        bookVBox.getChildren().add(buttonContainer);
+        bookVBox.getChildren().add(searchCopy);
+        bookVBox.getChildren().add(tableViewBook);
 
-        return bookHBox;
+        return bookVBox;
     }
 
     /**
@@ -257,28 +268,43 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Inventory" tab.
      */
-    private HBox createInventoryHBox()
+    private VBox createInventoryVBox()
     {
-        HBox inventoryHBox = new HBox();
+        VBox inventoryVBox = new VBox();
         tableViewInventory = new TableView();
+        searchInventory = new TextField();
+        HBox buttonContainer = new HBox();
+        Button addButton = new Button("Add");
+        Button removeButton = new Button("Remove");
         
-        TableColumn fornavnCol = new TableColumn("ID");
-        fornavnCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
+        searchInventory.setPromptText("Search through the inventory");
         
-        TableColumn etternavnCol = new TableColumn("Bok Navn");
-        etternavnCol.setCellValueFactory(new PropertyValueFactory<>("BookName"));
+        TableColumn antallCol = new TableColumn("Antall");
+        antallCol.setCellValueFactory(new PropertyValueFactory<>("BookQuantity"));
         
-        TableColumn telefonCol = new TableColumn("Antall");
-        telefonCol.setCellValueFactory(new PropertyValueFactory<>("BookQuantity"));
+        TableColumn tittelCol = new TableColumn("Tittel");
+        tittelCol.setCellValueFactory(new PropertyValueFactory<>("BookName"));
         
-        tableViewInventory.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        TableColumn forfatterCol = new TableColumn("Forfatter");
+        forfatterCol.setCellValueFactory(new PropertyValueFactory<>("BookAuthor"));
+        
+        TableColumn forlagCol = new TableColumn("Forlag");
+        forlagCol.setCellValueFactory(new PropertyValueFactory<>("BookPublisher"));
+        
+        TableColumn ISBNCol = new TableColumn("ISBN");
+        ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookISBN"));
+        
+        tableViewInventory.getColumns().addAll(antallCol, tittelCol, forfatterCol, forlagCol, ISBNCol);
         
         tableViewInventory.setItems(bookList);
         tableViewInventory.setMinSize(450, 175);
         tableViewInventory.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        inventoryHBox.getChildren().add(tableViewInventory);
+        buttonContainer.getChildren().addAll(addButton, removeButton);
+        inventoryVBox.getChildren().add(buttonContainer);
+        inventoryVBox.getChildren().add(searchInventory);
+        inventoryVBox.getChildren().add(tableViewInventory);
 
-        return inventoryHBox;
+        return inventoryVBox;
     }
 
     /**
@@ -286,10 +312,16 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Borrower" tab.
      */
-    private HBox createBorrowerHBox()
+    private VBox createBorrowerVBox()
     {
-        HBox borrowerHBox = new HBox();
+        VBox borrowerVBox = new VBox();
         tableViewBorrower = new TableView();
+        searchInventory = new TextField();
+        HBox buttonContainer = new HBox();
+        Button addButton = new Button("Add");
+        Button removeButton = new Button("Remove");
+        
+        searchInventory.setPromptText("Search through this lists");
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
@@ -305,9 +337,12 @@ public class GUI extends Application
         tableViewBorrower.setItems(borrowerList);
         tableViewBorrower.setMinSize(450, 175);
         tableViewBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        borrowerHBox.getChildren().add(tableViewBorrower);
+        buttonContainer.getChildren().addAll(addButton, removeButton);
+        borrowerVBox.getChildren().add(buttonContainer);
+        borrowerVBox.getChildren().add(searchInventory);
+        borrowerVBox.getChildren().add(tableViewBorrower);
 
-        return borrowerHBox;
+        return borrowerVBox;
     }
 
     /**
@@ -315,10 +350,16 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Librarian" tab.
      */
-    private HBox createLibrarianHBox()
+    private VBox createLibrarianVBox()
     {
-        HBox librarianHBox = new HBox();
+        VBox librarianVBox = new VBox();
         tableViewLibrarian = new TableView();
+        searchLibrarian = new TextField();
+        HBox buttonContainer = new HBox();
+        Button addButton = new Button("Add");
+        Button removeButton = new Button("Remove");
+        
+        searchLibrarian.setPromptText("Search through this lists");
 
         TableColumn librarianIDCol = new TableColumn("AnsattID");
         librarianIDCol.setCellValueFactory(new PropertyValueFactory<>("ansattID"));
@@ -334,9 +375,12 @@ public class GUI extends Application
         tableViewLibrarian.setItems(librarianList);
         tableViewLibrarian.setMinSize(450, 175);
         tableViewLibrarian.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        librarianHBox.getChildren().add(tableViewLibrarian);
+        buttonContainer.getChildren().addAll(addButton, removeButton);
+        librarianVBox.getChildren().add(buttonContainer);
+        librarianVBox.getChildren().add(searchLibrarian);
+        librarianVBox.getChildren().add(tableViewLibrarian);
 
-        return librarianHBox;
+        return librarianVBox;
     }
 
     /**
