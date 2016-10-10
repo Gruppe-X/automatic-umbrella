@@ -90,6 +90,7 @@ public class GUI extends Application
     private Tab createLoansTab()
     {
         Tab loansTab = new Tab("Utlån");
+        
         BorderPane loansBorderPane = new BorderPane();
         VBox loansVBox = createLoansVBox();
 
@@ -199,9 +200,9 @@ public class GUI extends Application
     }
 
     /**
-     * Creates a search bar in the "Loans" tab.
+     * Creates a VBox with all the content that goes in the 'Utlån' tab.
      *
-     * @return Return the search bar.
+     * @return loansVBox the VBox containing the structure of the 'Utlån' tab.
      */
     private VBox createLoansVBox()
     {
