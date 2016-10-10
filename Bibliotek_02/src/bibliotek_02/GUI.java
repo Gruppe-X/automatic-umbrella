@@ -29,14 +29,14 @@ public class GUI extends Application
     private TableView tableViewLoansTop;
     private TableView tableViewKopi;
     private TableView tableViewBook;
-    private TableView<BookCopy>tableViewInventory;
+    private TableView<Book>tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewBorrower;       
 
     
     ObservableList<Librarian> librarianList;
     //Filler for the Inventory table
-    ObservableList<BookCopy> bookList = FXCollections.observableArrayList();
+    ObservableList<Book> bookList = FXCollections.observableArrayList();
     
     ObservableList<Borrower> borrowerList;
     
@@ -44,7 +44,7 @@ public class GUI extends Application
     public GUI(){
         handler = new DatabaseHandler();
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
-        bookList = FXCollections.observableArrayList(handler.listBookCopys()); //TODO lag listBooks i DatabaseHandler
+        bookList = FXCollections.observableArrayList(handler.listBooks()); //TODO lag listBooks i DatabaseHandler
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
     }
     
@@ -167,7 +167,7 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the "Librarian" tab.
+     * Creates the "Librarian" tabh.
      *
      * @return Returns the "Librarian" tab.
      */
@@ -292,7 +292,7 @@ public class GUI extends Application
         forlagCol.setCellValueFactory(new PropertyValueFactory<>("BookPublisher"));
         
         TableColumn ISBNCol = new TableColumn("ISBN");
-        ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookISBN"));
+        ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
         
         tableViewInventory.getColumns().addAll(antallCol, tittelCol, forfatterCol, forlagCol, ISBNCol);
         
