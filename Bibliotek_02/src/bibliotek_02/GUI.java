@@ -251,7 +251,6 @@ public class GUI extends Application
     {
         VBox bookVBox = new VBox();
         tableViewBook = new TableView();
-        
         searchCopy = new TextField();
         Button addButton = new Button("Add");
         Button removeButton = new Button("Remove");
@@ -262,16 +261,12 @@ public class GUI extends Application
         TableColumn etternavnCol = new TableColumn("N/A");
         TableColumn telefonCol = new TableColumn("N/A");
 
-        
-        bookVBox.getChildren().add(removeButton);
-        bookVBox.getChildren().add(addButton);
-        bookVBox.getChildren().add(searchCopy);
-        bookVBox.getChildren().add(tableViewBook);
-
         tableViewBook.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
 
         tableViewBook.setMinSize(450, 175);
         tableViewBook.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        bookVBox.getChildren().add(removeButton);
+        bookVBox.getChildren().add(addButton);
         bookVBox.getChildren().add(searchCopy);
         bookVBox.getChildren().add(tableViewBook);
 
