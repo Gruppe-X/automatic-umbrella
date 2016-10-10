@@ -123,6 +123,8 @@ public class DatabaseHandler {
         return results;
     }
     
+    
+    
     public ResultSet getEmployees(){
         return getResultSet("SELECT * FROM Ansatt");
     }

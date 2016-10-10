@@ -20,12 +20,15 @@ import static javafx.application.Application.launch;
 public class GUI extends Application
 {
 
+    private DatabaseHandler handler;
     private TextField searchBooks;
     private TableView tableViewUtlanTop;
     private TableView tableViewKopi;
     private TableView<Beholdning>tableViewBeholdning;
     private TableView<Ansatt> tableViewAnsatt;
     private TableView<Kunde> tableViewKunde;
+    
+    private ObservableList<Kunde> kundeData;
 
     // Filler for the ansatt table
     final ObservableList<Ansatt> ansattData = FXCollections.observableArrayList(
@@ -43,9 +46,9 @@ public class GUI extends Application
                 new Beholdning("3", "Web Design", "15"),
                 new Beholdning("4", "SQL", "4"),
                 new Beholdning("5", "WoW ProTip", "100")
-                    
             );
     
+    /**
     final ObservableList<Kunde> kundeData = FXCollections.observableArrayList(
             new Kunde("John", "Swagmeister", "99911888"),
             new Kunde("Peter", "Toppris", "33399111"),
@@ -53,7 +56,13 @@ public class GUI extends Application
             new Kunde("Cristiano", "Google", "88877333"),
             new Kunde("Del", "Piero", "88855222")
     );
+    **/
 
+    public GUI(){
+        handler = new DatabaseHandler();
+        kundeData = FXCollections.observableArrayList(handler.listBorrowers());
+    }
+    
     public static void main(String[] args)
     {
         launch(args);
