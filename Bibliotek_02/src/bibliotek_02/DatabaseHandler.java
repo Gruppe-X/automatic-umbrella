@@ -203,13 +203,16 @@ public class DatabaseHandler {
         return librarians;
     }
     
+    /**
+     * Returns true if connection is valid, otherwise returns false.
+     * @return true if connection is valid, otherwise returns false.
+     */
     public boolean isConnectionValid(){
         boolean result = false;
         try{
             result = connection.isValid(0);
         } catch (SQLException SQLEx) {
-            System.out.println(SQLEx.getMessage());
-            SQLEx.printStackTrace();
+            result = false;
         }
         return result;
     }

@@ -12,6 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -25,22 +28,14 @@ public class GUI extends Application
     private TableView tableViewLoansTop;
     private TableView tableViewKopi;
     private TableView tableViewBook;
-    private TableView<Inventory>tableViewInventory;
+    private TableView<BookCopy>tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewBorrower;       
 
     
     ObservableList<Librarian> librarianList;
     //Filler for the Inventory table
-    ObservableList<Inventory> bookList = FXCollections.observableArrayList
-        (
-                new Inventory("1", "Forest Gum", "10"),
-                new Inventory("2", "Google", "22"),
-                new Inventory("3", "Web Design", "15"),
-                new Inventory("4", "SQL", "4"),
-                new Inventory("5", "WoW ProTip", "100")
-                    
-            );
+    ObservableList<BookCopy> bookList = FXCollections.observableArrayList();
     
     ObservableList<Borrower> borrowerList;
     

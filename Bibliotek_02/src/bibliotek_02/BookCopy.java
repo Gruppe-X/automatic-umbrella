@@ -6,20 +6,27 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Oscar Wika, Vinh Tran
  */
-public class Inventory {
+public class BookCopy {
     
     private final SimpleStringProperty bookID;
     private final SimpleStringProperty bookName;
     private final SimpleStringProperty bookQuantity;
-   // private final SimpleStringProperty bookAuthor;
+    private final Book book;
+    //private final SimpleStringProperty bookAuthor;
     //private final SimpleStringProperty bookYear;
     //private final SimpleStringProperty bookPublisher;
     
-    Inventory(String bookID, String bookName, String bookQuantity)
+    BookCopy(Book book, String bookID, String bookName, String bookQuantity)
     {
+        this.book = book;
+        this.bookID = new SimpleStringProperty(bookID);
+        this.bookName = new SimpleStringProperty(book.getBookName());
+        this.bookQuantity = new SimpleStringProperty(bookQuantity);
+        /**
         this.bookID = new SimpleStringProperty(bookID);
         this.bookName = new SimpleStringProperty(bookName);
         this.bookQuantity = new SimpleStringProperty(bookQuantity);
+        **/
         
     }
     
@@ -69,7 +76,7 @@ public class Inventory {
      * 
      * @param bookName 
      */
-    public void sstBookName(String bookName)
+    public void setBookName(String bookName)
     {
         this.bookName.set(bookName);
     }
