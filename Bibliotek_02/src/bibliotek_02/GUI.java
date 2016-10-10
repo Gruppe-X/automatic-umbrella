@@ -22,10 +22,10 @@ public class GUI extends Application
 
     private TextField searchBooks;
     private TableView tableViewLoansTop;
-    private TableView tableViewKopi;
+    private TableView tableViewBook;
     private TableView<Inventory>tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
-    private TableView<Borrower> tableViewLåntaker;
+    private TableView<Borrower> tableViewBorrower;       
 
     // Filler for the Librarian table
     final ObservableList<Librarian> librarianList = FXCollections.observableArrayList
@@ -111,24 +111,24 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the "Kopi" tab.
+     * Creates the "Book" tab.
      *
-     * @return Returns the "Kopi" tab.
+     * @return Returns the "Book" tab.
      */
-    private Tab createKopiTab()
+    private Tab createBookTab()
     {
-        Tab kopiTab = new Tab("Kopi");
-        BorderPane kopiBorderPane = new BorderPane();
-        HBox kopiHBox = createKopiHBox();
+        Tab bookTab = new Tab("Bok");
+        BorderPane bookBorderPane = new BorderPane();
+        HBox bookHBox = createBookHBox();
         BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
-        kopiTab.setContent(kopiBorderPane);
-        kopiBorderPane.setTop(kopiHBox);
-        kopiBorderPane.setBottom(loansBorderPaneBottom);
+        bookTab.setContent(bookBorderPane);
+        bookBorderPane.setTop(bookHBox);
+        bookBorderPane.setBottom(loansBorderPaneBottom);
 
-        kopiTab.setClosable(false);
+        bookTab.setClosable(false);
 
-        return kopiTab;
+        return bookTab;
     }
 
     /**
@@ -202,12 +202,12 @@ public class GUI extends Application
     private TabPane createTabPane()
     {
         Tab loans = createLoansTab();
-        Tab kopi = createKopiTab();
+        Tab book = createBookTab();
         Tab inventory = createInventoryTab();
         Tab borrower = createBorrowerTab();
         Tab librarian = createLibrarianTab();
 
-        TabPane tabPane = new TabPane(loans, kopi, inventory, borrower, librarian);
+        TabPane tabPane = new TabPane(loans, book, inventory, borrower, librarian);
 
         return tabPane;
     }
@@ -239,25 +239,25 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the table in the "Kopi" tab.
+     * Creates the table in the "Book" tab.
      *
-     * @return Returns a HBox containing a table for the "Kopi" tab.
+     * @return Returns a HBox containing a table for the "Book" tab.
      */
-    private HBox createKopiHBox()
+    private HBox createBookHBox()
     {
-        HBox kopiHBox = new HBox();
-        tableViewKopi = new TableView();
+        HBox bookHBox = new HBox();
+        tableViewBook = new TableView();
 
         TableColumn fornavnCol = new TableColumn("N/A");
         TableColumn etternavnCol = new TableColumn("N/A");
         TableColumn telefonCol = new TableColumn("N/A");
-        tableViewKopi.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewBook.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
 
-        tableViewKopi.setMinSize(450, 175);
-        tableViewKopi.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        kopiHBox.getChildren().add(tableViewKopi);
+        tableViewBook.setMinSize(450, 175);
+        tableViewBook.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        bookHBox.getChildren().add(tableViewBook);
 
-        return kopiHBox;
+        return bookHBox;
     }
 
     /**
@@ -297,7 +297,7 @@ public class GUI extends Application
     private HBox createBorrowerHBox()
     {
         HBox borrowerHBox = new HBox();
-        tableViewLåntaker = new TableView();
+        tableViewBorrower = new TableView();
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
@@ -308,12 +308,12 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Telefon");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
 
-        tableViewLåntaker.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewBorrower.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
 
-        tableViewLåntaker.setItems(borrowerList);
-        tableViewLåntaker.setMinSize(450, 175);
-        tableViewLåntaker.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        borrowerHBox.getChildren().add(tableViewLåntaker);
+        tableViewBorrower.setItems(borrowerList);
+        tableViewBorrower.setMinSize(450, 175);
+        tableViewBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        borrowerHBox.getChildren().add(tableViewBorrower);
 
         return borrowerHBox;
     }
