@@ -15,7 +15,7 @@ public class Librarian {
     Librarian(String employeeID, String employeeFirstName, String employeeLastName)
     {
         this.employeeID = new SimpleStringProperty(employeeID);
-        this.employeeFirstName = new SimpleStringProperty(employeeLastName);
+        this.employeeFirstName = new SimpleStringProperty(employeeFirstName);
         this.employeeLastName = new SimpleStringProperty(employeeLastName);
     }
     

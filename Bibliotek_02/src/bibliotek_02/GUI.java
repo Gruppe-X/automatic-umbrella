@@ -12,6 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -20,45 +23,34 @@ import static javafx.application.Application.launch;
 public class GUI extends Application
 {
 
+    private DatabaseHandler handler;
     private TextField searchBooks;
     private TextField searchCopy;
     private TextField searchInventory;
     private TextField searchBorrower;
     private TextField searchLibrarian;
     private TableView tableViewLoansTop;
+    private TableView tableViewKopi;
     private TableView tableViewBook;
-    private TableView<Inventory>tableViewInventory;
+    private TableView<BookCopy>tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewBorrower;       
 
-    // Filler for the Librarian table
-    final ObservableList<Librarian> librarianList = FXCollections.observableArrayList
-        (
-            new Librarian("1", "Smith", "Smith"),
-            new Librarian("2", "Johnson", "Johnson"),
-            new Librarian("3", "Williams", "Ethan-Williams"),
-            new Librarian("4", "Jones", "Emma"),
-            new Librarian("5", "Brown", "Michael")
-    );
-    //Filler for the Inventory table
-    final ObservableList<Inventory> bookList = FXCollections.observableArrayList
-        (
-                new Inventory("1", "Forest Gum", "10"),
-                new Inventory("2", "Google", "22"),
-                new Inventory("3", "Web Design", "15"),
-                new Inventory("4", "SQL", "4"),
-                new Inventory("5", "WoW ProTip", "100")
-                    
-            );
     
-    final ObservableList<Borrower> borrowerList = FXCollections.observableArrayList
-        (new Borrower("John", "Swagmeister", "99911888"),
-            new Borrower("Peter", "Toppris", "33399111"),
-            new Borrower("Lise", "Imsdal", "99933222"),
-            new Borrower("Cristiano", "Google", "88877333"),
-            new Borrower("Del", "Piero", "88855222")
-    );
+    ObservableList<Librarian> librarianList;
+    //Filler for the Inventory table
+    ObservableList<BookCopy> bookList = FXCollections.observableArrayList();
+    
+    ObservableList<Borrower> borrowerList;
+    
 
+    public GUI(){
+        handler = new DatabaseHandler();
+        borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
+        bookList = FXCollections.observableArrayList(); //TODO lag listBooks i DatabaseHandler
+        librarianList = FXCollections.observableArrayList(handler.listLibrarians());
+    }
+    
     public static void main(String[] args)
     {
         launch(args);
