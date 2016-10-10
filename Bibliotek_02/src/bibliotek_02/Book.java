@@ -14,8 +14,9 @@ public class Book {
     private final SimpleStringProperty bookAuthor;
     private final SimpleStringProperty bookYear;
     private final SimpleStringProperty bookPublisher;
+    private final SimpleStringProperty bookQuantity;
     
-    Book(String bookID, String bookName, String bookAuthor, String bookEdition, String bookYear, String bookPublisher)
+    Book(String bookID, String bookName, String bookAuthor, String bookEdition, String bookYear, String bookPublisher, int bookQuantity)
     {
         this.bookID = new SimpleStringProperty(bookID);
         this.bookName = new SimpleStringProperty(bookName);
@@ -23,7 +24,7 @@ public class Book {
         this.bookEdition = new SimpleStringProperty(bookEdition);
         this.bookYear = new SimpleStringProperty(bookYear);
         this.bookPublisher = new SimpleStringProperty(bookPublisher);
-        
+        this.bookQuantity = new SimpleStringProperty(Integer.toString(bookQuantity));
     }
     
     /**
@@ -80,6 +81,10 @@ public class Book {
         return bookPublisher.get();
     }
     
+    public String getBookQuantity(){
+        return bookQuantity.get();
+    }
+    
     /**
      * 
      * @param bookID
@@ -93,7 +98,7 @@ public class Book {
      * 
      * @param bookName 
      */
-    public void sstBookName(String bookName)
+    public void setBookName(String bookName)
     {
         this.bookName.set(bookName);
     }

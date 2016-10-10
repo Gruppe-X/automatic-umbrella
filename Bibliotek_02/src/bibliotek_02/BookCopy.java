@@ -4,90 +4,81 @@ import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
- * @author Oscar Wika, Vinh Tran
+ * @author Oscar Wika, Vinh Tran, Robert Rishaug
  */
 public class BookCopy {
     
-    private final SimpleStringProperty bookID;
-    private final SimpleStringProperty bookName;
-    private final SimpleStringProperty bookQuantity;
+    private final SimpleStringProperty copyID;
     private final Book book;
-    //private final SimpleStringProperty bookAuthor;
-    //private final SimpleStringProperty bookYear;
-    //private final SimpleStringProperty bookPublisher;
     
-    BookCopy(Book book, String bookID, String bookName, String bookQuantity)
+    BookCopy(Book book, String copyID)
     {
         this.book = book;
-        this.bookID = new SimpleStringProperty(bookID);
-        this.bookName = new SimpleStringProperty(book.getBookName());
-        this.bookQuantity = new SimpleStringProperty(bookQuantity);
-        /**
-        this.bookID = new SimpleStringProperty(bookID);
-        this.bookName = new SimpleStringProperty(bookName);
-        this.bookQuantity = new SimpleStringProperty(bookQuantity);
-        **/
-        
+        this.copyID = new SimpleStringProperty(copyID);
     }
     
     /**
-     * Returns the first name of a customer
-     * @return Returns the first name of a customer
+     * Returns id of the book.
+     * @return id of the book.
      */
-    public String getBookID()
-    {
-        return bookID.get();
+    public String getBookID() {
+        return book.getBookID();
+    }
+
+    /**
+     * Returns name/title of the book.
+     * @return name/title of the book.
+     */
+    public String getBookName() {
+        return book.getBookName();
+    }
+
+    /**
+     * Returns publisher of the book.
+     * @return publisher of the book.
+     */
+    public String getBookPublisher() {
+        return book.getBookPublisher();
+    }
+
+    /**
+     * Returns author of the book.
+     * @return author of the book.
+     */
+    public String getBookAuthor() {
+        return book.getBookAuthor();
+    }
+
+    /**
+     * Returns edition of the book.
+     * @return edition of the book.
+     */
+    public String getBookEdition() {
+        return book.getBookEdition();
     }
     
     /**
-     * Returns the last name of a customer
-     * @return Returns the last name of a customer
+     * Returns publishing year of the book.
+     * @return publishing year of the book.
      */
-    public String getBookName()
-    {
-       return bookName.get();
+    public String getBookPublishingYear() {
+        return book.getBookYear();
     }
-    
-     /**
-     * Returns the telephone of a customer
-     * @return Returns the telephone of a customer
-     */
-    public String getBookQuantity()
-    {
-        return bookQuantity.get();
-    }
-    
-    /*
-    public String getBookAuthor()
-    {
-        return bookAuthor.get();
-    }
-    */
+
     /**
-     * 
-     * @param bookID
+     * Returns id of the copy.
+     * @return id of the copy.
      */
-    public void setBookID(String bookID)
-    {
-        this.bookID.set(bookID);
+    public String getCopyID() {
+        return copyID.get();
     }
     
     /**
-     * 
-     * @param bookName 
+     * Returns book object.
+     * @return book object.
      */
-    public void setBookName(String bookName)
-    {
-        this.bookName.set(bookName);
-    }
-    
-    /**
-     * 
-     * @param bookQuantity 
-     */
-    public void setBookQuantity(String bookQuantity)
-    {
-        this.bookQuantity.set(bookQuantity);
+    public Book getBook() {
+        return book;
     }
     
 }

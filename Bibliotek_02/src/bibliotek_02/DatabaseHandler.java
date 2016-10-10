@@ -18,12 +18,16 @@ public class DatabaseHandler {
     
     private final String connString = "jdbc:sqlserver://roberris-prosjektx.uials.no;databaseName=Bibliotek;username=sa;password=password123";
     private Connection connection;
-    private PreparedStatement statement;
+    private PreparedStatement searchStatement;
+    private PreparedStatement bookCopyJoinStatement;
+    private PreparedStatement bookQuantityByIDStatement;
     
     public DatabaseHandler() {
         connect();
         try{
-            statement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
+            searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
+            bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
+            bookQuantityByIDStatement = connection.prepareStatement("SELECT count(ISBN) FROM Eksemplar WHERE ISBN = ?");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -57,11 +61,10 @@ public class DatabaseHandler {
     public ResultSet searchTableByColumnValString(String table, String col, String parameter){
         ResultSet results = null;
         try{
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
-            statement.setString(1, table);
-            statement.setString(2, col);
-            statement.setString(3, parameter);
-            results = statement.executeQuery();
+            searchStatement.setString(1, table);
+            searchStatement.setString(2, col);
+            searchStatement.setString(3, parameter);
+            results = searchStatement.executeQuery();
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -79,10 +82,10 @@ public class DatabaseHandler {
     public ResultSet searchTableByColumnValInt(String table, String col, int parameter){
         ResultSet results = null;
         try{
-            statement.setString(1, table);
-            statement.setString(2, col);
-            statement.setInt(3, parameter);
-            results = statement.executeQuery();
+            searchStatement.setString(1, table);
+            searchStatement.setString(2, col);
+            searchStatement.setInt(3, parameter);
+            results = searchStatement.executeQuery();
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -145,6 +148,26 @@ public class DatabaseHandler {
         return getResultSet("SELECT * FROM Bok");
     }
     
+    /**
+     * Returns quantity of books with given id/isbn
+     * @param bookID id/isbn to search for quantity of.
+     * @return quantity of books with given id/isbn.
+     */
+    public int getQuantityOfBooksByID(String bookID){
+        int quantity = -1;
+        try {
+            bookQuantityByIDStatement.setString(1, bookID);
+            ResultSet result = bookQuantityByIDStatement.executeQuery();
+            if(result.next()){
+            quantity = result.getInt(1);
+            }
+        } catch (SQLException SQLEx) {
+            System.out.println(SQLEx.getMessage());
+            SQLEx.printStackTrace();
+        }
+        return quantity;
+    }
+    
     public ResultSet getBooksByID(String ISBN){
         return searchTableByColumnValString("Bok", "ISBN", ISBN);
     }
@@ -162,15 +185,13 @@ public class DatabaseHandler {
     }
     
     public ResultSet getCopys(){
-        return getResultSet("SELECT * FROM Eksemplar");
-    }
-    
-    public ResultSet getCopysByID(int id){
-        return searchTableByColumnValInt("Eksemplar", "EksemplarID", id);
-    }
-    
-    public ResultSet getCopysByIDBN(String ISBN){
-        return searchTableByColumnValString("Eksemplar", "ISBN", ISBN);
+        ResultSet results;
+        try {
+            results = bookCopyJoinStatement.executeQuery();
+        } catch (SQLException ex) {
+            results = null;
+        }
+        return results;
     }
     
     /**
@@ -201,6 +222,41 @@ public class DatabaseHandler {
             //TODO
         }
         return librarians;
+    }
+    
+    public List<Book> listBooks(){
+        List<Book> books = new ArrayList<>();
+        ResultSet bookSet = getBooks();
+        try{
+            while(bookSet.next()){
+                books.add(new Book(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3), getQuantityOfBooksByID(bookSet.getString(1))));
+            }
+        } catch (SQLException ex) {
+            books = null;
+        }
+        return books;
+    }
+    
+    public List<BookCopy> listBookCopys(){
+        List<BookCopy> bookCopys = new ArrayList<>();
+        ResultSet bookCopySet = getCopys();
+        try {
+            while(bookCopySet.next()){
+                String bookID = bookCopySet.getString(1);
+                String title = bookCopySet.getString(2);
+                String publisher = bookCopySet.getString(3);
+                String author = bookCopySet.getString(4);
+                String edition = bookCopySet.getString(5);
+                String publishingYear = bookCopySet.getString(6);
+                Book book = new Book(bookID, title, author, edition, publishingYear, publisher, getQuantityOfBooksByID(bookID));
+                String copyID = bookCopySet.getString(7);
+                BookCopy copy = new BookCopy(book, copyID);
+                bookCopys.add(copy);
+            }
+        } catch (SQLException ex) {
+            bookCopys = null;
+        }
+        return bookCopys;
     }
     
     /**
