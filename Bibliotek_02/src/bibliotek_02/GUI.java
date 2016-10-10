@@ -12,6 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -21,6 +24,10 @@ public class GUI extends Application
 {
 
     private TextField searchBooks;
+    private TextField searchCopy;
+    private TextField searchInventory;
+    private TextField searchBorrower;
+    private TextField searchLibrarian;
     private TableView tableViewLoansTop;
     private TableView tableViewKopi;
     private TableView<Inventory>tableViewInventory;
@@ -119,11 +126,11 @@ public class GUI extends Application
     {
         Tab kopiTab = new Tab("Kopi");
         BorderPane kopiBorderPane = new BorderPane();
-        HBox kopiHBox = createKopiHBox();
+        VBox kopiVBox = createKopiVBox();
         BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         kopiTab.setContent(kopiBorderPane);
-        kopiBorderPane.setTop(kopiHBox);
+        kopiBorderPane.setTop(kopiVBox);
         kopiBorderPane.setBottom(loansBorderPaneBottom);
 
         kopiTab.setClosable(false);
@@ -140,11 +147,11 @@ public class GUI extends Application
     {
         Tab inventoryTab = new Tab("Beholdning");
         BorderPane inventoryBorderPane = new BorderPane();
-        HBox inventoryHBox = createInventoryHBox();
+        VBox inventoryVBox = createInventoryVBox();
         BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         inventoryTab.setContent(inventoryBorderPane);
-        inventoryBorderPane.setTop(inventoryHBox);
+        inventoryBorderPane.setTop(inventoryVBox);
         inventoryBorderPane.setBottom(loansBorderPaneBottom);
 
         inventoryTab.setClosable(false);
@@ -243,21 +250,30 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Kopi" tab.
      */
-    private HBox createKopiHBox()
+    private VBox createKopiVBox()
     {
-        HBox kopiHBox = new HBox();
+        VBox kopiVBox = new VBox();
         tableViewKopi = new TableView();
+        searchCopy = new TextField();
+        Button addButton = new Button("Add");
+        Button removeButton = new Button("Remove");
+        
+        searchCopy.setPromptText("Search after copy");
 
         TableColumn fornavnCol = new TableColumn("N/A");
         TableColumn etternavnCol = new TableColumn("N/A");
         TableColumn telefonCol = new TableColumn("N/A");
+        
         tableViewKopi.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-
         tableViewKopi.setMinSize(450, 175);
         tableViewKopi.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        kopiHBox.getChildren().add(tableViewKopi);
+        
+        kopiVBox.getChildren().add(removeButton);
+        kopiVBox.getChildren().add(addButton);
+        kopiVBox.getChildren().add(searchCopy);
+        kopiVBox.getChildren().add(tableViewKopi);
 
-        return kopiHBox;
+        return kopiVBox;
     }
 
     /**
@@ -265,10 +281,13 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Inventory" tab.
      */
-    private HBox createInventoryHBox()
+    private VBox createInventoryVBox()
     {
-        HBox inventoryHBox = new HBox();
+        VBox inventoryVBox = new VBox();
         tableViewInventory = new TableView();
+        searchInventory = new TextField();
+        
+        searchInventory.setPromptText("Search through the inventory");
         
         TableColumn fornavnCol = new TableColumn("ID");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
@@ -284,9 +303,9 @@ public class GUI extends Application
         tableViewInventory.setItems(bookList);
         tableViewInventory.setMinSize(450, 175);
         tableViewInventory.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        inventoryHBox.getChildren().add(tableViewInventory);
+        inventoryVBox.getChildren().add(tableViewInventory);
 
-        return inventoryHBox;
+        return inventoryVBox;
     }
 
     /**
