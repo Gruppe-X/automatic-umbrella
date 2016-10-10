@@ -32,17 +32,10 @@ public class GUI extends Application
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewLåntaker;
 
-    // Filler for the Librarian table
-    final ObservableList<Librarian> librarianList = FXCollections.observableArrayList
-        (
-            new Librarian("1", "Smith", "Smith"),
-            new Librarian("2", "Johnson", "Johnson"),
-            new Librarian("3", "Williams", "Ethan-Williams"),
-            new Librarian("4", "Jones", "Emma"),
-            new Librarian("5", "Brown", "Michael")
-    );
+    
+    ObservableList<Librarian> librarianList;
     //Filler for the Inventory table
-    final ObservableList<Inventory> bookList = FXCollections.observableArrayList
+    ObservableList<Inventory> bookList = FXCollections.observableArrayList
         (
                 new Inventory("1", "Forest Gum", "10"),
                 new Inventory("2", "Google", "22"),
@@ -52,18 +45,14 @@ public class GUI extends Application
                     
             );
     
-    ObservableList<Borrower> borrowerList = FXCollections.observableArrayList
-        (new Borrower("John", "Swagmeister", "99911888"),
-            new Borrower("Peter", "Toppris", "33399111"),
-            new Borrower("Lise", "Imsdal", "99933222"),
-            new Borrower("Cristiano", "Google", "88877333"),
-            new Borrower("Del", "Piero", "88855222")
-    );
+    ObservableList<Borrower> borrowerList;
     
 
     public GUI(){
         handler = new DatabaseHandler();
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
+        bookList = FXCollections.observableArrayList(); //TODO lag listBooks i DatabaseHandler
+        librarianList = FXCollections.observableArrayList(handler.listLibrarians());
     }
     
     public static void main(String[] args)
