@@ -12,9 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 
 /**
  *
@@ -282,16 +279,22 @@ public class GUI extends Application
         
         searchInventory.setPromptText("Search through the inventory");
         
-        TableColumn fornavnCol = new TableColumn("ID");
-        fornavnCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
+        TableColumn antallCol = new TableColumn("Antall");
+        antallCol.setCellValueFactory(new PropertyValueFactory<>("BookQuantity"));
         
-        TableColumn etternavnCol = new TableColumn("Bok Navn");
-        etternavnCol.setCellValueFactory(new PropertyValueFactory<>("BookName"));
+        TableColumn tittelCol = new TableColumn("Tittel");
+        tittelCol.setCellValueFactory(new PropertyValueFactory<>("BookName"));
         
-        TableColumn telefonCol = new TableColumn("Antall");
-        telefonCol.setCellValueFactory(new PropertyValueFactory<>("BookQuantity"));
+        TableColumn forfatterCol = new TableColumn("Forfatter");
+        forfatterCol.setCellValueFactory(new PropertyValueFactory<>("BookAuthor"));
         
-        tableViewInventory.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        TableColumn forlagCol = new TableColumn("Forlag");
+        forlagCol.setCellValueFactory(new PropertyValueFactory<>("BookPublisher"));
+        
+        TableColumn ISBNCol = new TableColumn("ISBN");
+        ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookISBN"));
+        
+        tableViewInventory.getColumns().addAll(antallCol, tittelCol, forfatterCol, forlagCol, ISBNCol);
         
         tableViewInventory.setItems(bookList);
         tableViewInventory.setMinSize(450, 175);
