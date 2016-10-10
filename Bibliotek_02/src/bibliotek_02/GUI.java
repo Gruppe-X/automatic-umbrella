@@ -87,14 +87,10 @@ public class GUI extends Application
     {
         Tab loansTab = new Tab("Utlån");
         BorderPane loansBorderPane = new BorderPane();
-        VBox loansVBoxTop = createLoansVBoxTop();
-        BorderPane loansnBorderPaneBottom = createLoansBorderPaneBottom();
+        VBox loansVBox = createLoansVBox();
 
         loansTab.setContent(loansBorderPane);
-        loansBorderPane.setTop(loansVBoxTop);
-        loansBorderPane.setBottom(loansnBorderPaneBottom);
-
-        loansTab.setClosable(false);
+        loansBorderPane.setCenter(loansVBox);
 
         return loansTab;
     }
@@ -109,13 +105,11 @@ public class GUI extends Application
         Tab bookTab = new Tab("Bok");
         BorderPane bookBorderPane = new BorderPane();
         HBox bookHBox = createBookHBox();
-        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
+        //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         bookTab.setContent(bookBorderPane);
         bookBorderPane.setTop(bookHBox);
-        bookBorderPane.setBottom(loansBorderPaneBottom);
-
-        bookTab.setClosable(false);
+        //bookBorderPane.setBottom(loansBorderPaneBottom);
 
         return bookTab;
     }
@@ -130,13 +124,11 @@ public class GUI extends Application
         Tab inventoryTab = new Tab("Beholdning");
         BorderPane inventoryBorderPane = new BorderPane();
         HBox inventoryHBox = createInventoryHBox();
-        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
+        //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         inventoryTab.setContent(inventoryBorderPane);
         inventoryBorderPane.setTop(inventoryHBox);
-        inventoryBorderPane.setBottom(loansBorderPaneBottom);
-
-        inventoryTab.setClosable(false);
+        //inventoryBorderPane.setBottom(loansBorderPaneBottom);
 
         return inventoryTab;
     }
@@ -151,13 +143,11 @@ public class GUI extends Application
         Tab borrowerTab = new Tab("Låntaker");
         BorderPane borrowerBorderPane = new BorderPane();
         HBox borrowerHBox = createBorrowerHBox();
-        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
+        //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         borrowerTab.setContent(borrowerBorderPane);
         borrowerBorderPane.setTop(borrowerHBox);
-        borrowerBorderPane.setBottom(loansBorderPaneBottom);
-
-        borrowerTab.setClosable(false);
+        //borrowerBorderPane.setBottom(loansBorderPaneBottom);
 
         return borrowerTab;
     }
@@ -172,13 +162,11 @@ public class GUI extends Application
         Tab librarianTab = new Tab("Bibliotekar");
         BorderPane librarianBorderPane = new BorderPane();
         HBox librarianHBox = createLibrarianHBox();
-        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
+        //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         librarianTab.setContent(librarianBorderPane);
         librarianBorderPane.setTop(librarianHBox);
-        librarianBorderPane.setBottom(loansBorderPaneBottom);
-
-        librarianTab.setClosable(false);
+        //librarianBorderPane.setBottom(loansBorderPaneBottom);
 
         return librarianTab;
     }
@@ -192,11 +180,12 @@ public class GUI extends Application
     {
         Tab loans = createLoansTab();
         Tab book = createBookTab();
-        Tab inventory = createInventoryTab();
+        Tab bookCopy = createInventoryTab();
         Tab borrower = createBorrowerTab();
         Tab librarian = createLibrarianTab();
 
-        TabPane tabPane = new TabPane(loans, book, inventory, borrower, librarian);
+        TabPane tabPane = new TabPane(loans, book, bookCopy, borrower, librarian);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         return tabPane;
     }
@@ -206,25 +195,27 @@ public class GUI extends Application
      *
      * @return Return the search bar.
      */
-    private VBox createLoansVBoxTop()
+    private VBox createLoansVBox()
     {
-        VBox loansVBoxTop = new VBox();
+        VBox loansVBox = new VBox();
         searchBooks = new TextField();
         tableViewLoansTop = new TableView();
 
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
 
-        TableColumn fornavnCol = new TableColumn("N/A");
-        TableColumn etternavnCol = new TableColumn("N/A");
-        TableColumn telefonCol = new TableColumn("N/A");
-        tableViewLoansTop.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-        tableViewLoansTop.setMinSize(450, 150);
+        TableColumn bokIDCol = new TableColumn("Bok-ID");
+        TableColumn ISBNCol = new TableColumn("ISBN");
+        TableColumn tittelCol = new TableColumn("Tittel");
+        TableColumn forfatterCol = new TableColumn("Forfatter");
+        tableViewLoansTop.getColumns().addAll(bokIDCol, ISBNCol, tittelCol, forfatterCol);
+        tableViewLoansTop.setMinHeight(225);
+        tableViewLoansTop.setMinWidth(300);
         tableViewLoansTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        loansVBoxTop.getChildren().add(searchBooks);
-        loansVBoxTop.getChildren().add(tableViewLoansTop);
+        loansVBox.getChildren().add(searchBooks);
+        loansVBox.getChildren().add(tableViewLoansTop);
 
-        return loansVBoxTop;
+        return loansVBox;
     }
 
     /**
@@ -340,22 +331,6 @@ public class GUI extends Application
         librarianHBox.getChildren().add(tableViewLibrarian);
 
         return librarianHBox;
-    }
-
-    /**
-     *
-     * @return
-     */
-    private BorderPane createLoansBorderPaneBottom()
-    {
-        BorderPane loansBorderPaneBottom = new BorderPane();
-        VBox loansVBoxBottomLeft = new VBox();
-        VBox loansVBoxBottomRight = new VBox();
-
-        loansBorderPaneBottom.setLeft(loansVBoxBottomLeft);
-        loansBorderPaneBottom.setRight(loansVBoxBottomRight);
-
-        return loansBorderPaneBottom;
     }
 
     /**
