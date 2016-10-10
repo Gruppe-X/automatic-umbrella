@@ -18,12 +18,14 @@ public class DatabaseHandler {
     
     private final String connString = "jdbc:sqlserver://roberris-prosjektx.uials.no;databaseName=Bibliotek;username=sa;password=password123";
     private Connection connection;
-    private PreparedStatement statement;
+    private PreparedStatement searchStatement;
+    private PreparedStatement bookCopyJoinStatement;
     
     public DatabaseHandler() {
         connect();
         try{
-            statement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
+            searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
+            bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -57,11 +59,11 @@ public class DatabaseHandler {
     public ResultSet searchTableByColumnValString(String table, String col, String parameter){
         ResultSet results = null;
         try{
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
-            statement.setString(1, table);
-            statement.setString(2, col);
-            statement.setString(3, parameter);
-            results = statement.executeQuery();
+            searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
+            searchStatement.setString(1, table);
+            searchStatement.setString(2, col);
+            searchStatement.setString(3, parameter);
+            results = searchStatement.executeQuery();
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -79,10 +81,10 @@ public class DatabaseHandler {
     public ResultSet searchTableByColumnValInt(String table, String col, int parameter){
         ResultSet results = null;
         try{
-            statement.setString(1, table);
-            statement.setString(2, col);
-            statement.setInt(3, parameter);
-            results = statement.executeQuery();
+            searchStatement.setString(1, table);
+            searchStatement.setString(2, col);
+            searchStatement.setInt(3, parameter);
+            results = searchStatement.executeQuery();
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -162,15 +164,13 @@ public class DatabaseHandler {
     }
     
     public ResultSet getCopys(){
-        return getResultSet("SELECT * FROM Eksemplar");
-    }
-    
-    public ResultSet getCopysByID(int id){
-        return searchTableByColumnValInt("Eksemplar", "EksemplarID", id);
-    }
-    
-    public ResultSet getCopysByIDBN(String ISBN){
-        return searchTableByColumnValString("Eksemplar", "ISBN", ISBN);
+        ResultSet results;
+        try {
+            results = bookCopyJoinStatement.executeQuery();
+        } catch (SQLException ex) {
+            results = null;
+        }
+        return results;
     }
     
     /**
@@ -201,6 +201,28 @@ public class DatabaseHandler {
             //TODO
         }
         return librarians;
+    }
+    
+    public List<BookCopy> listBookCopys(){
+        List<BookCopy> bookCopys = new ArrayList<>();
+        ResultSet bookCopySet = getCopys();
+        try {
+            while(bookCopySet.next()){
+                String bookID = bookCopySet.getString(1);
+                String title = bookCopySet.getString(2);
+                String publisher = bookCopySet.getString(3);
+                String author = bookCopySet.getString(4);
+                String edition = bookCopySet.getString(5);
+                String publishingYear = bookCopySet.getString(6);
+                Book book = new Book(bookID, title, author, edition, publishingYear, publisher);
+                String copyID = bookCopySet.getString(7);
+                BookCopy copy = new BookCopy(book, copyID);
+                bookCopys.add(copy);
+            }
+        } catch (SQLException ex) {
+            bookCopys = null;
+        }
+        return bookCopys;
     }
     
     /**

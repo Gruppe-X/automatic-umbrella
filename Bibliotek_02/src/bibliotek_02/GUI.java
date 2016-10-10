@@ -43,7 +43,7 @@ public class GUI extends Application
     public GUI(){
         handler = new DatabaseHandler();
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
-        bookList = FXCollections.observableArrayList(); //TODO lag listBooks i DatabaseHandler
+        bookList = FXCollections.observableArrayList(handler.listBookCopys()); //TODO lag listBooks i DatabaseHandler
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
     }
     
