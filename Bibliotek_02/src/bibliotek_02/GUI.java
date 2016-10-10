@@ -12,9 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 
 /**
  *
@@ -124,26 +121,15 @@ public class GUI extends Application
      */
     private Tab createBookTab()
     {
-<<<<<<< HEAD
-        Tab kopiTab = new Tab("Kopi");
-        BorderPane kopiBorderPane = new BorderPane();
-        VBox kopiVBox = createKopiVBox();
-        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
-
-        kopiTab.setContent(kopiBorderPane);
-        kopiBorderPane.setTop(kopiVBox);
-        kopiBorderPane.setBottom(loansBorderPaneBottom);
-=======
         Tab bookTab = new Tab("Bok");
         BorderPane bookBorderPane = new BorderPane();
-        HBox bookHBox = createBookHBox();
+        VBox bookVBox = createBookVBox();
         BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         bookTab.setContent(bookBorderPane);
-        bookBorderPane.setTop(bookHBox);
+        bookBorderPane.setTop(bookVBox);
         bookBorderPane.setBottom(loansBorderPaneBottom);
->>>>>>> 202d9f664d8b96bde6a4a69717f6d97dc01742ce
-
+        
         bookTab.setClosable(false);
 
         return bookTab;
@@ -261,47 +247,35 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Book" tab.
      */
-<<<<<<< HEAD
-    private VBox createKopiVBox()
+    private VBox createBookVBox()
     {
-        VBox kopiVBox = new VBox();
-        tableViewKopi = new TableView();
+        VBox bookVBox = new VBox();
+        tableViewBook = new TableView();
+        
         searchCopy = new TextField();
         Button addButton = new Button("Add");
         Button removeButton = new Button("Remove");
         
         searchCopy.setPromptText("Search after copy");
-=======
-    private HBox createBookHBox()
-    {
-        HBox bookHBox = new HBox();
-        tableViewBook = new TableView();
->>>>>>> 202d9f664d8b96bde6a4a69717f6d97dc01742ce
 
         TableColumn fornavnCol = new TableColumn("N/A");
         TableColumn etternavnCol = new TableColumn("N/A");
         TableColumn telefonCol = new TableColumn("N/A");
-<<<<<<< HEAD
-        
-        tableViewKopi.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-        tableViewKopi.setMinSize(450, 175);
-        tableViewKopi.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        
-        kopiVBox.getChildren().add(removeButton);
-        kopiVBox.getChildren().add(addButton);
-        kopiVBox.getChildren().add(searchCopy);
-        kopiVBox.getChildren().add(tableViewKopi);
 
-        return kopiVBox;
-=======
+        
+        bookVBox.getChildren().add(removeButton);
+        bookVBox.getChildren().add(addButton);
+        bookVBox.getChildren().add(searchCopy);
+        bookVBox.getChildren().add(tableViewBook);
+
         tableViewBook.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
 
         tableViewBook.setMinSize(450, 175);
         tableViewBook.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        bookHBox.getChildren().add(tableViewBook);
+        bookVBox.getChildren().add(searchCopy);
+        bookVBox.getChildren().add(tableViewBook);
 
-        return bookHBox;
->>>>>>> 202d9f664d8b96bde6a4a69717f6d97dc01742ce
+        return bookVBox;
     }
 
     /**
