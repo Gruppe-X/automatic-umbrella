@@ -193,12 +193,12 @@ public class DatabaseHandler {
      * Returns a List of all borrowers.
      * @return a List of all borrowers.
      */
-    public List<Kunde> listBorrowers(){
-        List<Kunde> customers = new ArrayList<>();
+    public List<Borrower> listBorrowers(){
+        List<Borrower> customers = new ArrayList<>();
         ResultSet customerSet = getBorrowers();
         try {
             while(customerSet.next()){
-                customers.add(new Kunde(customerSet.getString(2), customerSet.getString(3), customerSet.getString(4)));
+                customers.add(new Borrower(customerSet.getString(2), customerSet.getString(3), customerSet.getString(4)));
             }
         } catch (SQLException SQLEx) {
             

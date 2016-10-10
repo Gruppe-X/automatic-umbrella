@@ -22,45 +22,48 @@ public class GUI extends Application
 
     private DatabaseHandler handler;
     private TextField searchBooks;
-    private TableView tableViewUtlanTop;
+    private TableView tableViewLoansTop;
     private TableView tableViewKopi;
-    private TableView<Beholdning>tableViewBeholdning;
-    private TableView<Ansatt> tableViewAnsatt;
-    private TableView<Kunde> tableViewKunde;
-    
-    private ObservableList<Kunde> kundeData;
 
-    // Filler for the ansatt table
-    final ObservableList<Ansatt> ansattData = FXCollections.observableArrayList(
-            new Ansatt("1", "Smith", "Smith"),
-            new Ansatt("2", "Johnson", "Johnson"),
-            new Ansatt("3", "Williams", "Ethan-Williams"),
-            new Ansatt("4", "Jones", "Emma"),
-            new Ansatt("5", "Brown", "Michael")
+    
+    
+            
+    private TableView<Inventory>tableViewInventory;
+    private TableView<Librarian> tableViewLibrarian;
+    private TableView<Borrower> tableViewLåntaker;
+
+    // Filler for the Librarian table
+    final ObservableList<Librarian> librarianList = FXCollections.observableArrayList
+        (
+            new Librarian("1", "Smith", "Smith"),
+            new Librarian("2", "Johnson", "Johnson"),
+            new Librarian("3", "Williams", "Ethan-Williams"),
+            new Librarian("4", "Jones", "Emma"),
+            new Librarian("5", "Brown", "Michael")
     );
-    //Filler for the Beholdning table
-    final ObservableList<Beholdning> bookData = FXCollections.observableArrayList
-            (
-                new Beholdning("1", "Forest Gum", "10"),
-                new Beholdning("2", "Google", "22"),
-                new Beholdning("3", "Web Design", "15"),
-                new Beholdning("4", "SQL", "4"),
-                new Beholdning("5", "WoW ProTip", "100")
+    //Filler for the Inventory table
+    final ObservableList<Inventory> bookList = FXCollections.observableArrayList
+        (
+                new Inventory("1", "Forest Gum", "10"),
+                new Inventory("2", "Google", "22"),
+                new Inventory("3", "Web Design", "15"),
+                new Inventory("4", "SQL", "4"),
+                new Inventory("5", "WoW ProTip", "100")
+                    
             );
     
-    /**
-    final ObservableList<Kunde> kundeData = FXCollections.observableArrayList(
-            new Kunde("John", "Swagmeister", "99911888"),
-            new Kunde("Peter", "Toppris", "33399111"),
-            new Kunde("Lise", "Imsdal", "99933222"),
-            new Kunde("Cristiano", "Google", "88877333"),
-            new Kunde("Del", "Piero", "88855222")
+    ObservableList<Borrower> borrowerList = FXCollections.observableArrayList
+        (new Borrower("John", "Swagmeister", "99911888"),
+            new Borrower("Peter", "Toppris", "33399111"),
+            new Borrower("Lise", "Imsdal", "99933222"),
+            new Borrower("Cristiano", "Google", "88877333"),
+            new Borrower("Del", "Piero", "88855222")
     );
-    **/
+    
 
     public GUI(){
         handler = new DatabaseHandler();
-        kundeData = FXCollections.observableArrayList(handler.listBorrowers());
+        borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
     }
     
     public static void main(String[] args)
@@ -98,24 +101,24 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the "Utlån" tab.
+     * Creates the "Loans" tab.
      *
-     * @return The "Utlån" tab.
+     * @return The "Loans" tab.
      */
-    private Tab createUtlanTab()
+    private Tab createLoansTab()
     {
-        Tab utlanTab = new Tab("Utlån");
-        BorderPane utlanBorderPane = new BorderPane();
-        VBox utlanVBoxTop = createUtlanVBoxTop();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        Tab loansTab = new Tab("Utlån");
+        BorderPane loansBorderPane = new BorderPane();
+        VBox loansVBoxTop = createLoansVBoxTop();
+        BorderPane loansnBorderPaneBottom = createLoansBorderPaneBottom();
 
-        utlanTab.setContent(utlanBorderPane);
-        utlanBorderPane.setTop(utlanVBoxTop);
-        utlanBorderPane.setBottom(utlanBorderPaneBottom);
+        loansTab.setContent(loansBorderPane);
+        loansBorderPane.setTop(loansVBoxTop);
+        loansBorderPane.setBottom(loansnBorderPaneBottom);
 
-        utlanTab.setClosable(false);
+        loansTab.setClosable(false);
 
-        return utlanTab;
+        return loansTab;
     }
 
     /**
@@ -128,11 +131,11 @@ public class GUI extends Application
         Tab kopiTab = new Tab("Kopi");
         BorderPane kopiBorderPane = new BorderPane();
         HBox kopiHBox = createKopiHBox();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         kopiTab.setContent(kopiBorderPane);
         kopiBorderPane.setTop(kopiHBox);
-        kopiBorderPane.setBottom(utlanBorderPaneBottom);
+        kopiBorderPane.setBottom(loansBorderPaneBottom);
 
         kopiTab.setClosable(false);
 
@@ -140,66 +143,66 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the "Beholdning" tab.
+     * Creates the "Inventory" tab.
      *
-     * @return Returns the "Beholdning" tab.
+     * @return Returns the "Inventory" tab.
      */
-    private Tab createBeholdningTab()
+    private Tab createInventoryTab()
     {
-        Tab beholdningTab = new Tab("Beholdning");
-        BorderPane beholdningBorderPane = new BorderPane();
-        HBox beholdningHBox = createBeholdningHBox();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        Tab inventoryTab = new Tab("Beholdning");
+        BorderPane inventoryBorderPane = new BorderPane();
+        HBox inventoryHBox = createInventoryHBox();
+        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
-        beholdningTab.setContent(beholdningBorderPane);
-        beholdningBorderPane.setTop(beholdningHBox);
-        beholdningBorderPane.setBottom(utlanBorderPaneBottom);
+        inventoryTab.setContent(inventoryBorderPane);
+        inventoryBorderPane.setTop(inventoryHBox);
+        inventoryBorderPane.setBottom(loansBorderPaneBottom);
 
-        beholdningTab.setClosable(false);
+        inventoryTab.setClosable(false);
 
-        return beholdningTab;
+        return inventoryTab;
     }
 
     /**
-     * Creates the "Kunde" tab.
+     * Creates the "Borrower" tab.
      *
-     * @return Returns the "Kunde" tab.
+     * @return Returns the "Borrower" tab.
      */
-    private Tab createKundeTab()
+    private Tab createBorrowerTab()
     {
-        Tab kundeTab = new Tab("Kunde");
-        BorderPane kundeBorderPane = new BorderPane();
-        HBox kundeHBox = createKundeHBox();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        Tab borrowerTab = new Tab("Låntaker");
+        BorderPane borrowerBorderPane = new BorderPane();
+        HBox borrowerHBox = createBorrowerHBox();
+        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
-        kundeTab.setContent(kundeBorderPane);
-        kundeBorderPane.setTop(kundeHBox);
-        kundeBorderPane.setBottom(utlanBorderPaneBottom);
+        borrowerTab.setContent(borrowerBorderPane);
+        borrowerBorderPane.setTop(borrowerHBox);
+        borrowerBorderPane.setBottom(loansBorderPaneBottom);
 
-        kundeTab.setClosable(false);
+        borrowerTab.setClosable(false);
 
-        return kundeTab;
+        return borrowerTab;
     }
 
     /**
-     * Creates the "Ansatt" tab.
+     * Creates the "Librarian" tab.
      *
-     * @return Returns the "Ansatt" tab.
+     * @return Returns the "Librarian" tab.
      */
-    private Tab createAnsattTab()
+    private Tab createLibrarianTab()
     {
-        Tab ansattTab = new Tab("Ansatt");
-        BorderPane ansattBorderPane = new BorderPane();
-        HBox ansattHBox = createAnsattHBox();
-        BorderPane utlanBorderPaneBottom = createUtlanBorderPaneBottom();
+        Tab librarianTab = new Tab("Bibliotekar");
+        BorderPane librarianBorderPane = new BorderPane();
+        HBox librarianHBox = createLibrarianHBox();
+        BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
-        ansattTab.setContent(ansattBorderPane);
-        ansattBorderPane.setTop(ansattHBox);
-        ansattBorderPane.setBottom(utlanBorderPaneBottom);
+        librarianTab.setContent(librarianBorderPane);
+        librarianBorderPane.setTop(librarianHBox);
+        librarianBorderPane.setBottom(loansBorderPaneBottom);
 
-        ansattTab.setClosable(false);
+        librarianTab.setClosable(false);
 
-        return ansattTab;
+        return librarianTab;
     }
 
     /**
@@ -209,41 +212,41 @@ public class GUI extends Application
      */
     private TabPane createTabPane()
     {
-        Tab utlan = createUtlanTab();
+        Tab loans = createLoansTab();
         Tab kopi = createKopiTab();
-        Tab beholdning = createBeholdningTab();
-        Tab kunde = createKundeTab();
-        Tab ansatt = createAnsattTab();
+        Tab inventory = createInventoryTab();
+        Tab borrower = createBorrowerTab();
+        Tab librarian = createLibrarianTab();
 
-        TabPane tabPane = new TabPane(utlan, kopi, beholdning, kunde, ansatt);
+        TabPane tabPane = new TabPane(loans, kopi, inventory, borrower, librarian);
 
         return tabPane;
     }
 
     /**
-     * Creates a search bar in the "Utlån" tab.
+     * Creates a search bar in the "Loans" tab.
      *
      * @return Return the search bar.
      */
-    private VBox createUtlanVBoxTop()
+    private VBox createLoansVBoxTop()
     {
-        VBox utlanVBoxTop = new VBox();
+        VBox loansVBoxTop = new VBox();
         searchBooks = new TextField();
-        tableViewUtlanTop = new TableView();
+        tableViewLoansTop = new TableView();
 
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
 
         TableColumn fornavnCol = new TableColumn("N/A");
         TableColumn etternavnCol = new TableColumn("N/A");
         TableColumn telefonCol = new TableColumn("N/A");
-        tableViewUtlanTop.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-        tableViewUtlanTop.setMinSize(450, 150);
-        tableViewUtlanTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableViewLoansTop.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewLoansTop.setMinSize(450, 150);
+        tableViewLoansTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        utlanVBoxTop.getChildren().add(searchBooks);
-        utlanVBoxTop.getChildren().add(tableViewUtlanTop);
+        loansVBoxTop.getChildren().add(searchBooks);
+        loansVBoxTop.getChildren().add(tableViewLoansTop);
 
-        return utlanVBoxTop;
+        return loansVBoxTop;
     }
 
     /**
@@ -269,14 +272,14 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the table in the "Beholdning" tab.
+     * Creates the table in the "Inventory" tab.
      *
-     * @return Returns a HBox containing a table for the "Beholdning" tab.
+     * @return Returns a HBox containing a table for the "Inventory" tab.
      */
-    private HBox createBeholdningHBox()
+    private HBox createInventoryHBox()
     {
-        HBox beholdningHBox = new HBox();
-        tableViewBeholdning = new TableView();
+        HBox inventoryHBox = new HBox();
+        tableViewInventory = new TableView();
         
         TableColumn fornavnCol = new TableColumn("ID");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
@@ -287,25 +290,25 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Antall");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("BookQuantity"));
         
-        tableViewBeholdning.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewInventory.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         
-        tableViewBeholdning.setItems(bookData);
-        tableViewBeholdning.setMinSize(450, 175);
-        tableViewBeholdning.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        beholdningHBox.getChildren().add(tableViewBeholdning);
+        tableViewInventory.setItems(bookList);
+        tableViewInventory.setMinSize(450, 175);
+        tableViewInventory.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        inventoryHBox.getChildren().add(tableViewInventory);
 
-        return beholdningHBox;
+        return inventoryHBox;
     }
 
     /**
-     * Creates the table in the "Kunde" tab.
+     * Creates the table in the "Borrower" tab.
      *
-     * @return Returns a HBox containing a table for the "Kudne" tab.
+     * @return Returns a HBox containing a table for the "Borrower" tab.
      */
-    private HBox createKundeHBox()
+    private HBox createBorrowerHBox()
     {
-        HBox kundeHBox = new HBox();
-        tableViewKunde = new TableView();
+        HBox borrowerHBox = new HBox();
+        tableViewLåntaker = new TableView();
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
@@ -316,28 +319,28 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Telefon");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
 
-        tableViewKunde.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewLåntaker.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
 
-        tableViewKunde.setItems(kundeData);
-        tableViewKunde.setMinSize(450, 175);
-        tableViewKunde.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        kundeHBox.getChildren().add(tableViewKunde);
+        tableViewLåntaker.setItems(borrowerList);
+        tableViewLåntaker.setMinSize(450, 175);
+        tableViewLåntaker.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        borrowerHBox.getChildren().add(tableViewLåntaker);
 
-        return kundeHBox;
+        return borrowerHBox;
     }
 
     /**
-     * Creates the table in the "Ansatt" tab.
+     * Creates the table in the "Librarian" tab.
      *
-     * @return Returns a HBox containing a table for the "Ansatt" tab.
+     * @return Returns a HBox containing a table for the "Librarian" tab.
      */
-    private HBox createAnsattHBox()
+    private HBox createLibrarianHBox()
     {
-        HBox ansattHBox = new HBox();
-        tableViewAnsatt = new TableView();
+        HBox librarianHBox = new HBox();
+        tableViewLibrarian = new TableView();
 
-        TableColumn ansattIDCol = new TableColumn("AnsattID");
-        ansattIDCol.setCellValueFactory(new PropertyValueFactory<>("ansattID"));
+        TableColumn librarianIDCol = new TableColumn("AnsattID");
+        librarianIDCol.setCellValueFactory(new PropertyValueFactory<>("ansattID"));
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
@@ -345,30 +348,30 @@ public class GUI extends Application
         TableColumn etternavnCol = new TableColumn("Etternavn");
         etternavnCol.setCellValueFactory(new PropertyValueFactory<>("LastName"));
 
-        tableViewAnsatt.getColumns().addAll(ansattIDCol, fornavnCol, etternavnCol);
+        tableViewLibrarian.getColumns().addAll(librarianIDCol, fornavnCol, etternavnCol);
 
-        tableViewAnsatt.setItems(ansattData);
-        tableViewAnsatt.setMinSize(450, 175);
-        tableViewAnsatt.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        ansattHBox.getChildren().add(tableViewAnsatt);
+        tableViewLibrarian.setItems(librarianList);
+        tableViewLibrarian.setMinSize(450, 175);
+        tableViewLibrarian.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        librarianHBox.getChildren().add(tableViewLibrarian);
 
-        return ansattHBox;
+        return librarianHBox;
     }
 
     /**
      *
      * @return
      */
-    private BorderPane createUtlanBorderPaneBottom()
+    private BorderPane createLoansBorderPaneBottom()
     {
-        BorderPane utlanBorderPaneBottom = new BorderPane();
-        VBox utlanVBoxBottomLeft = new VBox();
-        VBox utlanVBoxBottomRight = new VBox();
+        BorderPane loansBorderPaneBottom = new BorderPane();
+        VBox loansVBoxBottomLeft = new VBox();
+        VBox loansVBoxBottomRight = new VBox();
 
-        utlanBorderPaneBottom.setLeft(utlanVBoxBottomLeft);
-        utlanBorderPaneBottom.setRight(utlanVBoxBottomRight);
+        loansBorderPaneBottom.setLeft(loansVBoxBottomLeft);
+        loansBorderPaneBottom.setRight(loansVBoxBottomRight);
 
-        return utlanBorderPaneBottom;
+        return loansBorderPaneBottom;
     }
 
     /**
