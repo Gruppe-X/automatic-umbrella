@@ -109,13 +109,6 @@ public class GUI extends Application
         Tab bookTab = new Tab("Bok");
         BorderPane bookBorderPane = new BorderPane();
 
-        HBox bookHBox = createBookHBox();
-        //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
-
-        bookTab.setContent(bookBorderPane);
-        bookBorderPane.setTop(bookHBox);
-        //bookBorderPane.setBottom(loansBorderPaneBottom);
-
         VBox bookVBox = createBookVBox();
         //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
@@ -135,13 +128,6 @@ public class GUI extends Application
     {
         Tab inventoryTab = new Tab("Beholdning");
         BorderPane inventoryBorderPane = new BorderPane();
-
-        HBox inventoryHBox = createInventoryHBox();
-        //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
-
-        inventoryTab.setContent(inventoryBorderPane);
-        inventoryBorderPane.setTop(inventoryHBox);
-        //inventoryBorderPane.setBottom(loansBorderPaneBottom);
 
         VBox inventoryVBox = createInventoryVBox();
         //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
@@ -163,13 +149,6 @@ public class GUI extends Application
         Tab borrowerTab = new Tab("Låntaker");
         BorderPane borrowerBorderPane = new BorderPane();
 
-        HBox borrowerHBox = createBorrowerHBox();
-        //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
-
-        borrowerTab.setContent(borrowerBorderPane);
-        borrowerBorderPane.setTop(borrowerHBox);
-        //borrowerBorderPane.setBottom(loansBorderPaneBottom);
-
         VBox borrowerVBox = createBorrowerVBox();
         //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
@@ -189,13 +168,6 @@ public class GUI extends Application
     {
         Tab librarianTab = new Tab("Bibliotekar");
         BorderPane librarianBorderPane = new BorderPane();
-
-        HBox librarianHBox = createLibrarianHBox();
-        //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
-
-        librarianTab.setContent(librarianBorderPane);
-        librarianBorderPane.setTop(librarianHBox);
-        //librarianBorderPane.setBottom(loansBorderPaneBottom);
 
         VBox librarianVBox = createLibrarianVBox();
         //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
