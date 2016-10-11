@@ -31,7 +31,9 @@ public class GUI extends Application
     private TableView tableViewBook;
     private TableView<Book>tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
-    private TableView<Borrower> tableViewBorrower;       
+    private TableView<Borrower> tableViewBorrower;
+    
+    private AddBookView addBookView;
 
     
     ObservableList<Librarian> librarianList;
@@ -46,6 +48,8 @@ public class GUI extends Application
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
         bookList = FXCollections.observableArrayList(handler.listBooks()); //TODO lag listBooks i DatabaseHandler
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
+        
+        addBookView = new AddBookView();
     }
     
     public static void main(String[] args)
@@ -271,7 +275,9 @@ public class GUI extends Application
         searchInventory = new TextField();
         HBox buttonContainer = new HBox();
         Button addButton = new Button("Add");
+        addButton.setOnAction(e -> addBook());
         Button removeButton = new Button("Remove");
+        removeButton.setOnAction(e -> removeBook());
         
         searchInventory.setPromptText("Search through the inventory");
         
@@ -409,5 +415,26 @@ public class GUI extends Application
             // ... user chose CANCEL or closed the dialog
             // then do nothing.
         }
+    }
+
+    private void updateInventoryList(){
+        bookList.clear();
+        bookList.addAll(handler.listBooks());
+    }
+    
+    private void addBook() {
+        Book newBook = addBookView.display();
+        if(handler.addBook(newBook)){
+            System.out.println(newBook.getBookName() + " was added");
+        } else {
+            System.out.println("Failed to add book");
+        }
+        updateInventoryList();
+    }
+
+    private void removeBook() {
+        Book bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
+        handler.deleteBook(bookToDelete);
+        updateInventoryList();
     }
 }

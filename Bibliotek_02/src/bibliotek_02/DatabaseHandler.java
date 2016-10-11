@@ -21,6 +21,8 @@ public class DatabaseHandler {
     private PreparedStatement searchStatement;
     private PreparedStatement bookCopyJoinStatement;
     private PreparedStatement bookQuantityByIDStatement;
+    private PreparedStatement addBookStatement;
+    private PreparedStatement deleteBookStatement;
     
     public DatabaseHandler() {
         connect();
@@ -28,6 +30,8 @@ public class DatabaseHandler {
             searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
             bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
             bookQuantityByIDStatement = connection.prepareStatement("SELECT count(ISBN) FROM Eksemplar WHERE ISBN = ?");
+            addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?)");
+            deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -273,4 +277,46 @@ public class DatabaseHandler {
         return result;
     }
     
+    /*
+    /**
+     * Adds a book to the book table of the database. ISBN and Title is needed to
+     * add book to database.
+     * @param newBook Book object to add to database. 
+     * @return true if book was successfully added, otherwise false.
+     */
+    public boolean addBook(Book newBook){
+        boolean result = false;
+        try {
+            addBookStatement.setString(1, newBook.getBookID());
+            addBookStatement.setString(2, newBook.getBookName());
+            addBookStatement.setString(3, newBook.getBookPublisher());
+            addBookStatement.setString(4, newBook.getBookAuthor());
+            addBookStatement.setInt(5, Integer.parseInt(newBook.getBookEdition()));
+            addBookStatement.setInt(6, Integer.parseInt(newBook.getBookYear()));
+            int rowsUpdated = addBookStatement.executeUpdate();
+            
+            if(rowsUpdated > 0){
+                
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    
+    public boolean deleteBook(Book bookToDelete){
+        boolean result = false;
+        try {
+            deleteBookStatement.setString(1, bookToDelete.getBookID());
+            if(deleteBookStatement.executeUpdate() > 0){
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+        }
+        return result;
+    }
 }
