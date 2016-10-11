@@ -112,7 +112,6 @@ public class GUI extends Application
     
     private HBox createLoansBottomContent(){
         HBox bottomContent = new HBox();
-        
         bottomContent.getChildren().addAll(createLoansBottomLeftContent(), createLoansBottomRightContent());
         
         return bottomContent;
@@ -131,12 +130,17 @@ public class GUI extends Application
         bottomLeftContent.setCenter(registeredBooks);
         Button registerLoanButton = new Button("Registrer Lån");
         bottomLeftContent.setBottom(registerLoanButton);
+        
+        bottomLeftContent.setPadding(new Insets(0,10,0,0));
+        
         return bottomLeftContent;
     }
     
     private VBox createLoansBottomRightContent(){
         VBox bottomRightContent = new VBox();
         GridPane topContent = new GridPane();
+        
+        topContent.setPadding(new Insets(0,0,10,0));
         
         TextField firstNameField = new TextField();
         firstNameField.setPadding(new Insets(5));
@@ -148,7 +152,13 @@ public class GUI extends Application
         topContent.add(lastNameField, 0, 2);
         topContent.add(findBorrowerButton, 1, 2);
         
-        bottomRightContent.getChildren().add(topContent);
+        TableView borrowerTable = new TableView();
+        borrowerTable.setMinHeight(50);
+        
+        bottomRightContent.getChildren().addAll(topContent, borrowerTable);
+        
+        bottomRightContent.setPadding(new Insets(0,0,0,10));
+        
         return bottomRightContent;
     }
 

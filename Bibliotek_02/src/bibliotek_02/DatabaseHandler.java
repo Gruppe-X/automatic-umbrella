@@ -307,6 +307,7 @@ public class DatabaseHandler {
         return result;
     }
     
+    //TODO fix nullpointer
     public boolean deleteBook(Book bookToDelete){
         boolean result = false;
         try {
