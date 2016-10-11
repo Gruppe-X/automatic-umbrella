@@ -233,7 +233,7 @@ public class DatabaseHandler {
         ResultSet bookSet = getBooks();
         try{
             while(bookSet.next()){
-                books.add(new Book(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3), getQuantityOfBooksByID(bookSet.getString(1))));
+                books.add(new Book(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3)));
             }
         } catch (SQLException ex) {
             books = null;
@@ -252,7 +252,7 @@ public class DatabaseHandler {
                 String author = bookCopySet.getString(4);
                 String edition = bookCopySet.getString(5);
                 String publishingYear = bookCopySet.getString(6);
-                Book book = new Book(bookID, title, author, edition, publishingYear, publisher, getQuantityOfBooksByID(bookID));
+                Book book = new Book(bookID, title, author, edition, publishingYear, publisher);
                 String copyID = bookCopySet.getString(7);
                 BookCopy copy = new BookCopy(book, copyID);
                 bookCopys.add(copy);
