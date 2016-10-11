@@ -12,6 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import static javafx.application.Application.launch;
+import javafx.geometry.Insets;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 
 /**
  *
@@ -73,10 +76,11 @@ public class GUI extends Application
 
         mainBorderPane.setCenter(tabPane);
 
-        Scene scene = new Scene(mainBorderPane, 800, 450);
+        Scene scene = new Scene(mainBorderPane);
         scene.getStylesheets().add(getClass().getResource("Stylesheet.css").toExternalForm());
         primaryStage.setTitle("Bibliotek X");
         primaryStage.setScene(scene);
+        primaryStage.sizeToScene();
         primaryStage.show();
 
         // Close window confirmation
@@ -96,12 +100,56 @@ public class GUI extends Application
         Tab loansTab = new Tab("Utlån");
         
         BorderPane loansBorderPane = new BorderPane();
-        VBox loansVBox = createLoansVBox();
-
         loansTab.setContent(loansBorderPane);
-        loansBorderPane.setCenter(loansVBox);
+        
+        VBox loansTopContent = createLoansTopContent();
+        loansBorderPane.setTop(loansTopContent);
 
+        HBox loansBottomContent = createLoansBottomContent();
+        loansBorderPane.setCenter(loansBottomContent);
         return loansTab;
+    }
+    
+    private HBox createLoansBottomContent(){
+        HBox bottomContent = new HBox();
+        
+        bottomContent.getChildren().addAll(createLoansBottomLeftContent(), createLoansBottomRightContent());
+        
+        return bottomContent;
+    }
+    
+    private BorderPane createLoansBottomLeftContent(){
+        BorderPane bottomLeftContent = new BorderPane();
+        Button addButton = new Button("Legg til");
+        Button removeButton = new Button("Fjern");
+        HBox buttonsBox = new HBox(addButton, removeButton);
+        
+        TableView registeredBooks =  new TableView();
+        
+        bottomLeftContent.setTop(buttonsBox);
+        //set table center.
+        bottomLeftContent.setCenter(registeredBooks);
+        Button registerLoanButton = new Button("Registrer Lån");
+        bottomLeftContent.setBottom(registerLoanButton);
+        return bottomLeftContent;
+    }
+    
+    private VBox createLoansBottomRightContent(){
+        VBox bottomRightContent = new VBox();
+        GridPane topContent = new GridPane();
+        
+        TextField firstNameField = new TextField();
+        firstNameField.setPadding(new Insets(5));
+        TextField lastNameField = new TextField();
+        lastNameField.setPadding(new Insets(5));
+        Button findBorrowerButton = new Button("Finn lånetaker");
+        topContent.add(new Label("Lånetaker"), 0, 0);
+        topContent.add(firstNameField, 0, 1);
+        topContent.add(lastNameField, 0, 2);
+        topContent.add(findBorrowerButton, 1, 2);
+        
+        bottomRightContent.getChildren().add(topContent);
+        return bottomRightContent;
     }
 
     /**
@@ -208,14 +256,21 @@ public class GUI extends Application
      *
      * @return loansVBox the VBox containing the structure of the 'Utlån' tab.
      */
-    private VBox createLoansVBox()
+    private VBox createLoansTopContent()
     {
         VBox loansVBox = new VBox();
         searchBooks = new TextField();
-        tableViewLoansTop = new TableView();
-
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
+        createBooksTable();
 
+        loansVBox.getChildren().add(searchBooks);
+        loansVBox.getChildren().add(tableViewLoansTop);
+
+        return loansVBox;
+    }
+    
+    private void createBooksTable(){
+        tableViewLoansTop = new TableView();
         TableColumn bokIDCol = new TableColumn("Bok-ID");
         TableColumn ISBNCol = new TableColumn("ISBN");
         TableColumn tittelCol = new TableColumn("Tittel");
@@ -224,11 +279,6 @@ public class GUI extends Application
         tableViewLoansTop.setMinHeight(225);
         tableViewLoansTop.setMinWidth(300);
         tableViewLoansTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        loansVBox.getChildren().add(searchBooks);
-        loansVBox.getChildren().add(tableViewLoansTop);
-
-        return loansVBox;
     }
 
     /**
