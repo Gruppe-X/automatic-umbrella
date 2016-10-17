@@ -23,6 +23,8 @@ import javafx.scene.layout.GridPane;
 public class GUI extends Application
 {
 
+    private Stage primaryStage;
+    
     private DatabaseHandler handler;
     private TextField searchBooks;
     private TextField searchCopy;
@@ -69,6 +71,7 @@ public class GUI extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+        this.primaryStage = primaryStage;
         // Window
         BorderPane mainBorderPane = new BorderPane();
         // Menu
@@ -257,6 +260,8 @@ public class GUI extends Application
 
         TabPane tabPane = new TabPane(loans, book, bookCopy, borrower, librarian);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        //Resize stage on tab change
+        tabPane.getSelectionModel().selectedItemProperty().addListener(l -> primaryStage.sizeToScene());
 
         return tabPane;
     }
@@ -360,7 +365,6 @@ public class GUI extends Application
         
         tableViewInventory.setItems(bookList);
         tableViewInventory.setMinSize(450, 175);
-        tableViewInventory.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         buttonContainer.getChildren().addAll(addButton, removeButton);
         inventoryVBox.getChildren().add(buttonContainer);
         inventoryVBox.getChildren().add(searchInventory);
@@ -484,9 +488,10 @@ public class GUI extends Application
     
     private void addBook() {
         Book newBook = addBookView.display();
-        if(handler.addBook(newBook)){
+        if(newBook != null && handler.addBook(newBook)){
             System.out.println(newBook.getBookName() + " was added");
-        } else {
+        }
+        else {
             System.out.println("Failed to add book");
         }
         updateInventoryList();
