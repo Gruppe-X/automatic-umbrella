@@ -119,75 +119,6 @@ public class GUI extends Application
         return loansTab;
     }
 
-    private HBox createLoansBottomContent()
-    {
-        HBox bottomContent = new HBox();
-        BorderPane botLeftCont = createLoansBottomLeftContent();
-        VBox botRightCont = createLoansBottomRightContent();
-        bottomContent.getChildren().addAll(botLeftCont, botRightCont);
-        bottomContent.setMinWidth(500);
-        HBox.setHgrow(botLeftCont, Priority.ALWAYS);
-        HBox.setHgrow(botRightCont, Priority.ALWAYS);
-
-        return bottomContent;
-    }
-
-    private BorderPane createLoansBottomLeftContent()
-    {
-        BorderPane bottomLeftContent = new BorderPane();
-        Button addButton = new Button("Legg til");
-        Button removeButton = new Button("Fjern");
-        HBox buttonsBox = new HBox(addButton, removeButton);
-
-        TableView registeredBooks = new TableView();
-        
-        registeredBooks.setMinWidth(240);
-        registeredBooks.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        bottomLeftContent.setTop(buttonsBox);
-        //set table center.
-        bottomLeftContent.setCenter(registeredBooks);
-        Button registerLoanButton = new Button("Registrer Lån");
-        bottomLeftContent.setBottom(registerLoanButton);
-
-        bottomLeftContent.setPadding(new Insets(0, 10, 0, 0));
-        bottomLeftContent.setMinWidth(240);
-
-        return bottomLeftContent;
-    }
-
-    private VBox createLoansBottomRightContent()
-    {
-        VBox bottomRightContent = new VBox();
-        GridPane topContent = new GridPane();
-
-        topContent.setPadding(new Insets(0, 0, 10, 0));
-        //topContent.setGridLinesVisible(true);
-
-        TextField firstNameField = new TextField();
-        firstNameField.setPadding(new Insets(5));
-        TextField lastNameField = new TextField();
-        lastNameField.setPadding(new Insets(5));
-        Button findBorrowerButton = new Button("Finn lånetaker");
-        topContent.add(new Label("Lånetaker"), 0, 0);
-        topContent.add(firstNameField, 0, 1);
-        topContent.add(lastNameField, 0, 2);
-        topContent.add(findBorrowerButton, 1, 2);
-
-        TableView borrowerTable = new TableView();
-        
-        borrowerTable.setMinWidth(240);
-        borrowerTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        borrowerTable.setMinHeight(50);
-
-        bottomRightContent.getChildren().addAll(topContent, borrowerTable);
-
-        bottomRightContent.setPadding(new Insets(0, 0, 0, 10));
-        bottomRightContent.setMinWidth(240);
-
-        return bottomRightContent;
-    }
-
     /**
      * Creates the "Copy" tab.
      *
@@ -280,11 +211,9 @@ public class GUI extends Application
         Tab bookCopy = createInventoryTab();
         Tab borrower = createBorrowerTab();
         Tab librarian = createLibrarianTab();
-
         TabPane tabPane = new TabPane(loans, book, bookCopy, borrower, librarian);
+        
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        //Resize stage on tab change
-        tabPane.getSelectionModel().selectedItemProperty().addListener(l -> primaryStage.sizeToScene());
 
         return tabPane;
     }
@@ -307,6 +236,75 @@ public class GUI extends Application
         return loansVBox;
     }
 
+    private HBox createLoansBottomContent()
+    {
+        HBox bottomContent = new HBox();
+        BorderPane botLeftCont = createLoansBottomLeftContent();
+        VBox botRightCont = createLoansBottomRightContent();
+        bottomContent.getChildren().addAll(botLeftCont, botRightCont);
+        bottomContent.setMinWidth(500);
+        HBox.setHgrow(botLeftCont, Priority.ALWAYS);
+        HBox.setHgrow(botRightCont, Priority.ALWAYS);
+
+        return bottomContent;
+    }
+
+    private BorderPane createLoansBottomLeftContent()
+    {
+        BorderPane bottomLeftContent = new BorderPane();
+        Button addButton = new Button("Legg til");
+        Button removeButton = new Button("Fjern");
+        HBox buttonsBox = new HBox(addButton, removeButton);
+
+        TableView registeredBooks = new TableView();
+        
+        registeredBooks.setMinWidth(240);
+        registeredBooks.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        bottomLeftContent.setTop(buttonsBox);
+        //set table center.
+        bottomLeftContent.setCenter(registeredBooks);
+        Button registerLoanButton = new Button("Registrer Lån");
+        bottomLeftContent.setBottom(registerLoanButton);
+
+        bottomLeftContent.setPadding(new Insets(0, 10, 0, 0));
+        bottomLeftContent.setMinWidth(240);
+
+        return bottomLeftContent;
+    }
+
+    private VBox createLoansBottomRightContent()
+    {
+        VBox bottomRightContent = new VBox();
+        GridPane topContent = new GridPane();
+
+        topContent.setPadding(new Insets(0, 0, 10, 0));
+        //topContent.setGridLinesVisible(true);
+
+        TextField firstNameField = new TextField();
+        firstNameField.setPadding(new Insets(5));
+        TextField lastNameField = new TextField();
+        lastNameField.setPadding(new Insets(5));
+        Button findBorrowerButton = new Button("Finn lånetaker");
+        topContent.add(new Label("Lånetaker"), 0, 0);
+        topContent.add(firstNameField, 0, 1);
+        topContent.add(lastNameField, 0, 2);
+        topContent.add(findBorrowerButton, 1, 2);
+
+        TableView borrowerTable = new TableView();
+        
+        borrowerTable.setMinWidth(240);
+        borrowerTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        borrowerTable.setMinHeight(50);
+
+        bottomRightContent.getChildren().addAll(topContent, borrowerTable);
+
+        bottomRightContent.setPadding(new Insets(0, 0, 0, 10));
+        bottomRightContent.setMinWidth(240);
+
+        return bottomRightContent;
+    }
+
     private void createBooksTable()
     {
         tableViewLoansTop = new TableView();
@@ -321,9 +319,9 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the table in the "Copy" tab.
+     * Creates the table in the "Kopi" tab.
      *
-     * @return Returns a HBox containing a table for the "Copy" tab.
+     * @return Returns a HBox containing a table for the "Kopi" tab.
      */
     private VBox createCopyVBox()
     {
@@ -353,9 +351,9 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the table in the "Inventory" tab.
+     * Creates the table in the "Beholdning" tab.
      *
-     * @return Returns a HBox containing a table for the "Inventory" tab.
+     * @return Returns a HBox containing a table for the "Beholdning" tab.
      */
     private VBox createInventoryVBox()
     {
@@ -398,9 +396,9 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the table in the "Borrower" tab.
+     * Creates the table in the "Låntaker" tab.
      *
-     * @return Returns a HBox containing a table for the "Borrower" tab.
+     * @return Returns a HBox containing a table for the "Låntaker" tab.
      */
     private VBox createBorrowerVBox()
     {
@@ -436,9 +434,9 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the table in the "Librarian" tab.
+     * Creates the table in the "Bibliotekar" tab.
      *
-     * @return Returns a HBox containing a table for the "Librarian" tab.
+     * @return Returns a HBox containing a table for the "Bibliotekar" tab.
      */
     private VBox createLibrarianVBox()
     {
