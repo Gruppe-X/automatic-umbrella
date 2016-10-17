@@ -9,9 +9,9 @@ import javafx.beans.property.SimpleStringProperty;
 public class BookCopy {
     
     private final SimpleStringProperty copyID;
-    private final Book book;
+    private final Copy book;
     
-    BookCopy(Book book, String copyID)
+    BookCopy(Copy book, String copyID)
     {
         this.book = book;
         this.copyID = new SimpleStringProperty(copyID);
@@ -77,7 +77,7 @@ public class BookCopy {
      * Returns book object.
      * @return book object.
      */
-    public Book getBook() {
+    public Copy getBook() {
         return book;
     }
     

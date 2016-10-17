@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Oscar Wika
  */
-public class Book {
+public class Copy {
     
     private final SimpleStringProperty bookID;
     private final SimpleStringProperty bookName;
@@ -15,7 +15,7 @@ public class Book {
     private final SimpleStringProperty bookYear;
     private final SimpleStringProperty bookPublisher;
     
-    Book(String bookID, String bookName, String bookAuthor, String bookEdition, String bookYear, String bookPublisher)
+    Copy(String bookID, String bookName, String bookAuthor, String bookEdition, String bookYear, String bookPublisher)
     {
         this.bookID = new SimpleStringProperty(bookID);
         this.bookName = new SimpleStringProperty(bookName);

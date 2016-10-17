@@ -24,7 +24,7 @@ public class AddBookView {
 
     //Fields
     private Stage window;
-    private Book newBook = null;
+    private Copy newBook = null;
     private TextField ISBNField;
     private TextField titleField;
     private TextField publisherField;
@@ -43,9 +43,9 @@ public class AddBookView {
      * Primary method in the class. Creates the stage and scene. returns a book
      * object when ok is pressed or null if window is closed.
      *
-     * @return Book object or null if window is closed.
+     * @return Copy object or null if window is closed.
      */
-    public Book display() {
+    public Copy display() {
         window = new Stage();
         window.setTitle("Add book");
         window.setAlwaysOnTop(true);
@@ -92,7 +92,7 @@ public class AddBookView {
             String author = authorField.getText();
             String edition = editionField.getText();
             String released = releasedField.getText();
-            newBook = new Book(ISBN, title, author, edition, released, publisher);
+            newBook = new Copy(ISBN, title, author, edition, released, publisher);
             window.close();
         });
         cancelButton.setOnAction((ActionEvent e) -> {

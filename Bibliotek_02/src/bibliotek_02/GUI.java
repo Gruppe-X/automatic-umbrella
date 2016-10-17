@@ -15,6 +15,7 @@ import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -32,9 +33,8 @@ public class GUI extends Application
     private TextField searchBorrower;
     private TextField searchLibrarian;
     private TableView tableViewLoansTop;
-    private TableView tableViewKopi;
-    private TableView tableViewBook;
-    private TableView<Book>tableViewInventory;
+    private TableView tableViewCopy;
+    private TableView<Copy>tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewBorrower;
     
@@ -43,7 +43,7 @@ public class GUI extends Application
     
     ObservableList<Librarian> librarianList;
     //Filler for the Inventory table
-    ObservableList<Book> bookList = FXCollections.observableArrayList();
+    ObservableList<Copy> bookList = FXCollections.observableArrayList();
     
     ObservableList<Borrower> borrowerList;
     
@@ -166,23 +166,23 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the "Book" tab.
+     * Creates the "Copy" tab.
      *
-     * @return Returns the "Book" tab.
+     * @return Returns the "Copy" tab.
      */
-    private Tab createBookTab()
+    private Tab createCopyTab()
     {
-        Tab bookTab = new Tab("Bok");
-        BorderPane bookBorderPane = new BorderPane();
+        Tab copyTab = new Tab("Kopi");
+        BorderPane copyBorderPane = new BorderPane();
 
-        VBox bookVBox = createBookVBox();
+        VBox copyVBox = createCopyVBox();
         //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
-        bookTab.setContent(bookBorderPane);
-        bookBorderPane.setTop(bookVBox);
+        copyTab.setContent(copyBorderPane);
+        copyBorderPane.setTop(copyVBox);
         //bookBorderPane.setBottom(loansBorderPaneBottom);
 
-        return bookTab;
+        return copyTab;
     }
 
     /**
@@ -253,7 +253,7 @@ public class GUI extends Application
     private TabPane createTabPane()
     {
         Tab loans = createLoansTab();
-        Tab book = createBookTab();
+        Tab book = createCopyTab();
         Tab bookCopy = createInventoryTab();
         Tab borrower = createBorrowerTab();
         Tab librarian = createLibrarianTab();
@@ -297,35 +297,35 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the table in the "Book" tab.
+     * Creates the table in the "Copy" tab.
      *
-     * @return Returns a HBox containing a table for the "Book" tab.
+     * @return Returns a HBox containing a table for the "Copy" tab.
      */
-    private VBox createBookVBox()
+    private VBox createCopyVBox()
     {
-        VBox bookVBox = new VBox();
-        tableViewBook = new TableView();
+        VBox copyVBox = new VBox();
+        tableViewCopy = new TableView();
         searchCopy = new TextField();
         HBox buttonContainer = new HBox();
         Button addButton = new Button("Add");
         Button removeButton = new Button("Remove");
         
-        searchCopy.setPromptText("Search after copy");
+        searchCopy.setPromptText("Søk etter kvitteringsNr, Lånetaker ...");
 
         TableColumn fornavnCol = new TableColumn("N/A");
         TableColumn etternavnCol = new TableColumn("N/A");
         TableColumn telefonCol = new TableColumn("N/A");
 
-        tableViewBook.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewCopy.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
 
-        tableViewBook.setMinSize(450, 175);
-        tableViewBook.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableViewCopy.setMinSize(450, 175);
+        tableViewCopy.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         buttonContainer.getChildren().addAll(addButton, removeButton);
-        bookVBox.getChildren().add(buttonContainer);
-        bookVBox.getChildren().add(searchCopy);
-        bookVBox.getChildren().add(tableViewBook);
+        copyVBox.getChildren().add(buttonContainer);
+        copyVBox.getChildren().add(searchCopy);
+        copyVBox.getChildren().add(tableViewCopy);
 
-        return bookVBox;
+        return copyVBox;
     }
 
     /**
@@ -487,7 +487,7 @@ public class GUI extends Application
     }
     
     private void addBook() {
-        Book newBook = addBookView.display();
+        Copy newBook = addBookView.display();
         if(newBook != null && handler.addBook(newBook)){
             System.out.println(newBook.getBookName() + " was added");
         }
@@ -498,7 +498,7 @@ public class GUI extends Application
     }
 
     private void removeBook() {
-        Book bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
+        Copy bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
         handler.deleteBook(bookToDelete);
         updateInventoryList();
     }

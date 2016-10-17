@@ -228,12 +228,12 @@ public class DatabaseHandler {
         return librarians;
     }
     
-    public List<Book> listBooks(){
-        List<Book> books = new ArrayList<>();
+    public List<Copy> listBooks(){
+        List<Copy> books = new ArrayList<>();
         ResultSet bookSet = getBooks();
         try{
             while(bookSet.next()){
-                books.add(new Book(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3)));
+                books.add(new Copy(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3)));
             }
         } catch (SQLException ex) {
             books = null;
@@ -252,7 +252,7 @@ public class DatabaseHandler {
                 String author = bookCopySet.getString(4);
                 String edition = bookCopySet.getString(5);
                 String publishingYear = bookCopySet.getString(6);
-                Book book = new Book(bookID, title, author, edition, publishingYear, publisher);
+                Copy book = new Copy(bookID, title, author, edition, publishingYear, publisher);
                 String copyID = bookCopySet.getString(7);
                 BookCopy copy = new BookCopy(book, copyID);
                 bookCopys.add(copy);
@@ -281,10 +281,10 @@ public class DatabaseHandler {
     /**
      * Adds a book to the book table of the database. ISBN and Title is needed to
      * add book to database.
-     * @param newBook Book object to add to database. 
+     * @param newBook Copy object to add to database. 
      * @return true if book was successfully added, otherwise false.
      */
-    public boolean addBook(Book newBook){
+    public boolean addBook(Copy newBook){
         boolean result = false;
         try {
             addBookStatement.setString(1, newBook.getBookID());
@@ -308,7 +308,7 @@ public class DatabaseHandler {
     }
     
     //TODO fix nullpointer
-    public boolean deleteBook(Book bookToDelete){
+    public boolean deleteBook(Copy bookToDelete){
         boolean result = false;
         try {
             deleteBookStatement.setString(1, bookToDelete.getBookID());
