@@ -11,9 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import static javafx.application.Application.launch;
 import javafx.scene.layout.Priority;
@@ -52,7 +50,7 @@ public class GUI extends Application
     {
         handler = new DatabaseHandler();
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
-        bookList = FXCollections.observableArrayList(handler.listBooks()); //TODO lag listBooks i DatabaseHandler
+        bookList = FXCollections.observableArrayList(handler.listBooks());
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
 
         addBookView = new AddBookView();
@@ -96,6 +94,25 @@ public class GUI extends Application
     }
 
     /**
+     * Creates the tab pane.
+     *
+     * @return Returns the tab pane.
+     */
+    private TabPane createTabPane()
+    {
+        Tab loans = createLoansTab();
+        Tab book = createCopyTab();
+        Tab bookCopy = createInventoryTab();
+        Tab borrower = createBorrowerTab();
+        Tab librarian = createLibrarianTab();
+        TabPane tabPane = new TabPane(loans, book, bookCopy, borrower, librarian);
+        
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        return tabPane;
+    }
+
+    /**
      * Creates the "Loans" tab.
      *
      * @return The "Loans" tab.
@@ -103,18 +120,18 @@ public class GUI extends Application
     private Tab createLoansTab()
     {
         Tab loansTab = new Tab("Utlån");
-
         BorderPane loansBorderPane = new BorderPane();
-        loansTab.setContent(loansBorderPane);
-
-        VBox content = new VBox();
+        VBox loansContent = new VBox();
+        
         VBox loansTopContent = createLoansTopContent();
         HBox loansBottomContent = createLoansBottomContent();
         
-        content.getChildren().addAll(loansTopContent, loansBottomContent);
+        loansTab.setContent(loansBorderPane);
+        loansBorderPane.setCenter(loansContent);
+        loansContent.getChildren().addAll(loansTopContent, loansBottomContent);
+        
         VBox.setVgrow(loansTopContent, Priority.ALWAYS);
         VBox.setVgrow(loansBottomContent, Priority.ALWAYS);
-        loansBorderPane.setCenter(content);
         
         return loansTab;
     }
@@ -128,13 +145,17 @@ public class GUI extends Application
     {
         Tab copyTab = new Tab("Kopi");
         BorderPane copyBorderPane = new BorderPane();
+        VBox copyContent = new VBox();
 
-        VBox copyVBox = createCopyVBox();
-        //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
+        VBox copyTopContent = createCopyTopContent();
+        HBox copyBottomContent = createCopyBottomContent();
 
         copyTab.setContent(copyBorderPane);
-        copyBorderPane.setTop(copyVBox);
-        //bookBorderPane.setBottom(loansBorderPaneBottom);
+        copyBorderPane.setCenter(copyContent);
+        copyContent.getChildren().addAll(copyTopContent, copyBottomContent);
+        
+        VBox.setVgrow(copyTopContent, Priority.ALWAYS);
+        VBox.setVgrow(copyBottomContent, Priority.ALWAYS);
 
         return copyTab;
     }
@@ -200,25 +221,6 @@ public class GUI extends Application
     }
 
     /**
-     * Creates the tab pane.
-     *
-     * @return Returns the tab pane.
-     */
-    private TabPane createTabPane()
-    {
-        Tab loans = createLoansTab();
-        Tab book = createCopyTab();
-        Tab bookCopy = createInventoryTab();
-        Tab borrower = createBorrowerTab();
-        Tab librarian = createLibrarianTab();
-        TabPane tabPane = new TabPane(loans, book, bookCopy, borrower, librarian);
-        
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
-        return tabPane;
-    }
-
-    /**
      * Creates a VBox with all the content that goes in the 'Utlån' tab.
      *
      * @return loansVBox the VBox containing the structure of the 'Utlån' tab.
@@ -241,8 +243,8 @@ public class GUI extends Application
         HBox bottomContent = new HBox();
         BorderPane botLeftCont = createLoansBottomLeftContent();
         VBox botRightCont = createLoansBottomRightContent();
+        
         bottomContent.getChildren().addAll(botLeftCont, botRightCont);
-        bottomContent.setMinWidth(500);
         HBox.setHgrow(botLeftCont, Priority.ALWAYS);
         HBox.setHgrow(botRightCont, Priority.ALWAYS);
 
@@ -312,9 +314,9 @@ public class GUI extends Application
         TableColumn ISBNCol = new TableColumn("ISBN");
         TableColumn tittelCol = new TableColumn("Tittel");
         TableColumn forfatterCol = new TableColumn("Forfatter");
+        
         tableViewLoansTop.getColumns().addAll(bokIDCol, ISBNCol, tittelCol, forfatterCol);
-        tableViewLoansTop.setMinHeight(225);
-        tableViewLoansTop.setMinWidth(300);
+        
         tableViewLoansTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
@@ -323,7 +325,7 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Kopi" tab.
      */
-    private VBox createCopyVBox()
+    private VBox createCopyTopContent()
     {
         VBox copyVBox = new VBox();
         tableViewCopy = new TableView();
@@ -348,6 +350,12 @@ public class GUI extends Application
         copyVBox.getChildren().add(tableViewCopy);
 
         return copyVBox;
+    }
+    
+    private HBox createCopyBottomContent()
+    {
+        HBox copyHBox = new HBox();
+        return copyHBox;
     }
 
     /**

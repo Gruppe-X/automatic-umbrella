@@ -17,7 +17,7 @@ import javafx.stage.Modality;
  * Class represents window used to add new books, gives user text field to fill
  * in information on new book.
  *
- * @author author Robert Rishaug, Vinh Tran and Kjetil Yndestad
+ * @author Robert Rishaug, Vinh Tran and Kjetil Yndestad
  * @version 11.10.2016
  */
 public class AddBookView {
