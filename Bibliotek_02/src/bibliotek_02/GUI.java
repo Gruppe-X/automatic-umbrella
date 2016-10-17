@@ -455,10 +455,10 @@ public class GUI extends Application
     private void doExitApplication()
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Exit");
-        alert.setHeaderText("Unsaved files");
-        alert.setContentText("Our program doesn't support file saving at the moment."
-                + "\nDo you still wish to exit the application?");
+        alert.setTitle("Avslutt");
+        alert.setHeaderText("Er du sikker på at du vil avslutte programmet?");
+        //alert.setContentText("Our program doesn't support file saving at the moment."
+        //        + "\nDo you still wish to exit the application?");
 
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
@@ -466,10 +466,12 @@ public class GUI extends Application
         //Deactivate Defaultbehavior for yes-Button:
         Button yesButton = (Button) alert.getDialogPane().lookupButton(ButtonType.YES);
         yesButton.setDefaultButton(true);
+        yesButton.setText("Ja");
 
         //Activate Defaultbehavior for no-Button:
         Button noButton = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
         noButton.setDefaultButton(false);
+        noButton.setText("Nei");
 
         Optional<ButtonType> result = alert.showAndWait();
 
