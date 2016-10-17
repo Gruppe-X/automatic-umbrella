@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
- * @author Oscar Wika
+ * @author Oscar Wika, Vinh Tran
  */
 public class Copy {
     

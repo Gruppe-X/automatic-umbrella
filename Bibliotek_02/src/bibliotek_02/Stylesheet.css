@@ -11,16 +11,17 @@
 
 /* Color of the tabs above the table */
 .tab-pane .tab {
-    
+     
 }
 
 /* Color when mouseover on the tabs above the table */
 .tab-pane .tab:hover {
+     background-color: lightblue;
 }
 
 /* Color of the currently selected tab*/
-.tab-pane .tab:selected {
-    
+.tab-pane .tab:selected { 
+    color: #B0C4DE;
 }
 
 /* Background color of the window */
