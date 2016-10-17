@@ -11,13 +11,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import static javafx.application.Application.launch;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -36,7 +34,7 @@ public class GUI extends Application
     private TextField searchLibrarian;
     private TableView tableViewLoansTop;
     private TableView tableViewCopy;
-    private TableView<Copy> tableViewInventory;
+    private TableView<InventoryBook> tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewBorrower;
 
@@ -44,7 +42,7 @@ public class GUI extends Application
 
     ObservableList<Librarian> librarianList;
     //Filler for the Inventory table
-    ObservableList<Copy> bookList = FXCollections.observableArrayList();
+    ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
 
     ObservableList<Borrower> borrowerList;
 
@@ -515,7 +513,7 @@ public class GUI extends Application
 
     private void addBook()
     {
-        Copy newBook = addBookView.display();
+        InventoryBook newBook = addBookView.display();
         if (newBook != null && handler.addBook(newBook)) {
             System.out.println(newBook.getBookName() + " was added");
         } else {
@@ -526,8 +524,10 @@ public class GUI extends Application
 
     private void removeBook()
     {
-        Copy bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
-        handler.deleteBook(bookToDelete);
-        updateInventoryList();
+        InventoryBook bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
+        if(bookToDelete != null){
+            handler.deleteBook(bookToDelete);
+            updateInventoryList();
+        }
     }
 }

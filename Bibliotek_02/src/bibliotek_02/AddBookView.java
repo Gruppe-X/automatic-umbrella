@@ -24,7 +24,7 @@ public class AddBookView {
 
     //Fields
     private Stage window;
-    private Copy newBook = null;
+    private InventoryBook newBook = null;
     private TextField ISBNField;
     private TextField titleField;
     private TextField publisherField;
@@ -45,7 +45,7 @@ public class AddBookView {
      *
      * @return Copy object or null if window is closed.
      */
-    public Copy display() {
+    public InventoryBook display() {
         window = new Stage();
         window.setTitle("Add book");
         window.setAlwaysOnTop(true);
@@ -92,7 +92,7 @@ public class AddBookView {
             String author = authorField.getText();
             String edition = editionField.getText();
             String released = releasedField.getText();
-            newBook = new Copy(ISBN, title, author, edition, released, publisher);
+            newBook = new InventoryBook(ISBN, title, author, edition, released, publisher, "0");
             window.close();
         });
         cancelButton.setOnAction((ActionEvent e) -> {
