@@ -16,6 +16,8 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import static javafx.application.Application.launch;
+import javafx.scene.layout.Priority;
+import javafx.stage.Modality;
 
 /**
  *
@@ -82,7 +84,8 @@ public class GUI extends Application
         scene.getStylesheets().add(getClass().getResource("Stylesheet.css").toExternalForm());
         primaryStage.setTitle("Bibliotek X");
         primaryStage.setScene(scene);
-        primaryStage.sizeToScene();
+        primaryStage.setMinHeight(720);
+        primaryStage.setMinWidth(1280);
         primaryStage.show();
 
         // Close window confirmation
@@ -104,20 +107,27 @@ public class GUI extends Application
         BorderPane loansBorderPane = new BorderPane();
         loansTab.setContent(loansBorderPane);
 
+        VBox content = new VBox();
         VBox loansTopContent = createLoansTopContent();
-        loansBorderPane.setTop(loansTopContent);
-
         HBox loansBottomContent = createLoansBottomContent();
-        loansBorderPane.setCenter(loansBottomContent);
+        
+        content.getChildren().addAll(loansTopContent, loansBottomContent);
+        VBox.setVgrow(loansTopContent, Priority.ALWAYS);
+        VBox.setVgrow(loansBottomContent, Priority.ALWAYS);
+        loansBorderPane.setCenter(content);
+        
         return loansTab;
     }
 
     private HBox createLoansBottomContent()
     {
         HBox bottomContent = new HBox();
-        bottomContent.getChildren().addAll(createLoansBottomLeftContent(), createLoansBottomRightContent());
-        bottomContent.setPrefWidth(1000);
+        BorderPane botLeftCont = createLoansBottomLeftContent();
+        VBox botRightCont = createLoansBottomRightContent();
+        bottomContent.getChildren().addAll(botLeftCont, botRightCont);
         bottomContent.setMinWidth(500);
+        HBox.setHgrow(botLeftCont, Priority.ALWAYS);
+        HBox.setHgrow(botRightCont, Priority.ALWAYS);
 
         return bottomContent;
     }
@@ -142,7 +152,6 @@ public class GUI extends Application
 
         bottomLeftContent.setPadding(new Insets(0, 10, 0, 0));
         bottomLeftContent.setMinWidth(240);
-        bottomLeftContent.setPrefWidth(600);
 
         return bottomLeftContent;
     }
@@ -153,6 +162,7 @@ public class GUI extends Application
         GridPane topContent = new GridPane();
 
         topContent.setPadding(new Insets(0, 0, 10, 0));
+        //topContent.setGridLinesVisible(true);
 
         TextField firstNameField = new TextField();
         firstNameField.setPadding(new Insets(5));
@@ -174,7 +184,6 @@ public class GUI extends Application
 
         bottomRightContent.setPadding(new Insets(0, 0, 0, 10));
         bottomRightContent.setMinWidth(240);
-        bottomRightContent.setPrefWidth(600);
 
         return bottomRightContent;
     }
@@ -485,7 +494,9 @@ public class GUI extends Application
         Button noButton = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
         noButton.setDefaultButton(false);
         noButton.setText("Nei");
-
+        
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.initOwner(primaryStage);
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == ButtonType.YES) {
