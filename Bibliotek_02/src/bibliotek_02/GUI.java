@@ -48,6 +48,9 @@ public class GUI extends Application
     ObservableList<Borrower> borrowerList;
     
 
+    /**
+     * 
+     */
     public GUI(){
         handler = new DatabaseHandler();
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
@@ -57,17 +60,29 @@ public class GUI extends Application
         addBookView = new AddBookView();
     }
     
+    /**
+     * 
+     * @param args 
+     */
     public static void main(String[] args)
     {
         launch(args);
     }
 
+    /**
+     * a
+     */
     @Override
     public void stop()
     {
         System.exit(0);
     }
 
+    /**
+     * 
+     * @param primaryStage
+     * @throws Exception 
+     */
     @Override
     public void start(Stage primaryStage) throws Exception
     {
@@ -120,6 +135,10 @@ public class GUI extends Application
         return bottomContent;
     }
     
+    /**
+     * 
+     * @return 
+     */
     private BorderPane createLoansBottomLeftContent(){
         BorderPane bottomLeftContent = new BorderPane();
         Button addButton = new Button("Legg til");
@@ -139,6 +158,10 @@ public class GUI extends Application
         return bottomLeftContent;
     }
     
+    /**
+     * 
+     * @return 
+     */
     private VBox createLoansBottomRightContent(){
         VBox bottomRightContent = new VBox();
         GridPane topContent = new GridPane();
@@ -483,11 +506,17 @@ public class GUI extends Application
         }
     }
 
+    /**
+     * 
+     */
     private void updateInventoryList(){
         bookList.clear();
         bookList.addAll(handler.listBooks());
     }
     
+    /**
+     * 
+     */
     private void addBook() {
         Copy newBook = addBookView.display();
         if(newBook != null && handler.addBook(newBook)){
@@ -499,6 +528,9 @@ public class GUI extends Application
         updateInventoryList();
     }
 
+    /**
+     * 
+     */
     private void removeBook() {
         Copy bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
         handler.deleteBook(bookToDelete);

@@ -115,11 +115,19 @@ public class Copy {
         this.bookEdition.set(bookEdition);
     }
     
+    /**
+     * 
+     * @param bookYear 
+     */
     public void setBookYear(String bookYear)
     {
         this.bookYear.set(bookYear);
     }
     
+    /**
+     * 
+     * @param bookPublisher 
+     */
     public void setBookPublisher(String bookPublisher)
     {
         this.bookPublisher.set(bookPublisher);
