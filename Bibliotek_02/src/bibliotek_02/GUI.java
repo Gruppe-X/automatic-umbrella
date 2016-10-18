@@ -282,7 +282,7 @@ public class GUI extends Application
         TabPane tabPane = new TabPane(loans, book, bookCopy, borrower, librarian);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         //Resize stage on tab change
-        tabPane.getSelectionModel().selectedItemProperty().addListener(l -> primaryStage.sizeToScene());
+        //tabPane.getSelectionModel().selectedItemProperty().addListener(l -> primaryStage.sizeToScene());
 
         return tabPane;
     }
@@ -297,7 +297,7 @@ public class GUI extends Application
         VBox loansVBox = new VBox();
         searchBooks = new TextField();
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
-        createBooksTable();
+        tableViewLoansTop = createBooksTable();
 
         loansVBox.getChildren().add(searchBooks);
         loansVBox.getChildren().add(tableViewLoansTop);
@@ -305,17 +305,18 @@ public class GUI extends Application
         return loansVBox;
     }
 
-    private void createBooksTable()
+    private TableView createBooksTable()
     {
-        tableViewLoansTop = new TableView();
+        TableView bookTable = new TableView();
         TableColumn bokIDCol = new TableColumn("Bok-ID");
         TableColumn ISBNCol = new TableColumn("ISBN");
         TableColumn tittelCol = new TableColumn("Tittel");
         TableColumn forfatterCol = new TableColumn("Forfatter");
-        tableViewLoansTop.getColumns().addAll(bokIDCol, ISBNCol, tittelCol, forfatterCol);
-        tableViewLoansTop.setMinHeight(225);
-        tableViewLoansTop.setMinWidth(300);
-        tableViewLoansTop.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        bookTable.getColumns().addAll(bokIDCol, ISBNCol, tittelCol, forfatterCol);
+        bookTable.setMinHeight(225);
+        bookTable.setMinWidth(300);
+        bookTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        return bookTable;
     }
 
     /**
@@ -511,6 +512,7 @@ public class GUI extends Application
         bookList.addAll(handler.listBooks());
     }
 
+    //TODO fiks feilmelding
     private void addBook()
     {
         InventoryBook newBook = addBookView.display();

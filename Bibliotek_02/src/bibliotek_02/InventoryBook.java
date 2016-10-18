@@ -24,6 +24,9 @@ public class InventoryBook {
         this.edition = new SimpleStringProperty(edition);
         this.year = new SimpleStringProperty(year);
         this.publisher = new SimpleStringProperty(publisher);
+        if(quantity == null){
+            quantity = "0";
+        }
         this.quantity = new SimpleStringProperty(quantity);
     }
     
