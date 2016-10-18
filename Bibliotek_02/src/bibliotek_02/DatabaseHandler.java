@@ -24,6 +24,8 @@ public class DatabaseHandler {
     private PreparedStatement addBookStatement;
     private PreparedStatement deleteBookStatement;
     
+    private PreparedStatement addBorrowerStatement;
+    
     public DatabaseHandler() {
         connect();
         try{
@@ -215,6 +217,10 @@ public class DatabaseHandler {
         return customers;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public List<Librarian> listLibrarians(){
         List<Librarian> librarians = new ArrayList<>();
         ResultSet librarianSet = getEmployees();
@@ -228,6 +234,10 @@ public class DatabaseHandler {
         return librarians;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public List<Copy> listBooks(){
         List<Copy> books = new ArrayList<>();
         ResultSet bookSet = getBooks();
@@ -241,6 +251,10 @@ public class DatabaseHandler {
         return books;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public List<BookCopy> listBookCopys(){
         List<BookCopy> bookCopys = new ArrayList<>();
         ResultSet bookCopySet = getCopys();
@@ -294,6 +308,32 @@ public class DatabaseHandler {
             addBookStatement.setInt(5, Integer.parseInt(newBook.getBookEdition()));
             addBookStatement.setInt(6, Integer.parseInt(newBook.getBookYear()));
             int rowsUpdated = addBookStatement.executeUpdate();
+            
+            if(rowsUpdated > 0){
+                
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    
+    /*
+    /**
+     * Adds a borrower to the borrowers table of the database. 
+     * @param  
+     * @return true if borrower was successfully added, otherwise false.
+     */
+    public boolean addBorrower(Borrower newBorrower){
+        boolean result = false;
+        try {
+            addBookStatement.setString(1, newBorrower.getFirstName());
+            addBookStatement.setString(2, newBorrower.getLastName());
+            addBookStatement.setString(3, newBorrower.getTelephone());
+            int rowsUpdated = addBorrowerStatement.executeUpdate();
             
             if(rowsUpdated > 0){
                 

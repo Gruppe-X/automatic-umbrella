@@ -39,6 +39,8 @@ public class GUI extends Application
     private TableView<Borrower> tableViewBorrower;
     
     private AddBookView addBookView;
+    private AddBorrowerView addBorrowerView;
+    private AddBorrowerView addLibriarianView;
 
     
     ObservableList<Librarian> librarianList;
@@ -56,8 +58,10 @@ public class GUI extends Application
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
         bookList = FXCollections.observableArrayList(handler.listBooks()); //TODO lag listBooks i DatabaseHandler
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
-        
+        // 
         addBookView = new AddBookView();
+        addBorrowerView = new AddBorrowerView();
+        addBorrowerView = new AddBorrowerView();
     }
     
     /**
@@ -405,12 +409,14 @@ public class GUI extends Application
     {
         VBox borrowerVBox = new VBox();
         tableViewBorrower = new TableView();
-        searchInventory = new TextField();
+        searchBorrower = new TextField();
         HBox buttonContainer = new HBox();
         Button addButton = new Button("Add");
+        addButton.setOnAction(e -> addBorrower());
         Button removeButton = new Button("Remove");
+        removeButton.setOnAction(e -> removeBorrower());
         
-        searchInventory.setPromptText("Search through this lists");
+        searchBorrower.setPromptText("Search through this lists");
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
@@ -428,7 +434,7 @@ public class GUI extends Application
         tableViewBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         buttonContainer.getChildren().addAll(addButton, removeButton);
         borrowerVBox.getChildren().add(buttonContainer);
-        borrowerVBox.getChildren().add(searchInventory);
+        borrowerVBox.getChildren().add(searchBorrower);
         borrowerVBox.getChildren().add(tableViewBorrower);
 
         return borrowerVBox;
@@ -446,7 +452,9 @@ public class GUI extends Application
         searchLibrarian = new TextField();
         HBox buttonContainer = new HBox();
         Button addButton = new Button("Add");
+        //addButton.setOnAction(e -> addLibrarian());
         Button removeButton = new Button("Remove");
+        //addButton.setOnAction(e -> removeLibrarian());
         
         searchLibrarian.setPromptText("Search through this lists");
 
@@ -527,7 +535,36 @@ public class GUI extends Application
         }
         updateInventoryList();
     }
+    
+    /**
+     * 
+     */
+    private void addBorrower(){
+        Borrower newBorrower = addBorrowerView.display();
+        if(newBorrower != null && handler.addBorrower(newBorrower)){
+            System.out.println(newBorrower.getFirstName() + " was added");
+        }
+        else {
+            System.out.println("Failed to add borrower");
+        }
+        updateInventoryList();
+        
+    }
 
+    /**
+     * 
+     */
+    /*private void addLibrarian(){
+        Librarian newLibrarian = addLibrarianView.display();
+        if(newLibrarian != null && handler.addBook(newLibrarian)){
+            System.out.println(newLibrarian.getFirstName() + " was added");
+        }
+        else {
+            System.out.println("Failed to add book");
+        }
+        updateInventoryList();
+    }*/
+    
     /**
      * 
      */
@@ -535,5 +572,19 @@ public class GUI extends Application
         Copy bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
         handler.deleteBook(bookToDelete);
         updateInventoryList();
+    }
+    
+    /**
+     * 
+     */
+    private void removeBorrower(){
+        
+    }
+
+    /**
+     * 
+     */
+    private void removeLibrarian(){
+        
     }
 }
