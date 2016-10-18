@@ -20,20 +20,24 @@ public class DatabaseHandler {
     private Connection connection;
     private PreparedStatement searchStatement;
     private PreparedStatement bookCopyJoinStatement;
-    private PreparedStatement bookQuantityByIDStatement;
     private PreparedStatement addBookStatement;
     private PreparedStatement deleteBookStatement;
     
     private PreparedStatement addBorrowerStatement;
+    
+    private PreparedStatement addLibrarianStatement;
     
     public DatabaseHandler() {
         connect();
         try{
             searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
             bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
-            bookQuantityByIDStatement = connection.prepareStatement("SELECT count(ISBN) FROM Eksemplar WHERE ISBN = ?");
             addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?)");
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
+            
+            addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
+            
+            addLibrarianStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -122,56 +126,12 @@ public class DatabaseHandler {
         return getResultSet("SELECT * FROM Ansatt");
     }
     
-    public ResultSet getEmployeesByID(int id){
-        return searchTableByColumnValInt("Ansatt", "AnsattID", id);
-    }
-    
-    public ResultSet getEmployeesByFirstName(String firstName){
-        return searchTableByColumnValString("Ansatt", "Fornavn", firstName);
-    }
-    
-    public ResultSet getEmployeesByLastName(String lastName){
-        return searchTableByColumnValString("Ansatt", "Etternavn", lastName);
-    }
-    
     public ResultSet getBorrowers(){
         return getResultSet("SELECT * FROM Lånetaker");
     }
     
-    public ResultSet getBorrowersByID(int id){
-        return searchTableByColumnValInt("Lånetaker", "LånetakerID", id);
-    }
-    
-    public ResultSet getBorrowersByFirstName(String firstName){
-        return searchTableByColumnValString("Lånetaker", "Fornavn", firstName);
-    }
-    
-    public ResultSet getBorrowersByLastName(String lastName){
-        return searchTableByColumnValString("Lånetaker", "Etternavn", lastName);
-    }
-    
     public ResultSet getBooks(){
         return getResultSet("SELECT * FROM Bok");
-    }
-    
-    /**
-     * Returns quantity of books with given id/isbn
-     * @param bookID id/isbn to search for quantity of.
-     * @return quantity of books with given id/isbn.
-     */
-    public int getQuantityOfBooksByID(String bookID){
-        int quantity = -1;
-        try {
-            bookQuantityByIDStatement.setString(1, bookID);
-            ResultSet result = bookQuantityByIDStatement.executeQuery();
-            if(result.next()){
-            quantity = result.getInt(1);
-            }
-        } catch (SQLException SQLEx) {
-            System.out.println(SQLEx.getMessage());
-            SQLEx.printStackTrace();
-        }
-        return quantity;
     }
     
     public ResultSet getBooksByID(String ISBN){
@@ -234,16 +194,13 @@ public class DatabaseHandler {
         return librarians;
     }
     
-    /**
-     * 
-     * @return 
-     */
-    public List<Copy> listBooks(){
-        List<Copy> books = new ArrayList<>();
+
+    public List<InventoryBook> listBooks(){
+        List<InventoryBook> books = new ArrayList<>();
         ResultSet bookSet = getBooks();
         try{
             while(bookSet.next()){
-                books.add(new Copy(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3)));
+                books.add(new InventoryBook(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3), bookSet.getString(7)));
             }
         } catch (SQLException ex) {
             books = null;
@@ -266,7 +223,8 @@ public class DatabaseHandler {
                 String author = bookCopySet.getString(4);
                 String edition = bookCopySet.getString(5);
                 String publishingYear = bookCopySet.getString(6);
-                Copy book = new Copy(bookID, title, author, edition, publishingYear, publisher);
+                String quantity = bookCopySet.getString(7);
+                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity);
                 String copyID = bookCopySet.getString(7);
                 BookCopy copy = new BookCopy(book, copyID);
                 bookCopys.add(copy);
@@ -298,7 +256,7 @@ public class DatabaseHandler {
      * @param newBook Copy object to add to database. 
      * @return true if book was successfully added, otherwise false.
      */
-    public boolean addBook(Copy newBook){
+    public boolean addBook(InventoryBook newBook){
         boolean result = false;
         try {
             addBookStatement.setString(1, newBook.getBookID());
@@ -321,7 +279,6 @@ public class DatabaseHandler {
         return result;
     }
     
-    /*
     /**
      * Adds a borrower to the borrowers table of the database. 
      * @param  
@@ -330,10 +287,33 @@ public class DatabaseHandler {
     public boolean addBorrower(Borrower newBorrower){
         boolean result = false;
         try {
-            addBookStatement.setString(1, newBorrower.getFirstName());
-            addBookStatement.setString(2, newBorrower.getLastName());
-            addBookStatement.setString(3, newBorrower.getTelephone());
+            addBorrowerStatement.setString(1, newBorrower.getFirstName());
+            addBorrowerStatement.setString(2, newBorrower.getLastName());
+            addBorrowerStatement.setString(3, newBorrower.getTelephone());
             int rowsUpdated = addBorrowerStatement.executeUpdate();
+            
+            if(rowsUpdated > 0){
+                
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    /**
+     * Adds a borrower to the borrowers table of the database.
+     * @return true if borrower was successfully added, otherwise false.
+     */
+    public boolean addLibrarian(Librarian newLibrarian){
+        boolean result = false;
+        try {
+            addBorrowerStatement.setString(3, newLibrarian.getEmployeeID());
+            addBorrowerStatement.setString(1, newLibrarian.getFirstName());
+            addBorrowerStatement.setString(2, newLibrarian.getLastName());
+            int rowsUpdated = addLibrarianStatement.executeUpdate();
             
             if(rowsUpdated > 0){
                 
@@ -348,7 +328,7 @@ public class DatabaseHandler {
     }
     
     //TODO fix nullpointer
-    public boolean deleteBook(Copy bookToDelete){
+    public boolean deleteBook(InventoryBook bookToDelete){
         boolean result = false;
         try {
             deleteBookStatement.setString(1, bookToDelete.getBookID());
