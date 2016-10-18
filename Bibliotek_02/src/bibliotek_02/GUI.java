@@ -40,7 +40,7 @@ public class GUI extends Application
 
     private AddBookView addBookView;
     private AddBorrowerView addBorrowerView;
-    private AddBorrowerView addLibriarianView;
+    private AddLibrarianView addLibrarianView;
 
     ObservableList<Librarian> librarianList;
     //Filler for the Inventory table
@@ -58,7 +58,7 @@ public class GUI extends Application
         // 
         addBookView = new AddBookView();
         addBorrowerView = new AddBorrowerView();
-        addBorrowerView = new AddBorrowerView();
+        addLibrarianView = new AddLibrarianView();
     }
 
     /**
@@ -569,7 +569,7 @@ public class GUI extends Application
     /**
      * 
      */
-   /* private void addLibrarian(){
+    private void addLibrarian(){
         Librarian newLibrarian = addLibrarianView.display();
         if(newLibrarian != null && handler.addBorrower(newLibrarian)){
             System.out.println(newLibrarian.getFirstName() + " was added");

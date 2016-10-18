@@ -310,9 +310,9 @@ public class DatabaseHandler {
     public boolean addLibrarian(Librarian newLibrarian){
         boolean result = false;
         try {
-            addBorrowerStatement.setString(3, newLibrarian.getEmployeeID());
-            addBorrowerStatement.setString(1, newLibrarian.getFirstName());
-            addBorrowerStatement.setString(2, newLibrarian.getLastName());
+            addLibrarianStatement.setString(3, newLibrarian.getEmployeeID());
+            addLibrarianStatement.setString(1, newLibrarian.getFirstName());
+            addLibrarianStatement.setString(2, newLibrarian.getLastName());
             int rowsUpdated = addLibrarianStatement.executeUpdate();
             
             if(rowsUpdated > 0){
