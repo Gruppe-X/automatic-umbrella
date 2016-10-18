@@ -1,5 +1,7 @@
 package bibliotek_02;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,14 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Robert
  */
-public class DatabaseHandler {
+public class DatabaseHandler implements Closeable {
     
     private final String connString = "jdbc:sqlserver://roberris-prosjektx.uials.no;databaseName=Bibliotek;username=sa;password=password123";
     private Connection connection;
@@ -51,6 +51,15 @@ public class DatabaseHandler {
             SQLEx.printStackTrace();
         }
         return success;
+    }
+    
+    @Override
+    public void close() throws IOException {
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException();
+        }
     }
     
     /**

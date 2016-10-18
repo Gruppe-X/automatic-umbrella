@@ -1,6 +1,9 @@
 package bibliotek_02;
 
+import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,7 +35,7 @@ public class GUI extends Application
     private TextField searchInventory;
     private TextField searchBorrower;
     private TextField searchLibrarian;
-    private TableView tableViewLoansTop;
+    private TableView<InventoryBook> tableViewLoansTop;
     private TableView tableViewCopy;
     private TableView<InventoryBook> tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
@@ -45,6 +48,8 @@ public class GUI extends Application
     ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
 
     ObservableList<Borrower> borrowerList;
+    
+    ObservableList<InventoryBook> loansBookList;
 
     public GUI()
     {
@@ -52,7 +57,8 @@ public class GUI extends Application
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
         bookList = FXCollections.observableArrayList(handler.listBooks()); //TODO lag listBooks i DatabaseHandler
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
-
+        loansBookList = FXCollections.observableArrayList();
+        
         addBookView = new AddBookView();
     }
 
@@ -134,10 +140,20 @@ public class GUI extends Application
     {
         BorderPane bottomLeftContent = new BorderPane();
         Button addButton = new Button("Legg til");
+        addButton.setOnAction(e -> addBookToLoan());
         Button removeButton = new Button("Fjern");
         HBox buttonsBox = new HBox(addButton, removeButton);
 
-        TableView registeredBooks = new TableView();
+        TableView<InventoryBook> registeredBooks = new TableView();
+        registeredBooks.setItems(loansBookList);
+        
+        TableColumn ISBNCol = new TableColumn("ISBN");
+        ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
+        TableColumn tittelCol = new TableColumn("Tittel");
+        tittelCol.setCellValueFactory(new PropertyValueFactory<>("BookName"));
+        TableColumn forfatterCol = new TableColumn("Forfatter");
+        forfatterCol.setCellValueFactory(new PropertyValueFactory<>("BookAuthor"));
+        registeredBooks.getColumns().addAll(ISBNCol, tittelCol, forfatterCol);
         
         registeredBooks.setMinWidth(240);
         registeredBooks.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -173,6 +189,15 @@ public class GUI extends Application
         topContent.add(findBorrowerButton, 1, 2);
 
         TableView borrowerTable = new TableView();
+        TableColumn fornavnCol = new TableColumn("Fornavn");
+        fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
+        TableColumn etternavnCol = new TableColumn("Etternavn");
+        etternavnCol.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+        TableColumn telefonCol = new TableColumn("Telefon");
+        telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
+        borrowerTable.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        ObservableList<Borrower> borrowers = FXCollections.observableArrayList();
+        borrowers.addAll(borrowerList);
         
         borrowerTable.setMinWidth(240);
         borrowerTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -305,14 +330,20 @@ public class GUI extends Application
         return loansVBox;
     }
 
-    private TableView createBooksTable()
+    private TableView<InventoryBook> createBooksTable()
     {
-        TableView bookTable = new TableView();
-        TableColumn bokIDCol = new TableColumn("Bok-ID");
+        TableView<InventoryBook> bookTable = new TableView<>();
+        bookTable.setItems(bookList);
         TableColumn ISBNCol = new TableColumn("ISBN");
+        ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
+
         TableColumn tittelCol = new TableColumn("Tittel");
+        tittelCol.setCellValueFactory(new PropertyValueFactory<>("BookName"));
+
         TableColumn forfatterCol = new TableColumn("Forfatter");
-        bookTable.getColumns().addAll(bokIDCol, ISBNCol, tittelCol, forfatterCol);
+        forfatterCol.setCellValueFactory(new PropertyValueFactory<>("BookAuthor"));
+        
+        bookTable.getColumns().addAll(ISBNCol, tittelCol, forfatterCol);
         bookTable.setMinHeight(225);
         bookTable.setMinWidth(300);
         bookTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -499,6 +530,11 @@ public class GUI extends Application
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == ButtonType.YES) {
+            try {
+                handler.close();
+            } catch (IOException ex) {
+                //Could not close SQL connection.... TODO
+            }
             System.exit(0);
         } else {
             // ... user chose CANCEL or closed the dialog
@@ -531,5 +567,9 @@ public class GUI extends Application
             handler.deleteBook(bookToDelete);
             updateInventoryList();
         }
+    }
+
+    private void addBookToLoan() {
+        loansBookList.add(tableViewLoansTop.getSelectionModel().getSelectedItem());
     }
 }
