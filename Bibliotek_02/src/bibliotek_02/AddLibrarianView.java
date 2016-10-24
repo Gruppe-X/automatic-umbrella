@@ -112,12 +112,12 @@ public class AddLibrarianView {
         firstNameField = new TextField();
         lastNameField = new TextField();
         
-        centerContainer.add(new Label("Telephone"), 0, 2);
-        centerContainer.add(employeeIDField, 1, 2);
-        centerContainer.add(new Label("First name"), 0, 0);
-        centerContainer.add(firstNameField, 1, 0);
-        centerContainer.add(new Label("Last name"), 0, 1);
-        centerContainer.add(lastNameField, 1, 1);
+        centerContainer.add(new Label("AnsattID"), 0, 0);
+        centerContainer.add(employeeIDField, 1, 0);
+        centerContainer.add(new Label("Fornavn"), 0, 1);
+        centerContainer.add(firstNameField, 1, 1);
+        centerContainer.add(new Label("Etternavn"), 0, 2);
+        centerContainer.add(lastNameField, 1, 2);
 
         return centerContainer;
     }

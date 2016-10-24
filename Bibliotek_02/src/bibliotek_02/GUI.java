@@ -16,9 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 
 /**
  *
@@ -487,13 +484,13 @@ public class GUI extends Application
         Button addButton = new Button("Add");
         addButton.setOnAction(e -> addLibrarian());
         Button removeButton = new Button("Remove");
-        addButton.setOnAction(e -> removeLibrarian());
+        removeButton.setOnAction(e -> removeLibrarian());
         
 
         searchLibrarian.setPromptText("Search through this lists");
 
         TableColumn librarianIDCol = new TableColumn("AnsattID");
-        librarianIDCol.setCellValueFactory(new PropertyValueFactory<>("ansattID"));
+        librarianIDCol.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
@@ -513,7 +510,117 @@ public class GUI extends Application
 
         return librarianVBox;
     }
+    
+    // -------- UPDATE METHODS --------
+    /**
+     * Updates the list of books.
+     */
+    private void updateBookList()
+    {
+        bookList.clear();
+        bookList.addAll(handler.listBooks());
+    }
+    
+    /**
+     * Updates the list of borrowers.
+     */
+    private void updateBorrowerList()
+    {
+        borrowerList.clear();
+        borrowerList.addAll(handler.listBorrowers());
+    }
+    
+    /**
+     * Updates the list of librarians
+     */
+    private void updateLibrarianList()
+    {
+        librarianList.clear();
+        librarianList.addAll(handler.listLibrarians());
+    }
 
+    // -------- ADD METHODS --------
+    //TODO fiks feilmelding
+    
+    /**
+     * Adds a book to the database and updates the list/table.
+     */
+    private void addBook()
+    {
+        InventoryBook newBook = addBookView.display();
+        if (newBook != null && handler.addBook(newBook)) {
+            System.out.println(newBook.getBookName() + " was added");
+        } else {
+            System.out.println("Failed to add book");
+        }
+        updateBookList();
+    }
+    
+    /**
+     * Adds a borrower to the database and updates the list/table.
+     */
+    private void addBorrower(){
+        Borrower newBorrower = addBorrowerView.display();
+        if(newBorrower != null && handler.addBorrower(newBorrower)){
+            System.out.println(newBorrower.getFirstName() + " was added");
+        }
+        else {
+            System.out.println("Failed to add borrower");
+        }
+        updateBorrowerList();
+    }
+
+    /**
+     * Adds a librarian to the database and updates the list/table.
+     */
+    private void addLibrarian(){
+        Librarian newLibrarian = addLibrarianView.display();
+        if(newLibrarian != null && handler.addLibrarian(newLibrarian)){
+            System.out.println(newLibrarian.getFirstName() + " was added");
+        }
+        else {
+            System.out.println("Failed to add employee");
+        }
+        updateLibrarianList();
+    }
+    
+    // -------- REMOVE METHODS --------
+    /**
+     * Removes a book from the database and updates the list/table.
+     */
+    private void removeBook()
+    {
+        InventoryBook bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
+        if(bookToDelete != null){
+            handler.deleteBook(bookToDelete);
+            updateBookList();
+        }
+    }
+    
+    /**
+     * Removes a borrower from the database and updates the list/table.
+     */
+    private void removeBorrower()
+    {
+        Borrower borrowerToDelete = tableViewBorrower.getSelectionModel().getSelectedItem();
+        if(borrowerToDelete != null){
+            handler.deleteBorrower(borrowerToDelete);
+            updateBorrowerList();
+        }
+    }
+
+    /**
+     * Removes a librarian from the databse and updates the list/table.
+     */
+    private void removeLibrarian()
+    {
+        Librarian librarianToDelete = tableViewLibrarian.getSelectionModel().getSelectedItem();
+        if(librarianToDelete != null){
+            handler.deleteLibrarian(librarianToDelete);
+            updateLibrarianList();
+        } 
+    }
+    
     /**
      * Exit the application. Displays a confirmation dialog.
      */
@@ -548,90 +655,4 @@ public class GUI extends Application
         }
     }
 
-
-    /**
-     * 
-     */
-    private void updateInventoryList()
-    {
-        bookList.clear();
-        bookList.addAll(handler.listBooks());
-    }
-
-    //TODO fiks feilmelding
-    private void addBook()
-    {
-        InventoryBook newBook = addBookView.display();
-        if (newBook != null && handler.addBook(newBook)) {
-            System.out.println(newBook.getBookName() + " was added");
-        } else {
-            System.out.println("Failed to add book");
-        }
-        updateInventoryList();
-    }
-    
-    /**
-     * 
-     */
-    private void addBorrower(){
-        Borrower newBorrower = addBorrowerView.display();
-        if(newBorrower != null && handler.addBorrower(newBorrower)){
-            System.out.println(newBorrower.getFirstName() + " was added");
-        }
-        else {
-            System.out.println("Failed to add borrower");
-        }
-        updateInventoryList();
-    }
-
-    /**
-     * 
-     */
-    private void addLibrarian(){
-        Librarian newLibrarian = addLibrarianView.display();
-        if(newLibrarian != null && handler.addLibrarian(newLibrarian)){
-            System.out.println(newLibrarian.getFirstName() + " was added");
-        }
-        else {
-            System.out.println("Failed to add employee");
-        }
-        updateInventoryList();
-    }
-    
-    /**
-     * 
-     */
-    private void removeBook()
-    {
-        InventoryBook bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
-        if(bookToDelete != null){
-            handler.deleteBook(bookToDelete);
-            updateInventoryList();
-        }
-    }
-    
-    /**
-     * 
-     */
-    private void removeBorrower()
-    {
-        Borrower borrowerToDelete = tableViewBorrower.getSelectionModel().getSelectedItem();
-        if(borrowerToDelete != null){
-            handler.deleteBorrower(borrowerToDelete);
-            updateInventoryList();
-        }
-    }
-
-    /**
-     * 
-     */
-    private void removeLibrarian()
-    {
-        Librarian librarianToDelete = tableViewLibrarian.getSelectionModel().getSelectedItem();
-        if(librarianToDelete != null){
-            handler.deleteLibrarian(librarianToDelete);
-            updateInventoryList();
-        }
-        
-    }
 }
