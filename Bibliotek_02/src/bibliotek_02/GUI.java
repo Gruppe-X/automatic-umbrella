@@ -161,24 +161,25 @@ public class GUI extends Application
         Button removeButton = new Button("Fjern");
         HBox buttonsBox = new HBox(addButton, removeButton);
 
-        TableView<BookCopy> registeredBooks = new TableView();
-        registeredBooks.setItems(copyRegisteredForLoanList);
+        TableView<BookCopy> registeredCopys = new TableView();
+        registeredCopys.setItems(copyRegisteredForLoanList);
         
-        
+        TableColumn copyIdCol = new TableColumn("Eksemplar ID");
+        copyIdCol.setCellValueFactory(new PropertyValueFactory<>("CopyID"));
         TableColumn ISBNCol = new TableColumn("ISBN");
         ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
         TableColumn tittelCol = new TableColumn("Tittel");
         tittelCol.setCellValueFactory(new PropertyValueFactory<>("BookName"));
         TableColumn forfatterCol = new TableColumn("Forfatter");
         forfatterCol.setCellValueFactory(new PropertyValueFactory<>("BookAuthor"));
-        registeredBooks.getColumns().addAll(ISBNCol, tittelCol, forfatterCol);
+        registeredCopys.getColumns().addAll(copyIdCol, ISBNCol, tittelCol, forfatterCol);
         
-        registeredBooks.setMinWidth(240);
-        registeredBooks.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        registeredCopys.setMinWidth(240);
+        registeredCopys.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         bottomLeftContent.setTop(buttonsBox);
         //set table center.
-        bottomLeftContent.setCenter(registeredBooks);
+        bottomLeftContent.setCenter(registeredCopys);
         Button registerLoanButton = new Button("Registrer Lån");
         bottomLeftContent.setBottom(registerLoanButton);
 
@@ -188,6 +189,11 @@ public class GUI extends Application
         return bottomLeftContent;
     }
 
+    /**
+     * Creates content in bottom right of loans tab
+     * Includes Searchbar to search for borrowers and table of borrowers matching search.
+     * @return VBox with bottom right content.
+     */
     private VBox createLoansBottomRightContent()
     {
         VBox bottomRightContent = new VBox();
@@ -334,6 +340,10 @@ public class GUI extends Application
     {
         TableView<InventoryBook> bookTable = new TableView<>();
         bookTable.setItems(bookList);
+        
+        TableColumn availableQuantityCol = new TableColumn("Tilgjenglig Antall");
+        availableQuantityCol.setCellValueFactory(new PropertyValueFactory<>("BookAvailableQuantity"));
+        
         TableColumn ISBNCol = new TableColumn("ISBN");
         ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
 
@@ -343,7 +353,7 @@ public class GUI extends Application
         TableColumn forfatterCol = new TableColumn("Forfatter");
         forfatterCol.setCellValueFactory(new PropertyValueFactory<>("BookAuthor"));
         
-        bookTable.getColumns().addAll(ISBNCol, tittelCol, forfatterCol);
+        bookTable.getColumns().addAll(availableQuantityCol, ISBNCol, tittelCol, forfatterCol);
         bookTable.setMinHeight(225);
         bookTable.setMinWidth(300);
         bookTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -578,6 +588,10 @@ public class GUI extends Application
     private void addBookToLoan() {
         //copyRegisteredForLoanList.add(tableViewLoansTop.getSelectionModel().getSelectedItem());
         InventoryBook selectedBook = tableViewLoansTop.getSelectionModel().getSelectedItem();
-        List<BookCopy> bookCopys = handler.listBookCopysWithId(selectedBook.getBookID());
+        copyRegisteredForLoanList.add(handler.getAvailableCopy(selectedBook));
+    }
+    
+    private void addBookToLoan(String copyID){
+        
     }
 }

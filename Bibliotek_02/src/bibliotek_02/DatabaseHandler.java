@@ -23,15 +23,18 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement bookCopyWithId;
     private PreparedStatement addBookStatement;
     private PreparedStatement deleteBookStatement;
+    private PreparedStatement availableCopyStatement;
     
     public DatabaseHandler() {
         connect();
         try{
             searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
             bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
-            bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
+            bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, Antall, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
             addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?)");
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
+            availableCopyStatement = connection.prepareStatement("SELECT * FROM Eksemplar WHERE ISBN = ? AND Utlånt = 0");
+            
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -174,6 +177,23 @@ public class DatabaseHandler implements Closeable {
         return results;
     }
     
+    public BookCopy getAvailableCopy(InventoryBook book){
+        System.out.println(book.getBookID());
+        BookCopy selectedCopy = null;
+        ResultSet results;
+        try{
+            availableCopyStatement.setString(1, book.getBookID());
+            results = availableCopyStatement.executeQuery();
+            results.next();
+            selectedCopy = new BookCopy(book, results.getString(1));
+        } catch (SQLException SQLEx) {
+            System.out.println(SQLEx.getMessage());
+            SQLEx.printStackTrace();
+            selectedCopy = null;
+        }
+        return selectedCopy;
+    }
+    
     /**
      * Returns a List of all borrowers.
      * @return a List of all borrowers.
@@ -209,7 +229,7 @@ public class DatabaseHandler implements Closeable {
         ResultSet bookSet = getBooks();
         try{
             while(bookSet.next()){
-                books.add(new InventoryBook(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3), bookSet.getString(7)));
+                books.add(new InventoryBook(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3), bookSet.getString(7), bookSet.getString(8)));
             }
         } catch (SQLException ex) {
             books = null;
@@ -229,8 +249,9 @@ public class DatabaseHandler implements Closeable {
                 String edition = bookCopySet.getString(5);
                 String publishingYear = bookCopySet.getString(6);
                 String quantity = bookCopySet.getString(7);
-                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity);
-                String copyID = bookCopySet.getString(7);
+                //TODO ????
+                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity, "0");
+                String copyID = bookCopySet.getString(8);
                 BookCopy copy = new BookCopy(book, copyID);
                 bookCopys.add(copy);
             }
@@ -252,7 +273,8 @@ public class DatabaseHandler implements Closeable {
                 String edition = bookCopySet.getString(5);
                 String publishingYear = bookCopySet.getString(6);
                 String quantity = bookCopySet.getString(7);
-                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity);
+                String availableQuantity = bookCopySet.getString(8);
+                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity, availableQuantity);
                 String copyID = bookCopySet.getString(7);
                 BookCopy copy = new BookCopy(book, copyID);
                 bookCopys.add(copy);
