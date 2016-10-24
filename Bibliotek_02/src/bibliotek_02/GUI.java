@@ -479,13 +479,8 @@ public class GUI extends Application
         removeButton.setOnAction(e -> removeBorrower());
         Button updateButton = new Button("Update");
         updateButton.setOnAction(e -> updateBorrowerList());
-<<<<<<< HEAD
 
-        searchInventory.setPromptText("Search through this lists");
-=======
-        
         searchBorrower.setPromptText("Search through this lists");
->>>>>>> e5e6af8f039d6b74b66182ed7bcbf7b490bd4873
 
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
