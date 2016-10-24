@@ -16,6 +16,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -42,11 +45,10 @@ public class GUI extends Application
     private AddBorrowerView addBorrowerView;
     private AddLibrarianView addLibrarianView;
 
-    ObservableList<Librarian> librarianList;
     //Filler for the Inventory table
     ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
-
-    ObservableList<Borrower> borrowerList;
+    ObservableList<Librarian> librarianList = FXCollections.observableArrayList();
+    ObservableList<Borrower> borrowerList = FXCollections.observableArrayList();
 
     public GUI()
     {
@@ -134,6 +136,10 @@ public class GUI extends Application
         return loansTab;
     }
 
+    /**
+     * 
+     * @return 
+     */
     private HBox createLoansBottomContent()
     {
         HBox bottomContent = new HBox();
@@ -148,6 +154,10 @@ public class GUI extends Application
     }
 
 
+    /**
+     * 
+     * @return 
+     */
     private BorderPane createLoansBottomLeftContent()
     {
         BorderPane bottomLeftContent = new BorderPane();
@@ -173,6 +183,10 @@ public class GUI extends Application
     }
     
 
+    /**
+     * 
+     * @return 
+     */
     private VBox createLoansBottomRightContent()
     {
         VBox bottomRightContent = new VBox();
@@ -324,6 +338,10 @@ public class GUI extends Application
         return loansVBox;
     }
 
+    /**
+     * 
+     * @return 
+     */
     private TableView createBooksTable()
     {
         TableView bookTable = new TableView();
@@ -467,9 +485,9 @@ public class GUI extends Application
         searchLibrarian = new TextField();
         HBox buttonContainer = new HBox();
         Button addButton = new Button("Add");
-        //addButton.setOnAction(e -> addLibrarian());
+        addButton.setOnAction(e -> addLibrarian());
         Button removeButton = new Button("Remove");
-        //addButton.setOnAction(e -> removeLibrarian());
+        addButton.setOnAction(e -> removeLibrarian());
         
 
         searchLibrarian.setPromptText("Search through this lists");
@@ -571,7 +589,7 @@ public class GUI extends Application
      */
     private void addLibrarian(){
         Librarian newLibrarian = addLibrarianView.display();
-        if(newLibrarian != null && handler.addBorrower(newLibrarian)){
+        if(newLibrarian != null && handler.addLibrarian(newLibrarian)){
             System.out.println(newLibrarian.getFirstName() + " was added");
         }
         else {
@@ -597,18 +615,23 @@ public class GUI extends Application
      */
     private void removeBorrower()
     {
-        InventoryBook bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
-        if(bookToDelete != null){
-            handler.deleteBook(bookToDelete);
+        Borrower borrowerToDelete = tableViewBorrower.getSelectionModel().getSelectedItem();
+        if(borrowerToDelete != null){
+            handler.deleteBorrower(borrowerToDelete);
             updateInventoryList();
         }
-        
     }
 
     /**
      * 
      */
-    private void removeLibrarian(){
+    private void removeLibrarian()
+    {
+        Librarian librarianToDelete = tableViewLibrarian.getSelectionModel().getSelectedItem();
+        if(librarianToDelete != null){
+            handler.deleteLibrarian(librarianToDelete);
+            updateInventoryList();
+        }
         
     }
 }

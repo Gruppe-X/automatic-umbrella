@@ -24,8 +24,10 @@ public class DatabaseHandler {
     private PreparedStatement deleteBookStatement;
     
     private PreparedStatement addBorrowerStatement;
+    private PreparedStatement deleteBorrowerStatement;
     
     private PreparedStatement addLibrarianStatement;
+    private PreparedStatement deleteLibrarianStatement;
     
     public DatabaseHandler() {
         connect();
@@ -36,8 +38,10 @@ public class DatabaseHandler {
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
             
             addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
+            deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
             
-            addLibrarianStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
+            addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?, ?)");
+            deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -281,7 +285,7 @@ public class DatabaseHandler {
     
     /**
      * Adds a borrower to the borrowers table of the database. 
-     * @param  
+     * @param newBorrower
      * @return true if borrower was successfully added, otherwise false.
      */
     public boolean addBorrower(Borrower newBorrower){
@@ -305,6 +309,7 @@ public class DatabaseHandler {
     }
     /**
      * Adds a borrower to the borrowers table of the database.
+     * @param newLibrarian
      * @return true if borrower was successfully added, otherwise false.
      */
     public boolean addLibrarian(Librarian newLibrarian){
@@ -333,6 +338,34 @@ public class DatabaseHandler {
         try {
             deleteBookStatement.setString(1, bookToDelete.getBookID());
             if(deleteBookStatement.executeUpdate() > 0){
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+        }
+        return result;
+    }
+    
+    //TODO fix nullpointer
+    public boolean deleteBorrower(Borrower borrowerToDelete){
+        boolean result = false;
+        try {
+            deleteBorrowerStatement.setString(1, borrowerToDelete.getFirstName());
+            if(deleteBorrowerStatement.executeUpdate() > 0){
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+        }
+        return result;
+    }
+    
+    //TODO fix nullpointer
+    public boolean deleteLibrarian(Librarian librarianToDelete){
+        boolean result = false;
+        try {
+            deleteLibrarianStatement.setString(1, librarianToDelete.getEmployeeID());
+            if(deleteLibrarianStatement.executeUpdate() > 0){
                 result = true;
             }
         } catch (SQLException ex) {
