@@ -42,7 +42,7 @@ public class DatabaseHandler implements Closeable {
             addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
             deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE Fornavn = ?");
             
-            addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?, ?)");
+            addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
             deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
             
         } catch (SQLException SQLEx) {
@@ -360,9 +360,8 @@ public class DatabaseHandler implements Closeable {
     public boolean addLibrarian(Librarian newLibrarian){
         boolean result = false;
         try {
-            addLibrarianStatement.setString(1, newLibrarian.getEmployeeID());
-            addLibrarianStatement.setString(2, newLibrarian.getFirstName());
-            addLibrarianStatement.setString(3, newLibrarian.getLastName());
+            addLibrarianStatement.setString(1, newLibrarian.getFirstName());
+            addLibrarianStatement.setString(2, newLibrarian.getLastName());
             int rowsUpdated = addLibrarianStatement.executeUpdate();
             
             if(rowsUpdated > 0){

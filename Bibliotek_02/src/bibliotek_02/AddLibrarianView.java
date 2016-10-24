@@ -78,11 +78,10 @@ public class AddLibrarianView {
 
         Button cancelButton = new Button("Cancel");
 
-        confirmButton.setOnAction((ActionEvent e) -> {
-            String telephone = employeeIDField.getText();
+        confirmButton.setOnAction((ActionEvent e) -> {;
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
-            newLibrarian = new Librarian(firstName, lastName, telephone);
+            newLibrarian = new Librarian(firstName, lastName);
             window.close();
         });
         cancelButton.setOnAction((ActionEvent e) -> {
@@ -112,12 +111,10 @@ public class AddLibrarianView {
         firstNameField = new TextField();
         lastNameField = new TextField();
         
-        centerContainer.add(new Label("AnsattID"), 0, 0);
-        centerContainer.add(employeeIDField, 1, 0);
-        centerContainer.add(new Label("Fornavn"), 0, 1);
-        centerContainer.add(firstNameField, 1, 1);
-        centerContainer.add(new Label("Etternavn"), 0, 2);
-        centerContainer.add(lastNameField, 1, 2);
+        centerContainer.add(new Label("Fornavn"), 0, 0);
+        centerContainer.add(firstNameField, 1, 0);
+        centerContainer.add(new Label("Etternavn"), 0, 1);
+        centerContainer.add(lastNameField, 1, 1);
 
         return centerContainer;
     }

@@ -430,6 +430,8 @@ public class GUI extends Application
         addButton.setOnAction(e -> addBook());
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> removeBook());
+        Button updateButton = new Button("Update");
+        updateButton.setOnAction(e -> updateBorrowerList());
 
         searchInventory.setPromptText("Search through the inventory");
 
@@ -452,7 +454,7 @@ public class GUI extends Application
 
         tableViewInventory.setItems(bookList);
         tableViewInventory.setMinSize(450, 175);
-        buttonContainer.getChildren().addAll(addButton, removeButton);
+        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton);
         inventoryVBox.getChildren().add(buttonContainer);
         inventoryVBox.getChildren().add(searchInventory);
         inventoryVBox.getChildren().add(tableViewInventory);
@@ -517,6 +519,8 @@ public class GUI extends Application
         addButton.setOnAction(e -> addLibrarian());
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> removeLibrarian());
+        Button updateButton = new Button("Update");
+        updateButton.setOnAction(e -> updateBorrowerList());
 
         searchLibrarian.setPromptText("Search through this lists");
 
@@ -534,7 +538,7 @@ public class GUI extends Application
         tableViewLibrarian.setItems(librarianList);
         tableViewLibrarian.setMinSize(450, 175);
         tableViewLibrarian.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        buttonContainer.getChildren().addAll(addButton, removeButton);
+        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton);
         librarianVBox.getChildren().add(buttonContainer);
         librarianVBox.getChildren().add(searchLibrarian);
         librarianVBox.getChildren().add(tableViewLibrarian);

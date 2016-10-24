@@ -11,17 +11,14 @@
 
 /* Color of the tabs above the table */
 .tab-pane .tab {
-    -fx-background-color: #ff0066;
 }
 
 /* Color when mouseover on the tabs above the table */
 .tab-pane .tab:hover {
-     background-color: lightblue;
 }
 
 /* Color of the currently selected tab*/
 .tab-pane .tab:selected { 
-    color: #B0C4DE;
 }
 
 /* Background color of the window */
@@ -49,14 +46,39 @@
     
 }
 
-.button {
-    -fx-background-color:aquamarine;
-}
+/*.button {
+      -fx-background-color: 
+          #707070,
+          linear-gradient(#fcfcfc, #f3f3f3),
+          linear-gradient(#f2f2f2 0%, #ebebeb 49%, #dddddd 50%, #cfcfcf 100%);
+      -fx-background-insets: 0,1,2;
+      -fx-background-radius: 3,2,1;
+      -fx-padding: 2 20 2 20;
+      -fx-text-fill: black;
+      -fx-font-size: 12px;
+*/
 
-.button:hover {
-    -fx-background-color:black;
-}
+/*.button:hover {
+       -fx-background-color: 
+           #707070,
+           linear-gradient(#fcfcfc, #f3f3f3),
+           linear-gradient(#666666 0%, #656565 49%, #646464 50%, white 100%);
+       -fx-background-insets: 0,1,2;
+       -fx-background-radius: 3,2,1;
+       -fx-padding: 2 20 2 20;  
+       -fx-text-fill: black;
+       -fx-font-size: 12px;
+}*/
 
 .button:pressed {
-    -fx-background-color:blue;
+    -fx-background-color:green;
 }
+
+
+
+
+
+
+
+
+
