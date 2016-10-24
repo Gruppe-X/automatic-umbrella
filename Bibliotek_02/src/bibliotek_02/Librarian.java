@@ -23,7 +23,7 @@ public class Librarian {
      * Returns the ansattID of an employee.
      * @return Returns the ansattID of an employee.
      */
-    public String getAnsattID()
+    public String getEmployeeID()
     {
         return employeeID.get();
     }
