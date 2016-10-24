@@ -20,6 +20,7 @@ public class DatabaseHandler implements Closeable {
     private Connection connection;
     private PreparedStatement searchStatement;
     private PreparedStatement bookCopyJoinStatement;
+    private PreparedStatement bookCopyWithId;
     private PreparedStatement addBookStatement;
     private PreparedStatement deleteBookStatement;
     
@@ -28,6 +29,7 @@ public class DatabaseHandler implements Closeable {
         try{
             searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
             bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
+            bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
             addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?)");
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
         } catch (SQLException SQLEx) {
@@ -161,6 +163,17 @@ public class DatabaseHandler implements Closeable {
         return results;
     }
     
+    private ResultSet getCopysWithId(String id){
+        ResultSet results;
+        try {
+            bookCopyWithId.setString(1, id);
+            results = bookCopyWithId.executeQuery();
+        } catch (SQLException ex) {
+            results = null;
+        }
+        return results;
+    }
+    
     /**
      * Returns a List of all borrowers.
      * @return a List of all borrowers.
@@ -207,6 +220,29 @@ public class DatabaseHandler implements Closeable {
     public List<BookCopy> listBookCopys(){
         List<BookCopy> bookCopys = new ArrayList<>();
         ResultSet bookCopySet = getCopys();
+        try {
+            while(bookCopySet.next()){
+                String bookID = bookCopySet.getString(1);
+                String title = bookCopySet.getString(2);
+                String publisher = bookCopySet.getString(3);
+                String author = bookCopySet.getString(4);
+                String edition = bookCopySet.getString(5);
+                String publishingYear = bookCopySet.getString(6);
+                String quantity = bookCopySet.getString(7);
+                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity);
+                String copyID = bookCopySet.getString(7);
+                BookCopy copy = new BookCopy(book, copyID);
+                bookCopys.add(copy);
+            }
+        } catch (SQLException ex) {
+            bookCopys = null;
+        }
+        return bookCopys;
+    }
+    
+    public List<BookCopy> listBookCopysWithId(String id){
+        List<BookCopy> bookCopys = new ArrayList<>();
+        ResultSet bookCopySet = getCopysWithId(id);
         try {
             while(bookCopySet.next()){
                 String bookID = bookCopySet.getString(1);

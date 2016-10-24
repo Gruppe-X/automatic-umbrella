@@ -1,9 +1,8 @@
 package bibliotek_02;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,7 +48,7 @@ public class GUI extends Application
 
     ObservableList<Borrower> borrowerList;
     
-    ObservableList<InventoryBook> loansBookList;
+    ObservableList<BookCopy> copyRegisteredForLoanList;
 
     public GUI()
     {
@@ -57,7 +56,7 @@ public class GUI extends Application
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
         bookList = FXCollections.observableArrayList(handler.listBooks()); //TODO lag listBooks i DatabaseHandler
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
-        loansBookList = FXCollections.observableArrayList();
+        copyRegisteredForLoanList = FXCollections.observableArrayList();
         
         addBookView = new AddBookView();
     }
@@ -144,8 +143,9 @@ public class GUI extends Application
         Button removeButton = new Button("Fjern");
         HBox buttonsBox = new HBox(addButton, removeButton);
 
-        TableView<InventoryBook> registeredBooks = new TableView();
-        registeredBooks.setItems(loansBookList);
+        TableView<BookCopy> registeredBooks = new TableView();
+        registeredBooks.setItems(copyRegisteredForLoanList);
+        
         
         TableColumn ISBNCol = new TableColumn("ISBN");
         ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
@@ -570,6 +570,8 @@ public class GUI extends Application
     }
 
     private void addBookToLoan() {
-        loansBookList.add(tableViewLoansTop.getSelectionModel().getSelectedItem());
+        //copyRegisteredForLoanList.add(tableViewLoansTop.getSelectionModel().getSelectedItem());
+        InventoryBook selectedBook = tableViewLoansTop.getSelectionModel().getSelectedItem();
+        List<BookCopy> bookCopys = handler.listBookCopysWithId(selectedBook.getBookID());
     }
 }
