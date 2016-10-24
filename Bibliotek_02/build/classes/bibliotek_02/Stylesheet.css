@@ -11,7 +11,11 @@
 
 /* Color of the tabs above the table */
 .tab-pane .tab {
+<<<<<<< HEAD
     -fx-background-color: #ff0066;
+=======
+     
+>>>>>>> 308b675d6cc31905237e610e263daf2ed46b6c43
 }
 
 /* Color when mouseover on the tabs above the table */

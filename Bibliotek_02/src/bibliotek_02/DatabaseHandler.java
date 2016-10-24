@@ -1,5 +1,7 @@
 package bibliotek_02;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,19 +9,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Robert
  */
-public class DatabaseHandler {
+public class DatabaseHandler implements Closeable {
     
     private final String connString = "jdbc:sqlserver://roberris-prosjektx.uials.no;databaseName=Bibliotek;username=sa;password=password123";
     private Connection connection;
     private PreparedStatement searchStatement;
     private PreparedStatement bookCopyJoinStatement;
+
+    private PreparedStatement bookCopyWithId;
     private PreparedStatement addBookStatement;
     private PreparedStatement deleteBookStatement;
     
@@ -34,6 +36,8 @@ public class DatabaseHandler {
         try{
             searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
             bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
+
+            bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
             addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?)");
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
             
@@ -64,6 +68,15 @@ public class DatabaseHandler {
             SQLEx.printStackTrace();
         }
         return success;
+    }
+    
+    @Override
+    public void close() throws IOException {
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException();
+        }
     }
     
     /**
@@ -165,6 +178,17 @@ public class DatabaseHandler {
         return results;
     }
     
+    private ResultSet getCopysWithId(String id){
+        ResultSet results;
+        try {
+            bookCopyWithId.setString(1, id);
+            results = bookCopyWithId.executeQuery();
+        } catch (SQLException ex) {
+            results = null;
+        }
+        return results;
+    }
+    
     /**
      * Returns a List of all borrowers.
      * @return a List of all borrowers.
@@ -232,6 +256,28 @@ public class DatabaseHandler {
                 InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity);
                 String copyID = bookCopySet.getString(7);
                 BookCopy copy = new BookCopy(book, copyID);
+                bookCopys.add(copy);
+            }
+        } catch (SQLException ex) {
+            bookCopys = null;
+        }
+        return bookCopys;
+    }
+    
+    public List<BookCopy> listBookCopysWithId(String id){
+        List<BookCopy> bookCopys = new ArrayList<>();
+        ResultSet bookCopySet = getCopysWithId(id);
+        try {
+            while(bookCopySet.next()){
+                String bookID = bookCopySet.getString(1);
+                String title = bookCopySet.getString(2);
+                String publisher = bookCopySet.getString(3);
+                String author = bookCopySet.getString(4);
+                String edition = bookCopySet.getString(5);
+                String publishingYear = bookCopySet.getString(6);
+                String quantity = bookCopySet.getString(7);
+                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity);
+                BookCopy copy = new BookCopy(book, title);
                 bookCopys.add(copy);
             }
         } catch (SQLException ex) {
