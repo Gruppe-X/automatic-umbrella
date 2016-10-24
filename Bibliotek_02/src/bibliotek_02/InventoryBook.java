@@ -6,23 +6,28 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Oscar Wika, Vinh Tran
  */
-public class Copy {
+public class InventoryBook {
     
-    private final SimpleStringProperty bookID;
-    private final SimpleStringProperty bookName;
-    private final SimpleStringProperty bookEdition;
-    private final SimpleStringProperty bookAuthor;
-    private final SimpleStringProperty bookYear;
-    private final SimpleStringProperty bookPublisher;
+    private final SimpleStringProperty ID;
+    private final SimpleStringProperty title;
+    private final SimpleStringProperty edition;
+    private final SimpleStringProperty author;
+    private final SimpleStringProperty year;
+    private final SimpleStringProperty publisher;
+    private final SimpleStringProperty quantity;
     
-    Copy(String bookID, String bookName, String bookAuthor, String bookEdition, String bookYear, String bookPublisher)
+    InventoryBook(String ID, String title, String author, String edition, String year, String publisher, String quantity)
     {
-        this.bookID = new SimpleStringProperty(bookID);
-        this.bookName = new SimpleStringProperty(bookName);
-        this.bookAuthor = new SimpleStringProperty(bookAuthor);
-        this.bookEdition = new SimpleStringProperty(bookEdition);
-        this.bookYear = new SimpleStringProperty(bookYear);
-        this.bookPublisher = new SimpleStringProperty(bookPublisher);
+        this.ID = new SimpleStringProperty(ID);
+        this.title = new SimpleStringProperty(title);
+        this.author = new SimpleStringProperty(author);
+        this.edition = new SimpleStringProperty(edition);
+        this.year = new SimpleStringProperty(year);
+        this.publisher = new SimpleStringProperty(publisher);
+        if(quantity == null){
+            quantity = "0";
+        }
+        this.quantity = new SimpleStringProperty(quantity);
     }
     
     /**
@@ -31,7 +36,7 @@ public class Copy {
      */
     public String getBookID()
     {
-        return bookID.get();
+        return ID.get();
     }
     
     /**
@@ -40,7 +45,7 @@ public class Copy {
      */
     public String getBookName()
     {
-       return bookName.get();
+       return title.get();
     }
         
     /**
@@ -49,7 +54,7 @@ public class Copy {
      */
     public String getBookAuthor()
     {
-        return bookAuthor.get();
+        return author.get();
     }
     
      /**
@@ -58,7 +63,7 @@ public class Copy {
      */
     public String getBookEdition()
     {
-        return bookEdition.get();
+        return edition.get();
     }
     
     /**
@@ -67,7 +72,7 @@ public class Copy {
      */
     public String getBookYear()
     {
-        return bookYear.get();
+        return year.get();
     }
     
     /**
@@ -76,7 +81,7 @@ public class Copy {
      */
     public String getBookPublisher()
     {
-        return bookPublisher.get();
+        return publisher.get();
     }
     
     /**
@@ -85,7 +90,7 @@ public class Copy {
      */
     public void setBookID(String bookID)
     {
-        this.bookID.set(bookID);
+        this.ID.set(bookID);
     }
     
     /**
@@ -94,7 +99,7 @@ public class Copy {
      */
     public void setBookName(String bookName)
     {
-        this.bookName.set(bookName);
+        this.title.set(bookName);
     }
     
     /**
@@ -103,7 +108,7 @@ public class Copy {
      */
     public void setBookAuthor(String bookAuthor)
     {
-        this.bookAuthor.set(bookAuthor);
+        this.author.set(bookAuthor);
     }
     
     /**
@@ -112,17 +117,21 @@ public class Copy {
      */
     public void setBookEdition(String bookEdition)
     {
-        this.bookEdition.set(bookEdition);
+        this.edition.set(bookEdition);
     }
     
     public void setBookYear(String bookYear)
     {
-        this.bookYear.set(bookYear);
+        this.year.set(bookYear);
     }
     
     public void setBookPublisher(String bookPublisher)
     {
-        this.bookPublisher.set(bookPublisher);
+        this.publisher.set(bookPublisher);
+    }
+    
+    public String getBookQuantity() {
+        return quantity.get();
     }
     
 }
