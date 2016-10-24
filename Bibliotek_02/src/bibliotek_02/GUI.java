@@ -445,6 +445,8 @@ public class GUI extends Application
         addButton.setOnAction(e -> addBorrower());
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> removeBorrower());
+        Button updateButton = new Button("Update");
+        updateButton.setOnAction(e -> updateBorrowerList());
         
         searchBorrower.setPromptText("Search through this lists");
 
@@ -462,7 +464,7 @@ public class GUI extends Application
         tableViewBorrower.setItems(borrowerList);
         tableViewBorrower.setMinSize(450, 175);
         tableViewBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        buttonContainer.getChildren().addAll(addButton, removeButton);
+        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton);
         borrowerVBox.getChildren().add(buttonContainer);
         borrowerVBox.getChildren().add(searchBorrower);
         borrowerVBox.getChildren().add(tableViewBorrower);
