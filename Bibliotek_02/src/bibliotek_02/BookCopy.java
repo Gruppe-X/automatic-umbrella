@@ -10,11 +10,13 @@ public class BookCopy {
     
     private final SimpleStringProperty copyID;
     private final InventoryBook book;
+    private final boolean available;
     
-    BookCopy(InventoryBook book, String copyID)
+    BookCopy(InventoryBook book, String copyID, boolean available)
     {
         this.book = book;
         this.copyID = new SimpleStringProperty(copyID);
+        this.available = available;
     }
     
     /**

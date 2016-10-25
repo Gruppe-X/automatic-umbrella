@@ -8,12 +8,14 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Borrower {
     
+    private final SimpleStringProperty borrowerId;
     private final SimpleStringProperty firstName;
     private final SimpleStringProperty lastName; 
     private final SimpleStringProperty telephone;
  
-    Borrower(String firstName, String lastName, String telephone)
+    Borrower(String borrowerId, String firstName, String lastName, String telephone)
     {
+        this.borrowerId = new SimpleStringProperty(borrowerId);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.telephone = new SimpleStringProperty(telephone);
@@ -44,6 +46,10 @@ public class Borrower {
     public String getTelephone()
     {
         return telephone.get();
+    }
+    
+    public String getBorrowerId(){
+        return borrowerId.get();
     }
     
     /**
