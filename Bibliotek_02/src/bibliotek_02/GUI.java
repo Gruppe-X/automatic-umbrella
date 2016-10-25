@@ -47,6 +47,7 @@ public class GUI extends Application
     ObservableList<Librarian> librarianList;
     ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
     ObservableList<Borrower> borrowerList;
+    ObservableList<Copy> copyList;
     ObservableList<BookCopy> copyRegisteredForLoanList;
 
     public GUI()
@@ -55,6 +56,7 @@ public class GUI extends Application
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
         bookList = FXCollections.observableArrayList(handler.listBooks());
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
+        copyList = FXCollections.observableArrayList(handler.listCopies());
         copyRegisteredForLoanList = FXCollections.observableArrayList();
 
         addBookView = new AddBookView();
@@ -394,7 +396,9 @@ public class GUI extends Application
         searchCopy.setPromptText("Søk etter kvitteringsNr, Lånetaker ...");
 
         TableColumn kvittNrCol = new TableColumn("KvittNr");
+        kvittNrCol.setCellValueFactory(new PropertyValueFactory("LoanID"));
         TableColumn datoCol = new TableColumn("Dato");
+        datoCol.setCellValueFactory(new PropertyValueFactory("StartDateTime"));
         TableColumn navnCol = new TableColumn("Navn");
 
         tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, navnCol);
@@ -587,6 +591,12 @@ public class GUI extends Application
     {
         librarianList.clear();
         librarianList.addAll(handler.listLibrarians());
+    }
+    
+    private void updateCopyList()
+    {
+        copyList.clear();
+        copyList.addAll(handler.listCopies());
     }
 
     // -------- ADD METHODS --------

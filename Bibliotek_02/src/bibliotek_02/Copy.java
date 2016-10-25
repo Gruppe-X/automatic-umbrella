@@ -1,7 +1,5 @@
 package bibliotek_02;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -10,28 +8,28 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Copy {
     
-    private final  SimpleIntegerProperty loanID;
-    private final  SimpleIntegerProperty borrowerID;
-    private final  SimpleIntegerProperty librarianID;
+    private final  SimpleStringProperty loanID;
+    private final  SimpleStringProperty borrowerID;
+    private final  SimpleStringProperty librarianID;
     private final  SimpleStringProperty startDateTime;
     private final  SimpleStringProperty endDateTime;
-    private final  SimpleBooleanProperty handedIn;
+    private final  SimpleStringProperty handedIn;
     
-    Copy(int loanID, int borrowerID, int librarianID, String startDateTime, String endDateTime, boolean handedIn)
+    Copy(String loanID, String borrowerID, String librarianID, String startDateTime, String endDateTime, String handedIn)
     {
-        this.loanID = new SimpleIntegerProperty(loanID);
-        this.borrowerID = new SimpleIntegerProperty(borrowerID);
-        this.librarianID = new SimpleIntegerProperty(librarianID);
+        this.loanID = new SimpleStringProperty(loanID);
+        this.borrowerID = new SimpleStringProperty(borrowerID);
+        this.librarianID = new SimpleStringProperty(librarianID);
         this.startDateTime = new SimpleStringProperty(startDateTime);
         this.endDateTime = new SimpleStringProperty(endDateTime);
-        this.handedIn = new SimpleBooleanProperty(handedIn);
+        this.handedIn = new SimpleStringProperty(handedIn);
     }
 
     /**
      *
      * @return
      */
-    public int getLoanID()
+    public String getLoanID()
     {
         return loanID.get();
     }
@@ -40,7 +38,7 @@ public class Copy {
      * 
      * @param loanID 
      */
-    public void setLoanID(int loanID)
+    public void setLoanID(String loanID)
     {
         this.loanID.set(loanID);
     }
@@ -49,7 +47,7 @@ public class Copy {
      * 
      * @return 
      */
-    public int getBorrowerID()
+    public String getBorrowerID()
     {
         return borrowerID.get();
     }
@@ -58,7 +56,7 @@ public class Copy {
      * 
      * @param borrowerID 
      */
-    public void setBorrowerID(int borrowerID)
+    public void setBorrowerID(String borrowerID)
     {
         this.borrowerID.set(borrowerID);
     }
@@ -67,7 +65,7 @@ public class Copy {
      * 
      * @return 
      */
-    public int getLibrarianID()
+    public String getLibrarianID()
     {
         return librarianID.get();
     }
@@ -76,7 +74,7 @@ public class Copy {
      * 
      * @param librarianID 
      */
-    public void setLibrarianID(int librarianID)
+    public void setLibrarianID(String librarianID)
     {
         this.librarianID.set(librarianID);
     }
@@ -117,7 +115,7 @@ public class Copy {
      * 
      * @return 
      */
-    public boolean getHandedIn()
+    public String getHandedIn()
     {
         return handedIn.get();
     }
@@ -126,7 +124,7 @@ public class Copy {
      * 
      * @param handedIn 
      */
-    public void setHandedIn(boolean handedIn)
+    public void setHandedIn(String handedIn)
     {
         this.handedIn.set(handedIn);
     }  
