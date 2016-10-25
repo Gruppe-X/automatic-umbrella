@@ -40,6 +40,7 @@ public class GUI extends Application
     private TableView<InventoryBook> tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewBorrower;
+    private TableView<Borrower> tableViewLoanBorrower;
 
     private AddBookView addBookView;
 
@@ -182,6 +183,7 @@ public class GUI extends Application
         //set table center.
         bottomLeftContent.setCenter(registeredCopys);
         Button registerLoanButton = new Button("Registrer Lån");
+        registerLoanButton.setOnAction(e -> registerLoan());
         bottomLeftContent.setBottom(registerLoanButton);
 
         bottomLeftContent.setPadding(new Insets(0, 10, 0, 0));
@@ -213,22 +215,23 @@ public class GUI extends Application
         topContent.add(lastNameField, 0, 2);
         topContent.add(findBorrowerButton, 1, 2);
 
-        TableView borrowerTable = new TableView();
+        tableViewLoanBorrower = new TableView();
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
         TableColumn etternavnCol = new TableColumn("Etternavn");
         etternavnCol.setCellValueFactory(new PropertyValueFactory<>("LastName"));
         TableColumn telefonCol = new TableColumn("Telefon");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
-        borrowerTable.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewLoanBorrower.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         ObservableList<Borrower> borrowers = FXCollections.observableArrayList();
         borrowers.addAll(borrowerList);
+        tableViewLoanBorrower.setItems(borrowers);
         
-        borrowerTable.setMinWidth(240);
-        borrowerTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        borrowerTable.setMinHeight(50);
+        tableViewLoanBorrower.setMinWidth(240);
+        tableViewLoanBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableViewLoanBorrower.setMinHeight(50);
 
-        bottomRightContent.getChildren().addAll(topContent, borrowerTable);
+        bottomRightContent.getChildren().addAll(topContent, tableViewLoanBorrower);
 
         bottomRightContent.setPadding(new Insets(0, 0, 0, 10));
         bottomRightContent.setMinWidth(240);
@@ -608,7 +611,16 @@ public class GUI extends Application
         
     }
     
-    private void addBookToLoan(String copyID){
-        
+    private void registerLoan(int borrowerId, int librarianId, int numberOfDays, List<BookCopy> copys){
+        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
+    }
+    
+    private void registerLoan(){
+        //TODO vis error om ingen lånetaker er valgt.
+        int borrowerId = Integer.parseInt(tableViewLoanBorrower.getSelectionModel().getSelectedItem().getBorrowerId());
+        int librarianId = 9; //TODO finn librarian id
+        int numberOfDays = 30;
+        List<BookCopy> copys = copyRegisteredForLoanList;
+        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
     }
 }
