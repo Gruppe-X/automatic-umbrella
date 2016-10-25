@@ -10,11 +10,13 @@ public class BookCopy {
     
     private final SimpleStringProperty copyID;
     private final InventoryBook book;
+    private final boolean available;
     
-    BookCopy(InventoryBook book, String copyID)
+    BookCopy(InventoryBook book, String copyID, boolean available)
     {
         this.book = book;
         this.copyID = new SimpleStringProperty(copyID);
+        this.available = available;
     }
     
     /**
@@ -79,6 +81,17 @@ public class BookCopy {
      */
     public InventoryBook getBook() {
         return book;
+    }
+    
+    @Override
+    public boolean equals(Object copy) {
+        boolean result = false;
+        if (copy instanceof BookCopy) {
+            if (this.getCopyID().equals(((BookCopy) copy).getCopyID())) {
+                result = true;
+            }
+        }
+        return result;
     }
     
 }

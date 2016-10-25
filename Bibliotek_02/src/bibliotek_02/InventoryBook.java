@@ -15,8 +15,9 @@ public class InventoryBook {
     private final SimpleStringProperty year;
     private final SimpleStringProperty publisher;
     private final SimpleStringProperty quantity;
+    private final SimpleStringProperty availableQuantity;
     
-    InventoryBook(String ID, String title, String author, String edition, String year, String publisher, String quantity)
+    InventoryBook(String ID, String title, String author, String edition, String year, String publisher, String quantity, String availableQuantity)
     {
         this.ID = new SimpleStringProperty(ID);
         this.title = new SimpleStringProperty(title);
@@ -28,6 +29,7 @@ public class InventoryBook {
             quantity = "0";
         }
         this.quantity = new SimpleStringProperty(quantity);
+        this.availableQuantity = new SimpleStringProperty(availableQuantity);
     }
     
     /**
@@ -132,6 +134,10 @@ public class InventoryBook {
     
     public String getBookQuantity() {
         return quantity.get();
+    }
+    
+    public String getBookAvailableQuantity(){
+        return availableQuantity.get();
     }
     
 }

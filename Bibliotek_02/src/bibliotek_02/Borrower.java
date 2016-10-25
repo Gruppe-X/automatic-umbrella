@@ -9,11 +9,13 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Borrower {
     
+    //private final SimpleStringProperty borrowerId;
     private final SimpleStringProperty firstName;
     private final SimpleStringProperty lastName; 
     private final SimpleStringProperty telephone;
     private final SimpleIntegerProperty borrowerID;
  
+
     Borrower(int borrowerID, String firstName, String lastName, String telephone)
     {
         this.borrowerID = new SimpleIntegerProperty(borrowerID);

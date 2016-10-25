@@ -7,8 +7,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,6 +27,10 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement bookCopyWithId;
     private PreparedStatement addBookStatement;
     private PreparedStatement deleteBookStatement;
+    private PreparedStatement availableCopyStatement;
+    private PreparedStatement registerLoanStatement;
+    private PreparedStatement registerCopyToLoanStatement;
+    private PreparedStatement overdueLoansStatement;
     
     private PreparedStatement addBorrowerStatement;
     private PreparedStatement deleteBorrowerStatement;
@@ -34,17 +42,21 @@ public class DatabaseHandler implements Closeable {
         connect();
         try{
             searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
-            bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
-            bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
+            bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
+            bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, Antall, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
             addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?)");
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
+            availableCopyStatement = connection.prepareStatement("SELECT * FROM Eksemplar WHERE ISBN = ? AND Utlånt = 0");
+            //1=BorrowerID, 2=LibrarianID/EmployeeID, 2=Number of days to loan
+            registerLoanStatement = connection.prepareStatement("INSERT INTO Lån (LånetakerID, AnsattID, Starttidspunkt, Slutttidspunkt) VALUES(?, ?, GETDATE(), DATEADD(day, ?, GETDATE()));", Statement.RETURN_GENERATED_KEYS);
+            registerCopyToLoanStatement = connection.prepareStatement("UPDATE Eksemplar SET LånId = ?, Utlånt=1 WHERE EksemplarID = ?");
+            overdueLoansStatement = connection.prepareStatement("EXEC overDueProcedure");
             
             addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
             deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
             
             addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
             deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
-            
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -146,6 +158,10 @@ public class DatabaseHandler implements Closeable {
         return getResultSet("SELECT * FROM Lånetaker");
     }
     
+    public ResultSet getReceipts(){
+        return getResultSet("SELECT * FROM Lån");
+    }
+    
     public ResultSet getBooks(){
         return getResultSet("SELECT * FROM Bok");
     }
@@ -196,6 +212,24 @@ public class DatabaseHandler implements Closeable {
         return results;
     }
     
+    public List<BookCopy> getAvailableCopys(InventoryBook book){
+        System.out.println(book.getBookID());
+        List<BookCopy> selectedCopys = new ArrayList<>();
+        ResultSet results;
+        try{
+            availableCopyStatement.setString(1, book.getBookID());
+            results = availableCopyStatement.executeQuery();
+            while(results.next()){
+                selectedCopys.add(new BookCopy(book, results.getString(1), true));
+            }
+        } catch (SQLException SQLEx) {
+            System.out.println(SQLEx.getMessage());
+            SQLEx.printStackTrace();
+            selectedCopys = null;
+        }
+        return selectedCopys;
+    }
+    
     /**
      * Returns a List of all borrowers.
      * @return a List of all borrowers.
@@ -240,12 +274,27 @@ public class DatabaseHandler implements Closeable {
         ResultSet bookSet = getBooks();
         try{
             while(bookSet.next()){
-                books.add(new InventoryBook(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3), bookSet.getString(7)));
+                books.add(new InventoryBook(bookSet.getString(1), bookSet.getString(2), bookSet.getString(4), bookSet.getString(5), bookSet.getString(6), bookSet.getString(3), bookSet.getString(7), bookSet.getString(8)));
             }
         } catch (SQLException ex) {
             books = null;
         }
         return books;
+    }
+    
+    public List<Copy> listCopies() {
+        List<Copy> copies = new ArrayList<>();
+        ResultSet copySet = getReceipts();
+        
+        try {
+            while (copySet.next()) {
+                copies.add(new Copy(copySet.getString(1), copySet.getString(2), copySet.getString(3), copySet.getString(4), copySet.getString(5), copySet.getString(6)));
+            }
+        } catch ( SQLException ex) {
+                //TODO
+                System.out.println("looooooool");
+        }
+        return copies;
     }
     
     /**
@@ -264,9 +313,17 @@ public class DatabaseHandler implements Closeable {
                 String edition = bookCopySet.getString(5);
                 String publishingYear = bookCopySet.getString(6);
                 String quantity = bookCopySet.getString(7);
-                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity);
-                String copyID = bookCopySet.getString(7);
-                BookCopy copy = new BookCopy(book, copyID);
+                //TODO ????
+                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity, "0");
+                String copyID = bookCopySet.getString(8);
+                int avaiableBit = bookCopySet.getInt(9);
+                boolean available;
+                if(avaiableBit>0){
+                    available = false;
+                } else {
+                    available = true;
+                }
+                BookCopy copy = new BookCopy(book, copyID, available);
                 bookCopys.add(copy);
             }
         } catch (SQLException ex) {
@@ -292,9 +349,17 @@ public class DatabaseHandler implements Closeable {
                 String edition = bookCopySet.getString(5);
                 String publishingYear = bookCopySet.getString(6);
                 String quantity = bookCopySet.getString(7);
-                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity);
+                String availableQuantity = bookCopySet.getString(8);
+                InventoryBook book = new InventoryBook(bookID, title, author, edition, publishingYear, publisher, quantity, availableQuantity);
                 String copyID = bookCopySet.getString(7);
-                BookCopy copy = new BookCopy(book, copyID);
+                int avaiableBit = bookCopySet.getInt(9);
+                boolean available;
+                if(avaiableBit>0){
+                    available = false;
+                } else {
+                    available = true;
+                }
+                BookCopy copy = new BookCopy(book, copyID, available);
                 bookCopys.add(copy);
             }
         } catch (SQLException ex) {
@@ -413,11 +478,49 @@ public class DatabaseHandler implements Closeable {
         }
         return result;
     }
-    /**
-     * Returns true if 
-     * @param borrowerToDelete
-     * @return 
-     */
+
+    
+    public boolean registerLoan(int borrowerId, int librarianId, int numberOfDays, List<BookCopy> copysToLoan){
+        boolean success = false;
+        ResultSet result;
+        int affectedRows=0;
+        try {
+            connection.setAutoCommit(false);
+            registerLoanStatement.setInt(1, borrowerId);
+            registerLoanStatement.setInt(2, librarianId);
+            registerLoanStatement.setInt(3, numberOfDays);
+            affectedRows = registerLoanStatement.executeUpdate();
+            if (affectedRows > 0) {
+                result = registerLoanStatement.getGeneratedKeys();
+                result.next();
+                int loanId = result.getInt(1);
+                Iterator<BookCopy> copysIt = copysToLoan.iterator();
+                while (copysIt.hasNext()) {
+                    BookCopy currentCopy = copysIt.next();
+                    registerCopyToLoanStatement.setInt(1, loanId);
+                    registerCopyToLoanStatement.setString(2, currentCopy.getCopyID());
+                    registerCopyToLoanStatement.executeUpdate();
+                }
+                success = true;
+                connection.commit();
+            } else {
+                success = false;
+            }
+        } catch (SQLException ex) {
+            success = false;
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        } finally {
+            try{
+                connection.setAutoCommit(true);
+            } catch (SQLException SQLEx){
+                
+            }
+        }
+        return success;
+    }
+    
+
     //TODO fix nullpointer
     public boolean deleteBorrower(Borrower borrowerToDelete){
         boolean result = false;

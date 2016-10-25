@@ -92,7 +92,7 @@ public class AddBookView {
             String author = authorField.getText();
             String edition = editionField.getText();
             String released = releasedField.getText();
-            newBook = new InventoryBook(ISBN, title, author, edition, released, publisher, "0");
+            newBook = new InventoryBook(ISBN, title, author, edition, released, publisher, "0", "0");
             window.close();
         });
         cancelButton.setOnAction((ActionEvent e) -> {
