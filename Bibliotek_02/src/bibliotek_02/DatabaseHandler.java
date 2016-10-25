@@ -158,6 +158,10 @@ public class DatabaseHandler implements Closeable {
         return getResultSet("SELECT * FROM Lånetaker");
     }
     
+    public ResultSet getReceipts(){
+        return getResultSet("SELECT * FROM Lån");
+    }
+    
     public ResultSet getBooks(){
         return getResultSet("SELECT * FROM Bok");
     }
@@ -267,6 +271,21 @@ public class DatabaseHandler implements Closeable {
             books = null;
         }
         return books;
+    }
+    
+    public List<Copy> listCopies() {
+        List<Copy> copies = new ArrayList<>();
+        ResultSet copySet = getReceipts();
+        
+        try {
+            while (copySet.next()) {
+                copies.add(new Copy(copySet.getString(1), copySet.getString(2), copySet.getString(3), copySet.getString(4), copySet.getString(5), copySet.getString(6)));
+            }
+        } catch ( SQLException ex) {
+                //TODO
+                System.out.println("looooooool");
+        }
+        return copies;
     }
     
     /**
