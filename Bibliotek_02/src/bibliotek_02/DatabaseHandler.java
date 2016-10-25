@@ -32,6 +32,12 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement registerCopyToLoanStatement;
     private PreparedStatement overdueLoansStatement;
     
+    private PreparedStatement addBorrowerStatement;
+    private PreparedStatement deleteBorrowerStatement;
+    
+    private PreparedStatement addLibrarianStatement;
+    private PreparedStatement deleteLibrarianStatement;
+    
     public DatabaseHandler() {
         connect();
         try{
@@ -45,6 +51,12 @@ public class DatabaseHandler implements Closeable {
             registerLoanStatement = connection.prepareStatement("INSERT INTO Lån (LånetakerID, AnsattID, Starttidspunkt, Slutttidspunkt) VALUES(?, ?, GETDATE(), DATEADD(day, ?, GETDATE()));", Statement.RETURN_GENERATED_KEYS);
             registerCopyToLoanStatement = connection.prepareStatement("UPDATE Eksemplar SET LånId = ?, Utlånt=1 WHERE EksemplarID = ?");
             overdueLoansStatement = connection.prepareStatement("EXEC overDueProcedure");
+            
+            addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
+            deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
+            
+            addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
+            deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -214,7 +226,7 @@ public class DatabaseHandler implements Closeable {
         ResultSet customerSet = getBorrowers();
         try {
             while(customerSet.next()){
-                customers.add(new Borrower(customerSet.getString(1), customerSet.getString(2), customerSet.getString(3), customerSet.getString(4)));
+                customers.add(new Borrower(customerSet.getInt(1), customerSet.getString(2), customerSet.getString(3), customerSet.getString(4)));
             }
         } catch (SQLException SQLEx) {
             //TODO
@@ -222,6 +234,10 @@ public class DatabaseHandler implements Closeable {
         return customers;
     }
     
+    /**
+     * Returns a list of all the librarians.
+     * @return Returns a list of all the librarians.
+     */
     public List<Librarian> listLibrarians(){
         List<Librarian> librarians = new ArrayList<>();
         ResultSet librarianSet = getEmployees();
@@ -235,6 +251,11 @@ public class DatabaseHandler implements Closeable {
         return librarians;
     }
     
+    
+    /**
+     * Returns a list of all the books 
+     * @return Returns a list of all the books
+     */
     public List<InventoryBook> listBooks(){
         List<InventoryBook> books = new ArrayList<>();
         ResultSet bookSet = getBooks();
@@ -248,6 +269,10 @@ public class DatabaseHandler implements Closeable {
         return books;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public List<BookCopy> listBookCopys(){
         List<BookCopy> bookCopys = new ArrayList<>();
         ResultSet bookCopySet = getCopys();
@@ -279,6 +304,11 @@ public class DatabaseHandler implements Closeable {
         return bookCopys;
     }
     
+    /**
+     * 
+     * @param id
+     * @return 
+     */
     public List<BookCopy> listBookCopysWithId(String id){
         List<BookCopy> bookCopys = new ArrayList<>();
         ResultSet bookCopySet = getCopysWithId(id);
@@ -354,6 +384,54 @@ public class DatabaseHandler implements Closeable {
         return result;
     }
     
+    /**
+     * Adds a borrower to the borrowers table of the database. 
+     * @param newBorrower
+     * @return true if borrower was successfully added, otherwise false.
+     */
+    public boolean addBorrower(Borrower newBorrower){
+        boolean result = false;
+        try {
+            addBorrowerStatement.setString(1, newBorrower.getFirstName());
+            addBorrowerStatement.setString(2, newBorrower.getLastName());
+            addBorrowerStatement.setString(3, newBorrower.getTelephone());
+            int rowsUpdated = addBorrowerStatement.executeUpdate();
+            
+            if(rowsUpdated > 0){
+                
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    /**
+     * Adds a borrower to the borrowers table of the database.
+     * @param newLibrarian
+     * @return true if borrower was successfully added, otherwise false.
+     */
+    public boolean addLibrarian(Librarian newLibrarian){
+        boolean result = false;
+        try {
+            addLibrarianStatement.setString(1, newLibrarian.getFirstName());
+            addLibrarianStatement.setString(2, newLibrarian.getLastName());
+            int rowsUpdated = addLibrarianStatement.executeUpdate();
+            
+            if(rowsUpdated > 0){
+                
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    
     //TODO fix nullpointer
     public boolean deleteBook(InventoryBook bookToDelete){
         boolean result = false;
@@ -406,5 +484,33 @@ public class DatabaseHandler implements Closeable {
             }
         }
         return success;
+    }
+    
+    //TODO fix nullpointer
+    public boolean deleteBorrower(Borrower borrowerToDelete){
+        boolean result = false;
+        try {
+            deleteBorrowerStatement.setInt(1, borrowerToDelete.getBorrowerID());
+            if(deleteBorrowerStatement.executeUpdate() > 0){
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+        }
+        return result;
+    }
+    
+    //TODO fix nullpointer
+    public boolean deleteLibrarian(Librarian librarianToDelete){
+        boolean result = false;
+        try {
+            deleteLibrarianStatement.setString(1, librarianToDelete.getEmployeeID());
+            if(deleteLibrarianStatement.executeUpdate() > 0){
+                result = true;
+            }
+        } catch (SQLException ex) {
+            result = false;
+        }
+        return result;
     }
 }

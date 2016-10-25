@@ -1,5 +1,6 @@
 package bibliotek_02;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -8,17 +9,36 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Borrower {
     
-    private final SimpleStringProperty borrowerId;
+    //private final SimpleStringProperty borrowerId;
     private final SimpleStringProperty firstName;
     private final SimpleStringProperty lastName; 
     private final SimpleStringProperty telephone;
+    private final SimpleIntegerProperty borrowerID;
  
-    Borrower(String borrowerId, String firstName, String lastName, String telephone)
+
+    Borrower(int borrowerID, String firstName, String lastName, String telephone)
     {
-        this.borrowerId = new SimpleStringProperty(borrowerId);
+        this.borrowerID = new SimpleIntegerProperty(borrowerID);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.telephone = new SimpleStringProperty(telephone);
+    }
+    
+    public Borrower(String firstName, String lastName, String telephone)
+    {
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
+        this.telephone = new SimpleStringProperty(telephone);
+        this.borrowerID = null;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public int getBorrowerID()
+    {
+        return borrowerID.get();
     }
 
     /**
@@ -48,8 +68,13 @@ public class Borrower {
         return telephone.get();
     }
     
-    public String getBorrowerId(){
-        return borrowerId.get();
+    /**
+     * 
+     * @param borrowerID 
+     */
+    public void setBorrowerID(int borrowerID)
+    {
+        this.borrowerID.set(borrowerID);
     }
     
     /**

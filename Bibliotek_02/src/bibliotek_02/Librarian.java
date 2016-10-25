@@ -19,11 +19,18 @@ public class Librarian {
         this.employeeLastName = new SimpleStringProperty(employeeLastName);
     }
     
+    public Librarian(String employeeFirstName, String employeeLastName)
+    {
+        this.employeeFirstName = new SimpleStringProperty(employeeFirstName);
+        this.employeeLastName = new SimpleStringProperty(employeeLastName);
+        this.employeeID = null;
+    }
+    
     /**
      * Returns the ansattID of an employee.
      * @return Returns the ansattID of an employee.
      */
-    public String getAnsattID()
+    public String getEmployeeID()
     {
         return employeeID.get();
     }
