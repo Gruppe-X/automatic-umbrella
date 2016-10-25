@@ -1,6 +1,7 @@
 package bibliotek_02;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javafx.application.Application;
@@ -44,9 +45,9 @@ public class GUI extends Application
     private AddBorrowerView addBorrowerView;
     private AddLibrarianView addLibrarianView;
 
-    ObservableList<Librarian> librarianList;
     ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
     ObservableList<Borrower> borrowerList;
+    ObservableList<Librarian> librarianList;
     ObservableList<BookCopy> copyRegisteredForLoanList;
 
     public GUI()
@@ -126,6 +127,7 @@ public class GUI extends Application
         TabPane tabPane = new TabPane(loans, book, bookCopy, borrower, librarian);
         
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        tabPane.getSelectionModel().selectedItemProperty().addListener(l -> updateAllList());
 
         return tabPane;
     }
@@ -356,7 +358,10 @@ public class GUI extends Application
         return loansVBox;
     }
 
-    
+    /**
+     * 
+     * @return 
+     */
     private TableView<InventoryBook> createBooksTable()
     {
         TableView<InventoryBook> bookTable = new TableView<>();
@@ -409,6 +414,10 @@ public class GUI extends Application
         return copyVBox;
     }
     
+    /**
+     * 
+     * @return 
+     */
     private HBox createCopyBottomContent()
     {
         HBox copyHBox = new HBox();
@@ -482,6 +491,9 @@ public class GUI extends Application
 
         searchBorrower.setPromptText("Search through this lists");
 
+        TableColumn lanetakerID = new TableColumn("LånetakerID");
+        lanetakerID.setCellValueFactory(new PropertyValueFactory<>("BorrowerID"));
+        
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
 
@@ -491,7 +503,7 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Telefon");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
 
-        tableViewBorrower.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewBorrower.getColumns().addAll(lanetakerID, fornavnCol, etternavnCol, telefonCol);
 
         tableViewBorrower.setItems(borrowerList);
         tableViewBorrower.setMinSize(450, 175);
@@ -523,6 +535,17 @@ public class GUI extends Application
         updateButton.setOnAction(e -> updateBorrowerList());
 
         searchLibrarian.setPromptText("Search through this lists");
+        searchLibrarian.textProperty().addListener((v, oldValue, newValue) -> {
+//            
+//            ArrayList<Librarian> searchResult = (newValue);
+//            if(newValue.length() > 0)
+//            {
+//            
+//            } else {
+//                
+//            }
+            
+        });
 
         TableColumn librarianIDCol = new TableColumn("AnsattID");
         librarianIDCol.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
@@ -573,6 +596,16 @@ public class GUI extends Application
         librarianList.clear();
         librarianList.addAll(handler.listLibrarians());
     }
+    
+    /**
+     * Updates all the lists
+     */
+    private void updateAllList()
+    {
+        updateBookList();
+        updateBorrowerList();
+        updateLibrarianList();
+    }
 
     // -------- ADD METHODS --------
     //TODO fiks feilmelding
@@ -600,7 +633,8 @@ public class GUI extends Application
     /**
      * Adds a borrower to the database and updates the list/table.
      */
-    private void addBorrower(){
+    private void addBorrower()
+    {
         Borrower newBorrower = addBorrowerView.display();
         if(newBorrower != null && handler.addBorrower(newBorrower)){
             System.out.println(newBorrower.getFirstName() + " was added");
@@ -614,7 +648,8 @@ public class GUI extends Application
     /**
      * Adds a librarian to the database and updates the list/table.
      */
-    private void addLibrarian(){
+    private void addLibrarian()
+    {
         Librarian newLibrarian = addLibrarianView.display();
         if(newLibrarian != null && handler.addLibrarian(newLibrarian)){
             System.out.println(newLibrarian.getFirstName() + " was added");

@@ -40,7 +40,7 @@ public class DatabaseHandler implements Closeable {
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
             
             addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
-            deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE Fornavn = ?");
+            deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
             
             addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
             deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
@@ -196,7 +196,7 @@ public class DatabaseHandler implements Closeable {
         ResultSet customerSet = getBorrowers();
         try {
             while(customerSet.next()){
-                customers.add(new Borrower(customerSet.getString(2), customerSet.getString(3), customerSet.getString(4)));
+                customers.add(new Borrower(customerSet.getInt(1), customerSet.getString(2), customerSet.getString(3), customerSet.getString(4)));
             }
         } catch (SQLException SQLEx) {
             //TODO
@@ -205,8 +205,8 @@ public class DatabaseHandler implements Closeable {
     }
     
     /**
-     * 
-     * @return 
+     * Returns a list of all the librarians.
+     * @return Returns a list of all the librarians.
      */
     public List<Librarian> listLibrarians(){
         List<Librarian> librarians = new ArrayList<>();
@@ -221,6 +221,11 @@ public class DatabaseHandler implements Closeable {
         return librarians;
     }
     
+    
+    /**
+     * Returns a list of all the books 
+     * @return Returns a list of all the books
+     */
     public List<InventoryBook> listBooks(){
         List<InventoryBook> books = new ArrayList<>();
         ResultSet bookSet = getBooks();
@@ -261,6 +266,11 @@ public class DatabaseHandler implements Closeable {
         return bookCopys;
     }
     
+    /**
+     * 
+     * @param id
+     * @return 
+     */
     public List<BookCopy> listBookCopysWithId(String id){
         List<BookCopy> bookCopys = new ArrayList<>();
         ResultSet bookCopySet = getCopysWithId(id);
@@ -394,7 +404,7 @@ public class DatabaseHandler implements Closeable {
     public boolean deleteBorrower(Borrower borrowerToDelete){
         boolean result = false;
         try {
-            deleteBorrowerStatement.setString(1, borrowerToDelete.getFirstName());
+            deleteBorrowerStatement.setInt(1, borrowerToDelete.getBorrowerID());
             if(deleteBorrowerStatement.executeUpdate() > 0){
                 result = true;
             }
