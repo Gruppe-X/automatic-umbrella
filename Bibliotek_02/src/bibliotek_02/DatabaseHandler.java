@@ -166,6 +166,10 @@ public class DatabaseHandler implements Closeable {
         return searchTableByColumnValString("Bok", "Forlag", publisher);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public ResultSet getCopys(){
         ResultSet results;
         try {
@@ -176,6 +180,11 @@ public class DatabaseHandler implements Closeable {
         return results;
     }
     
+    /**
+     * 
+     * @param id
+     * @return 
+     */
     private ResultSet getCopysWithId(String id){
         ResultSet results;
         try {
@@ -387,6 +396,11 @@ public class DatabaseHandler implements Closeable {
     }
     
     //TODO fix nullpointer
+    /**
+     * Returns true if 
+     * @param bookToDelete The book to be deleted
+     * @return 
+     */
     public boolean deleteBook(InventoryBook bookToDelete){
         boolean result = false;
         try {
@@ -399,7 +413,11 @@ public class DatabaseHandler implements Closeable {
         }
         return result;
     }
-    
+    /**
+     * Returns true if 
+     * @param borrowerToDelete
+     * @return 
+     */
     //TODO fix nullpointer
     public boolean deleteBorrower(Borrower borrowerToDelete){
         boolean result = false;
@@ -414,6 +432,11 @@ public class DatabaseHandler implements Closeable {
         return result;
     }
     
+    /**
+     * Returns true if 
+     * @param librarianToDelete
+     * @return 
+     */
     //TODO fix nullpointer
     public boolean deleteLibrarian(Librarian librarianToDelete){
         boolean result = false;

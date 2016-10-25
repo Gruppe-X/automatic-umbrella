@@ -537,11 +537,7 @@ public class GUI extends Application
         searchLibrarian.setPromptText("Search through this lists");
         searchLibrarian.textProperty().addListener((v, oldValue, newValue) -> {
 //            
-//            ArrayList<Librarian> searchResult = (newValue);
-//            if(newValue.length() > 0)
-//            {
 //            
-//            } else {
 //                
 //            }
             
