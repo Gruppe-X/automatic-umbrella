@@ -4,133 +4,128 @@ import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
- * @author Oscar Wika
+ * @author Thomas S Todal
  */
 public class Copy {
     
-    private final SimpleStringProperty bookID;
-    private final SimpleStringProperty bookName;
-    private final SimpleStringProperty bookEdition;
-    private final SimpleStringProperty bookAuthor;
-    private final SimpleStringProperty bookYear;
-    private final SimpleStringProperty bookPublisher;
+    private final  SimpleStringProperty loanID;
+    private final  SimpleStringProperty borrowerID;
+    private final  SimpleStringProperty librarianID;
+    private final  SimpleStringProperty startDateTime;
+    private final  SimpleStringProperty endDateTime;
+    private final  SimpleStringProperty handedIn;
     
-    Copy(String bookID, String bookName, String bookAuthor, String bookEdition, String bookYear, String bookPublisher)
+    Copy(String loanID, String borrowerID, String librarianID, String startDateTime, String endDateTime, String handedIn)
     {
-        this.bookID = new SimpleStringProperty(bookID);
-        this.bookName = new SimpleStringProperty(bookName);
-        this.bookAuthor = new SimpleStringProperty(bookAuthor);
-        this.bookEdition = new SimpleStringProperty(bookEdition);
-        this.bookYear = new SimpleStringProperty(bookYear);
-        this.bookPublisher = new SimpleStringProperty(bookPublisher);
+        this.loanID = new SimpleStringProperty(loanID);
+        this.borrowerID = new SimpleStringProperty(borrowerID);
+        this.librarianID = new SimpleStringProperty(librarianID);
+        this.startDateTime = new SimpleStringProperty(startDateTime);
+        this.endDateTime = new SimpleStringProperty(endDateTime);
+        this.handedIn = new SimpleStringProperty(handedIn);
     }
-    
+
     /**
-     * Returns the first name of a customer
-     * @return Returns the first name of a customer
+     *
+     * @return
      */
-    public String getBookID()
+    public String getLoanID()
     {
-        return bookID.get();
+        return loanID.get();
     }
-    
+
     /**
-     * Returns the last name of a customer
-     * @return Returns the last name of a customer
+     * 
+     * @param loanID 
      */
-    public String getBookName()
+    public void setLoanID(String loanID)
     {
-       return bookName.get();
+        this.loanID.set(loanID);
     }
-        
+
     /**
      * 
      * @return 
      */
-    public String getBookAuthor()
+    public String getBorrowerID()
     {
-        return bookAuthor.get();
+        return borrowerID.get();
     }
-    
-     /**
-     * Returns the telephone of a customer
-     * @return Returns the telephone of a customer
+
+    /**
+     * 
+     * @param borrowerID 
      */
-    public String getBookEdition()
+    public void setBorrowerID(String borrowerID)
     {
-        return bookEdition.get();
+        this.borrowerID.set(borrowerID);
     }
-    
+
     /**
      * 
      * @return 
      */
-    public String getBookYear()
+    public String getLibrarianID()
     {
-        return bookYear.get();
+        return librarianID.get();
     }
-    
+
+    /**
+     * 
+     * @param librarianID 
+     */
+    public void setLibrarianID(String librarianID)
+    {
+        this.librarianID.set(librarianID);
+    }
+
+    public String getStartDateTime()
+    {
+        return startDateTime.get();
+    }
+
+    /**
+     * 
+     * @param startDateTime 
+     */
+    public void setStartDateTime(String startDateTime)
+    {
+        this.startDateTime.set(startDateTime);
+    }
+
     /**
      * 
      * @return 
      */
-    public String getBookPublisher()
+    public String getEndDateTime()
     {
-        return bookPublisher.get();
+        return endDateTime.get();
     }
-    
+
     /**
      * 
-     * @param bookID
+     * @param endDateTime 
      */
-    public void setBookID(String bookID)
+    public void setEndDateTime(String endDateTime)
     {
-        this.bookID.set(bookID);
+        this.endDateTime.set(endDateTime);
     }
-    
+
     /**
      * 
-     * @param bookName 
+     * @return 
      */
-    public void setBookName(String bookName)
+    public String getHandedIn()
     {
-        this.bookName.set(bookName);
+        return handedIn.get();
     }
-    
+
     /**
      * 
-     * @param bookAuthor 
+     * @param handedIn 
      */
-    public void setBookAuthor(String bookAuthor)
+    public void setHandedIn(String handedIn)
     {
-        this.bookAuthor.set(bookAuthor);
-    }
-    
-    /**
-     * 
-     * @param bookEdition 
-     */
-    public void setBookEdition(String bookEdition)
-    {
-        this.bookEdition.set(bookEdition);
-    }
-    
-    /**
-     * 
-     * @param bookYear 
-     */
-    public void setBookYear(String bookYear)
-    {
-        this.bookYear.set(bookYear);
-    }
-    
-    /**
-     * 
-     * @param bookPublisher 
-     */
-    public void setBookPublisher(String bookPublisher)
-    {
-        this.bookPublisher.set(bookPublisher);
-    }
-    
+        this.handedIn.set(handedIn);
+    }  
 }

@@ -48,6 +48,7 @@ public class GUI extends Application
     ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
     ObservableList<Borrower> borrowerList;
     ObservableList<Librarian> librarianList;
+    ObservableList<Copy> copyList;
     ObservableList<BookCopy> copyRegisteredForLoanList;
 
     public GUI()
@@ -56,6 +57,7 @@ public class GUI extends Application
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
         bookList = FXCollections.observableArrayList(handler.listBooks());
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
+        copyList = FXCollections.observableArrayList(handler.listCopies());
         copyRegisteredForLoanList = FXCollections.observableArrayList();
 
         addBookView = new AddBookView();
@@ -389,7 +391,7 @@ public class GUI extends Application
      */
     private VBox createCopyTopContent()
     {
-        VBox copyVBox = new VBox();
+        VBox topContent = new VBox();
         tableViewCopy = new TableView();
         searchCopy = new TextField();
         HBox buttonContainer = new HBox();
@@ -398,20 +400,22 @@ public class GUI extends Application
 
         searchCopy.setPromptText("Søk etter kvitteringsNr, Lånetaker ...");
 
-        TableColumn fornavnCol = new TableColumn("N/A");
-        TableColumn etternavnCol = new TableColumn("N/A");
-        TableColumn telefonCol = new TableColumn("N/A");
+        TableColumn kvittNrCol = new TableColumn("KvittNr");
+        kvittNrCol.setCellValueFactory(new PropertyValueFactory("LoanID"));
+        TableColumn datoCol = new TableColumn("Dato");
+        datoCol.setCellValueFactory(new PropertyValueFactory("StartDateTime"));
+        TableColumn navnCol = new TableColumn("Navn");
 
-        tableViewCopy.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
+        tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, navnCol);
 
         tableViewCopy.setMinSize(450, 175);
         tableViewCopy.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         buttonContainer.getChildren().addAll(addButton, removeButton);
-        copyVBox.getChildren().add(buttonContainer);
-        copyVBox.getChildren().add(searchCopy);
-        copyVBox.getChildren().add(tableViewCopy);
+        topContent.getChildren().add(buttonContainer);
+        topContent.getChildren().add(searchCopy);
+        topContent.getChildren().add(tableViewCopy);
 
-        return copyVBox;
+        return topContent;
     }
     
     /**
@@ -420,8 +424,27 @@ public class GUI extends Application
      */
     private HBox createCopyBottomContent()
     {
-        HBox copyHBox = new HBox();
-        return copyHBox;
+        HBox bottomContent = new HBox();
+        BorderPane botLeftCont = createCopyBottomLeftContent();
+        VBox botRightCont = createCopyBottomRightContent();
+        
+        bottomContent.getChildren().addAll(botLeftCont, botRightCont);
+        HBox.setHgrow(botLeftCont, Priority.ALWAYS);
+        HBox.setHgrow(botRightCont, Priority.ALWAYS);
+        
+        return bottomContent;
+    }
+    
+    private BorderPane createCopyBottomLeftContent()
+    {
+        BorderPane botLeftContent = new BorderPane();
+        return botLeftContent;
+    }
+    
+    private VBox createCopyBottomRightContent()
+    {
+        VBox botRightContent = new VBox();
+        return botRightContent;
     }
 
     /**
@@ -598,6 +621,15 @@ public class GUI extends Application
     }
     
     /**
+     * 
+     */
+    private void updateCopyList()
+    {
+        copyList.clear();
+        copyList.addAll(handler.listCopies());
+    }
+    
+    /**
      * Updates all the lists
      */
     private void updateAllList()
@@ -605,6 +637,7 @@ public class GUI extends Application
         updateBookList();
         updateBorrowerList();
         updateLibrarianList();
+        updateCopyList();
     }
 
     // -------- ADD METHODS --------
