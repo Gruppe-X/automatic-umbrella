@@ -30,6 +30,7 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement availableCopyStatement;
     private PreparedStatement registerLoanStatement;
     private PreparedStatement registerCopyToLoanStatement;
+    private PreparedStatement overdueLoansStatement;
     
     public DatabaseHandler() {
         connect();
@@ -43,6 +44,7 @@ public class DatabaseHandler implements Closeable {
             //1=BorrowerID, 2=LibrarianID/EmployeeID, 2=Number of days to loan
             registerLoanStatement = connection.prepareStatement("INSERT INTO Lån (LånetakerID, AnsattID, Starttidspunkt, Slutttidspunkt) VALUES(?, ?, GETDATE(), DATEADD(day, ?, GETDATE()));", Statement.RETURN_GENERATED_KEYS);
             registerCopyToLoanStatement = connection.prepareStatement("UPDATE Eksemplar SET LånId = ?, Utlånt=1 WHERE EksemplarID = ?");
+            overdueLoansStatement = connection.prepareStatement("EXEC overDueProcedure");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
