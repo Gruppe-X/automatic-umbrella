@@ -177,21 +177,22 @@ public class DatabaseHandler implements Closeable {
         return results;
     }
     
-    public BookCopy getAvailableCopy(InventoryBook book){
+    public List<BookCopy> getAvailableCopys(InventoryBook book){
         System.out.println(book.getBookID());
-        BookCopy selectedCopy = null;
+        List<BookCopy> selectedCopys = new ArrayList<>();
         ResultSet results;
         try{
             availableCopyStatement.setString(1, book.getBookID());
             results = availableCopyStatement.executeQuery();
-            results.next();
-            selectedCopy = new BookCopy(book, results.getString(1));
+            while(results.next()){
+                selectedCopys.add(new BookCopy(book, results.getString(1)));
+            }
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
-            selectedCopy = null;
+            selectedCopys = null;
         }
-        return selectedCopy;
+        return selectedCopys;
     }
     
     /**

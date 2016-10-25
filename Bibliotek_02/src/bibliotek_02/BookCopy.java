@@ -81,4 +81,15 @@ public class BookCopy {
         return book;
     }
     
+    @Override
+    public boolean equals(Object copy) {
+        boolean result = false;
+        if (copy instanceof BookCopy) {
+            if (this.getCopyID().equals(((BookCopy) copy).getCopyID())) {
+                result = true;
+            }
+        }
+        return result;
+    }
+    
 }

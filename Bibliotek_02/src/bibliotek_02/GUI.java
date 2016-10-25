@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -588,7 +589,23 @@ public class GUI extends Application
     private void addBookToLoan() {
         //copyRegisteredForLoanList.add(tableViewLoansTop.getSelectionModel().getSelectedItem());
         InventoryBook selectedBook = tableViewLoansTop.getSelectionModel().getSelectedItem();
-        copyRegisteredForLoanList.add(handler.getAvailableCopy(selectedBook));
+        List<BookCopy> selectedCopys = handler.getAvailableCopys(selectedBook);
+        BookCopy selectedCopy = null;
+        int i = 0;
+        boolean looping = true;
+        while(i<selectedCopys.size() && looping){
+            if(!copyRegisteredForLoanList.contains(selectedCopys.get(i))){
+                selectedCopy = selectedCopys.get(i);
+                looping = false;
+            }
+            i++;
+        }
+        if(selectedCopy == null){
+            //TODO Display error
+        } else {
+            copyRegisteredForLoanList.add(selectedCopy);
+        }
+        
     }
     
     private void addBookToLoan(String copyID){
