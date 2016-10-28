@@ -67,7 +67,7 @@ public class ChooseEmployeeView {
         window.sizeToScene();
         window.showAndWait();
 
-        return null;
+        return librarian;
     }
 
     /**

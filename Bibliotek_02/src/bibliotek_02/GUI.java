@@ -49,11 +49,13 @@ public class GUI extends Application
     
     private ChooseEmployeeView employeeView;
 
-    private ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
+    private ObservableList<InventoryBook> bookList;
     private ObservableList<Borrower> borrowerList;
     private ObservableList<Librarian> librarianList;
     private ObservableList<Copy> copyList;
+    
     private ObservableList<BookCopy> copyRegisteredForLoanList;
+    private ObservableList<Borrower> loanBorrowers;
     
     private final int DEFAULT_LOAN_DURATION = 30;
     
@@ -68,6 +70,8 @@ public class GUI extends Application
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
         copyList = FXCollections.observableArrayList(handler.listCopies());
         copyRegisteredForLoanList = FXCollections.observableArrayList();
+        
+        loanBorrowers = FXCollections.observableArrayList();
 
         addBookView = new AddBookView();
         addBorrowerView = new AddBorrowerView();
@@ -236,14 +240,9 @@ public class GUI extends Application
     }
 
     /**
-<<<<<<< HEAD
      * Creates content in bottom right of loans tab
      * Includes Searchbar to search for borrowers and table of borrowers matching search.
      * @return VBox with bottom right content.
-=======
-     * 
-     * @return 
->>>>>>> 8d4aa9b7571e35a62a89c156d9eab5b38f657e21
      */
     private VBox createLoansBottomRightContent()
     {
@@ -271,9 +270,8 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Telefon");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
         tableViewLoanBorrower.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-        ObservableList<Borrower> borrowers = FXCollections.observableArrayList();
-        borrowers.addAll(borrowerList);
-        tableViewLoanBorrower.setItems(borrowers);
+        loanBorrowers.addAll(borrowerList);
+        tableViewLoanBorrower.setItems(loanBorrowers);
         
         tableViewLoanBorrower.setMinWidth(240);
         tableViewLoanBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -834,5 +832,17 @@ public class GUI extends Application
         int numberOfDays = DEFAULT_LOAN_DURATION;
         List<BookCopy> copys = copyRegisteredForLoanList;
         handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
+        updateLoanTabLists();
+    }
+    
+    private void updateLoanBorrowers(){
+        loanBorrowers.clear();
+        loanBorrowers.addAll(borrowerList);
+    }
+    
+    private void updateLoanTabLists(){
+        copyRegisteredForLoanList.clear();
+        updateLoanBorrowers();
+        updateInventoryList();
     }
 }
