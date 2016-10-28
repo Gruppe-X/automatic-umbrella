@@ -32,9 +32,11 @@ public class DatabaseHandler implements Closeable {
     
     private PreparedStatement addBorrowerStatement;
     private PreparedStatement deleteBorrowerStatement;
+    private PreparedStatement searchBorrowerStatement;
     
     private PreparedStatement addLibrarianStatement;
-    private PreparedStatement deleteLibrarianStatement; 
+    private PreparedStatement deleteLibrarianStatement;
+    private PreparedStatement getLibrarianByIdStatement;
     
     public DatabaseHandler() {
         connect();
@@ -52,9 +54,11 @@ public class DatabaseHandler implements Closeable {
             
             addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
             deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
+            searchBorrowerStatement = connection.prepareStatement("SELECT * FROM Lånetaker WHERE LånetakerID = ?");
             
             addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
             deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
+            getLibrarianByIdStatement = connection.prepareStatement("SELECT * FROM Ansatt WHERE AnsattID = ?");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -210,6 +214,11 @@ public class DatabaseHandler implements Closeable {
         return results;
     }
     
+    /**
+     * 
+     * @param book
+     * @return 
+     */
     public List<BookCopy> getAvailableCopys(InventoryBook book){
         System.out.println(book.getBookID());
         List<BookCopy> selectedCopys = new ArrayList<>();
@@ -260,6 +269,24 @@ public class DatabaseHandler implements Closeable {
             //TODO
         }
         return librarians;
+    }
+    
+    /**
+     * Returns librarian object of librarian found in database with given id
+     * @param id id of librarian to find
+     * @return librarian object of data in database. If none where found returns null.
+     */
+    public Librarian getLibrarianById(String id){
+        Librarian librarian;
+        try {
+            getLibrarianByIdStatement.setString(1, id);
+            ResultSet librarianSet = getLibrarianByIdStatement.executeQuery();
+            librarianSet.next();
+            librarian = new Librarian(librarianSet.getString(1), librarianSet.getString(2), librarianSet.getString(3));
+        } catch (SQLException ex) {
+            librarian = null;
+        }
+        return librarian;
     }
     
     

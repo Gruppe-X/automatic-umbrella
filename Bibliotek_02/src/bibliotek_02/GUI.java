@@ -44,13 +44,23 @@ public class GUI extends Application
     private AddBookView addBookView;
     private AddBorrowerView addBorrowerView;
     private AddLibrarianView addLibrarianView;
-
-    ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
-    ObservableList<Borrower> borrowerList;
-    ObservableList<Librarian> librarianList;
-    ObservableList<Copy> copyList;
-    ObservableList<BookCopy> copyRegisteredForLoanList;
     
+    private ChooseEmployeeView employeeView;
+
+
+    private ObservableList<InventoryBook> bookList;
+    private ObservableList<Borrower> borrowerList;
+    private ObservableList<Librarian> librarianList;
+    private ObservableList<Copy> copyList;
+    
+    private ObservableList<BookCopy> copyRegisteredForLoanList;
+    private ObservableList<Borrower> loanBorrowers;
+    
+    private final int DEFAULT_LOAN_DURATION = 30;
+    
+    //Holds the currently logged in user.
+    private Librarian currentUser;
+
     public GUI()
     {
         handler = new DatabaseHandler();
@@ -59,10 +69,17 @@ public class GUI extends Application
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
         copyList = FXCollections.observableArrayList(handler.listCopies());
         copyRegisteredForLoanList = FXCollections.observableArrayList();
+        
+        loanBorrowers = FXCollections.observableArrayList();
 
         addBookView = new AddBookView();
         addBorrowerView = new AddBorrowerView();
         addLibrarianView = new AddLibrarianView();
+        employeeView = new ChooseEmployeeView(handler);
+        currentUser = employeeView.display();
+        if(currentUser == null){
+            System.exit(0);
+        }
     }
 
     /**
@@ -130,6 +147,7 @@ public class GUI extends Application
         
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         tabPane.getSelectionModel().selectedItemProperty().addListener(l -> updateAllList());
+        tabPane.getSelectionModel().selectedItemProperty().addListener(l -> updateLoanTabLists());
 
         return tabPane;
     }
@@ -222,6 +240,11 @@ public class GUI extends Application
     }
 
 
+    /**
+     * Creates content in bottom right of loans tab
+     * Includes Searchbar to search for borrowers and table of borrowers matching search.
+     * @return VBox with bottom right content.
+     */
     private VBox createLoansBottomRightContent()
     {
         VBox bottomRightContent = new VBox();
@@ -235,10 +258,13 @@ public class GUI extends Application
         TextField lastNameField = new TextField();
         lastNameField.setPadding(new Insets(5));
         Button findBorrowerButton = new Button("Finn lånetaker");
+        Button updateButton = new Button("Update");
+        updateButton.setOnAction(e -> updateLoanTabLists());
         topContent.add(new Label("Lånetaker"), 0, 0);
         topContent.add(firstNameField, 0, 1);
         topContent.add(lastNameField, 0, 2);
         topContent.add(findBorrowerButton, 1, 2);
+        topContent.add(updateButton, 2, 2);
 
         tableViewLoanBorrower = new TableView();
         TableColumn fornavnCol = new TableColumn("Fornavn");
@@ -248,9 +274,8 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Telefon");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
         tableViewLoanBorrower.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-        ObservableList<Borrower> borrowers = FXCollections.observableArrayList();
-        borrowers.addAll(borrowerList);
-        tableViewLoanBorrower.setItems(borrowers);
+        loanBorrowers.addAll(borrowerList);
+        tableViewLoanBorrower.setItems(loanBorrowers);
         
         tableViewLoanBorrower.setMinWidth(240);
         tableViewLoanBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -520,8 +545,8 @@ public class GUI extends Application
         removeButton.setOnAction(e -> removeBorrower());
         Button updateButton = new Button("Update");
         updateButton.setOnAction(e -> updateBorrowerList());
-        Button searchButton = new Button("Search");
-        searchButton = new Button(e -> handler.searchBorrowerList());
+//        Button searchButton = new Button("Search");
+//        searchButton = new Button(e -> handler.searchBorrowerList());
         
         searchBorrower.setPromptText("Search through this lists");
         searchBorrower.textProperty().addListener((v, oldValue, newValue) -> {
@@ -568,7 +593,7 @@ public class GUI extends Application
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> removeLibrarian());
         Button updateButton = new Button("Update");
-        updateButton.setOnAction(e -> updateBorrowerList());
+        updateButton.setOnAction(e -> updateLibrarianList());
 
         searchLibrarian.setPromptText("Search through this lists");
 
@@ -629,6 +654,32 @@ public class GUI extends Application
     {
         copyList.clear();
         copyList.addAll(handler.listCopies());
+    }
+    
+    /**
+     * Updates the inventory list.
+     */
+    private void updateInventoryList()
+    {
+        bookList.clear();
+        bookList.addAll(handler.listBooks());
+    }
+    
+    /**
+     * Updates the loan borrowers list.
+     */
+    private void updateLoanBorrowers(){
+        loanBorrowers.clear();
+        loanBorrowers.addAll(borrowerList);
+    }
+    
+    /**
+     * Updates all the lists in the loan tab.
+     */
+    private void updateLoanTabLists(){
+        copyRegisteredForLoanList.clear();
+        updateLoanBorrowers();
+        updateInventoryList();
     }
     
     /**
@@ -713,7 +764,7 @@ public class GUI extends Application
         updateLibrarianList();
     }
     
-    // -------- REMOVE METHODS --------
+    // -------- REMOVE METHODS -------- //
     /**
      * Removes a book from the database and updates the list/table.
      */
@@ -748,6 +799,20 @@ public class GUI extends Application
             handler.deleteLibrarian(librarianToDelete);
             updateLibrarianList();
         } 
+    }
+    
+    private void registerLoan(int borrowerId, int librarianId, int numberOfDays, List<BookCopy> copys){
+        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
+    }
+    
+    private void registerLoan(){
+        //TODO vis error om ingen lånetaker er valgt.
+        int borrowerId = tableViewLoanBorrower.getSelectionModel().getSelectedItem().getBorrowerID();
+        int librarianId = Integer.parseInt(currentUser.getEmployeeID()); //TODO finn librarian id
+        int numberOfDays = DEFAULT_LOAN_DURATION;
+        List<BookCopy> copys = copyRegisteredForLoanList;
+        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
+        updateLoanTabLists();
     }
     
     /**
@@ -787,26 +852,5 @@ public class GUI extends Application
             // ... user chose CANCEL or closed the dialog
             // then do nothing.
         }
-    }
-
-    private void updateInventoryList()
-    {
-        bookList.clear();
-        bookList.addAll(handler.listBooks());
-    }
-
-    
-    
-    private void registerLoan(int borrowerId, int librarianId, int numberOfDays, List<BookCopy> copys){
-        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
-    }
-    
-    private void registerLoan(){
-        //TODO vis error om ingen lånetaker er valgt.
-        int borrowerId = tableViewLoanBorrower.getSelectionModel().getSelectedItem().getBorrowerID();
-        int librarianId = 9; //TODO finn librarian id
-        int numberOfDays = 30;
-        List<BookCopy> copys = copyRegisteredForLoanList;
-        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
     }
 }
