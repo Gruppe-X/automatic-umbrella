@@ -44,12 +44,21 @@ public class GUI extends Application
     private AddBookView addBookView;
     private AddBorrowerView addBorrowerView;
     private AddLibrarianView addLibrarianView;
+    
+    private ChooseEmployeeView employeeView;
 
-    ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
-    ObservableList<Borrower> borrowerList;
-    ObservableList<Librarian> librarianList;
-    ObservableList<Copy> copyList;
-    ObservableList<BookCopy> copyRegisteredForLoanList;
+    private ObservableList<InventoryBook> bookList;
+    private ObservableList<Borrower> borrowerList;
+    private ObservableList<Librarian> librarianList;
+    private ObservableList<Copy> copyList;
+    
+    private ObservableList<BookCopy> copyRegisteredForLoanList;
+    private ObservableList<Borrower> loanBorrowers;
+    
+    private final int DEFAULT_LOAN_DURATION = 30;
+    
+    //Holds the currently logged in user.
+    private Librarian currentUser;
 
     public GUI()
     {
@@ -59,10 +68,17 @@ public class GUI extends Application
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
         copyList = FXCollections.observableArrayList(handler.listCopies());
         copyRegisteredForLoanList = FXCollections.observableArrayList();
+        
+        loanBorrowers = FXCollections.observableArrayList();
 
         addBookView = new AddBookView();
         addBorrowerView = new AddBorrowerView();
         addLibrarianView = new AddLibrarianView();
+        employeeView = new ChooseEmployeeView(handler);
+        currentUser = employeeView.display();
+        if(currentUser == null){
+            System.exit(0);
+        }
     }
 
     /**
@@ -222,14 +238,9 @@ public class GUI extends Application
     }
 
     /**
-<<<<<<< HEAD
      * Creates content in bottom right of loans tab
      * Includes Searchbar to search for borrowers and table of borrowers matching search.
      * @return VBox with bottom right content.
-=======
-     * 
-     * @return 
->>>>>>> 8d4aa9b7571e35a62a89c156d9eab5b38f657e21
      */
     private VBox createLoansBottomRightContent()
     {
@@ -257,9 +268,8 @@ public class GUI extends Application
         TableColumn telefonCol = new TableColumn("Telefon");
         telefonCol.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
         tableViewLoanBorrower.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
-        ObservableList<Borrower> borrowers = FXCollections.observableArrayList();
-        borrowers.addAll(borrowerList);
-        tableViewLoanBorrower.setItems(borrowers);
+        loanBorrowers.addAll(borrowerList);
+        tableViewLoanBorrower.setItems(loanBorrowers);
         
         tableViewLoanBorrower.setMinWidth(240);
         tableViewLoanBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -816,9 +826,21 @@ public class GUI extends Application
     private void registerLoan(){
         //TODO vis error om ingen lånetaker er valgt.
         int borrowerId = tableViewLoanBorrower.getSelectionModel().getSelectedItem().getBorrowerID();
-        int librarianId = 9; //TODO finn librarian id
-        int numberOfDays = 30;
+        int librarianId = Integer.parseInt(currentUser.getEmployeeID()); //TODO finn librarian id
+        int numberOfDays = DEFAULT_LOAN_DURATION;
         List<BookCopy> copys = copyRegisteredForLoanList;
         handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
+        updateLoanTabLists();
+    }
+    
+    private void updateLoanBorrowers(){
+        loanBorrowers.clear();
+        loanBorrowers.addAll(borrowerList);
+    }
+    
+    private void updateLoanTabLists(){
+        copyRegisteredForLoanList.clear();
+        updateLoanBorrowers();
+        updateInventoryList();
     }
 }
