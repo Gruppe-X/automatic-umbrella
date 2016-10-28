@@ -14,7 +14,7 @@ public class Borrower {
     private final SimpleStringProperty lastName; 
     private final SimpleStringProperty telephone;
     private final SimpleIntegerProperty borrowerID;
- 
+    
 
     Borrower(int borrowerID, String firstName, String lastName, String telephone)
     {
@@ -31,7 +31,7 @@ public class Borrower {
         this.telephone = new SimpleStringProperty(telephone);
         this.borrowerID = null;
     }
-    
+
     /**
      * 
      * @return 

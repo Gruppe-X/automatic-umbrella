@@ -1,7 +1,6 @@
 package bibliotek_02;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javafx.application.Application;
@@ -18,7 +17,6 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
-import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 
 /**
@@ -52,7 +50,7 @@ public class GUI extends Application
     ObservableList<Librarian> librarianList;
     ObservableList<Copy> copyList;
     ObservableList<BookCopy> copyRegisteredForLoanList;
-
+    
     public GUI()
     {
         handler = new DatabaseHandler();
@@ -223,16 +221,7 @@ public class GUI extends Application
         return bottomLeftContent;
     }
 
-    /**
-<<<<<<< HEAD
-     * Creates content in bottom right of loans tab
-     * Includes Searchbar to search for borrowers and table of borrowers matching search.
-     * @return VBox with bottom right content.
-=======
-     * 
-     * @return 
->>>>>>> 8d4aa9b7571e35a62a89c156d9eab5b38f657e21
-     */
+
     private VBox createLoansBottomRightContent()
     {
         VBox bottomRightContent = new VBox();
@@ -531,8 +520,12 @@ public class GUI extends Application
         removeButton.setOnAction(e -> removeBorrower());
         Button updateButton = new Button("Update");
         updateButton.setOnAction(e -> updateBorrowerList());
-
+        Button searchButton = new Button("Search");
+        searchButton = new Button(e -> handler.searchBorrowerList());
+        
         searchBorrower.setPromptText("Search through this lists");
+        searchBorrower.textProperty().addListener((v, oldValue, newValue) -> {
+        });
 
         TableColumn lanetakerID = new TableColumn("LånetakerID");
         lanetakerID.setCellValueFactory(new PropertyValueFactory<>("BorrowerID"));
@@ -578,13 +571,6 @@ public class GUI extends Application
         updateButton.setOnAction(e -> updateBorrowerList());
 
         searchLibrarian.setPromptText("Search through this lists");
-        searchLibrarian.textProperty().addListener((v, oldValue, newValue) -> {
-//            
-//            
-//                
-//            }
-            
-        });
 
         TableColumn librarianIDCol = new TableColumn("AnsattID");
         librarianIDCol.setCellValueFactory(new PropertyValueFactory<>("employeeID"));

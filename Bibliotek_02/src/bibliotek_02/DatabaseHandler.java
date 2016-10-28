@@ -11,8 +11,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -36,7 +34,7 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement deleteBorrowerStatement;
     
     private PreparedStatement addLibrarianStatement;
-    private PreparedStatement deleteLibrarianStatement;
+    private PreparedStatement deleteLibrarianStatement; 
     
     public DatabaseHandler() {
         connect();
@@ -148,7 +146,7 @@ public class DatabaseHandler implements Closeable {
         return results;
     }
     
-    
+   
     
     public ResultSet getEmployees(){
         return getResultSet("SELECT * FROM Ansatt");
@@ -157,7 +155,7 @@ public class DatabaseHandler implements Closeable {
     public ResultSet getBorrowers(){
         return getResultSet("SELECT * FROM Lånetaker");
     }
-    
+
     public ResultSet getReceipts(){
         return getResultSet("SELECT * FROM Lån");
     }
@@ -246,7 +244,7 @@ public class DatabaseHandler implements Closeable {
         }
         return customers;
     }
-    
+
     /**
      * Returns a list of all the librarians.
      * @return Returns a list of all the librarians.
@@ -553,4 +551,6 @@ public class DatabaseHandler implements Closeable {
         }
         return result;
     }
+    
+
 }
