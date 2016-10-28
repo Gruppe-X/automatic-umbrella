@@ -146,6 +146,7 @@ public class GUI extends Application
         
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         tabPane.getSelectionModel().selectedItemProperty().addListener(l -> updateAllList());
+        tabPane.getSelectionModel().selectedItemProperty().addListener(l -> updateLoanTabLists());
 
         return tabPane;
     }
@@ -255,10 +256,13 @@ public class GUI extends Application
         TextField lastNameField = new TextField();
         lastNameField.setPadding(new Insets(5));
         Button findBorrowerButton = new Button("Finn lånetaker");
+        Button updateBorrowerButton = new Button("Oppdater");
+        updateBorrowerButton.setOnAction(e -> updateLoanTabLists());
         topContent.add(new Label("Lånetaker"), 0, 0);
         topContent.add(firstNameField, 0, 1);
         topContent.add(lastNameField, 0, 2);
         topContent.add(findBorrowerButton, 1, 2);
+        topContent.add(updateBorrowerButton, 2, 2);
 
         tableViewLoanBorrower = new TableView();
         TableColumn fornavnCol = new TableColumn("Fornavn");
@@ -652,6 +656,32 @@ public class GUI extends Application
         copyList.clear();
         copyList.addAll(handler.listCopies());
     }
+
+    /**
+     * Updates the inventory list.
+     */
+    private void updateInventoryList()
+    {
+        bookList.clear();
+        bookList.addAll(handler.listBooks());
+    }
+    
+    /**
+     * Updates the loan borrowers list.
+     */
+    private void updateLoanBorrowers(){
+        loanBorrowers.clear();
+        loanBorrowers.addAll(borrowerList);
+    }
+    
+    /**
+     * Updates all the list in the loan tab.
+     */
+    private void updateLoanTabLists(){
+        copyRegisteredForLoanList.clear();
+        updateLoanBorrowers();
+        updateInventoryList();
+    }
     
     /**
      * Updates all the lists
@@ -663,8 +693,10 @@ public class GUI extends Application
         updateLibrarianList();
         updateCopyList();
     }
+    
+    
 
-    // -------- ADD METHODS --------
+    // -------- ADD METHODS -------- //
     /**
      * 
      */
@@ -735,7 +767,31 @@ public class GUI extends Application
         updateLibrarianList();
     }
     
-    // -------- REMOVE METHODS --------
+    /**
+     * 
+     * @param borrowerId
+     * @param librarianId
+     * @param numberOfDays
+     * @param copys 
+     */
+    private void registerLoan(int borrowerId, int librarianId, int numberOfDays, List<BookCopy> copys){
+        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
+    }
+    
+    /**
+     * 
+     */
+    private void registerLoan(){
+        //TODO vis error om ingen lånetaker er valgt.
+        int borrowerId = tableViewLoanBorrower.getSelectionModel().getSelectedItem().getBorrowerID();
+        int librarianId = Integer.parseInt(currentUser.getEmployeeID()); //TODO finn librarian id
+        int numberOfDays = DEFAULT_LOAN_DURATION;
+        List<BookCopy> copys = copyRegisteredForLoanList;
+        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
+        updateLoanTabLists();
+    }
+    
+    // -------- REMOVE METHODS -------- //
     /**
      * Removes a book from the database and updates the list/table.
      */
@@ -809,38 +865,5 @@ public class GUI extends Application
             // ... user chose CANCEL or closed the dialog
             // then do nothing.
         }
-    }
-
-    private void updateInventoryList()
-    {
-        bookList.clear();
-        bookList.addAll(handler.listBooks());
-    }
-
-    
-    
-    private void registerLoan(int borrowerId, int librarianId, int numberOfDays, List<BookCopy> copys){
-        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
-    }
-    
-    private void registerLoan(){
-        //TODO vis error om ingen lånetaker er valgt.
-        int borrowerId = tableViewLoanBorrower.getSelectionModel().getSelectedItem().getBorrowerID();
-        int librarianId = Integer.parseInt(currentUser.getEmployeeID()); //TODO finn librarian id
-        int numberOfDays = DEFAULT_LOAN_DURATION;
-        List<BookCopy> copys = copyRegisteredForLoanList;
-        handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
-        updateLoanTabLists();
-    }
-    
-    private void updateLoanBorrowers(){
-        loanBorrowers.clear();
-        loanBorrowers.addAll(borrowerList);
-    }
-    
-    private void updateLoanTabLists(){
-        copyRegisteredForLoanList.clear();
-        updateLoanBorrowers();
-        updateInventoryList();
     }
 }

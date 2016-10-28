@@ -32,6 +32,7 @@ public class DatabaseHandler implements Closeable {
     
     private PreparedStatement addBorrowerStatement;
     private PreparedStatement deleteBorrowerStatement;
+    private PreparedStatement searchBorrowerStatement;
     
     private PreparedStatement addLibrarianStatement;
     private PreparedStatement deleteLibrarianStatement;
@@ -50,8 +51,11 @@ public class DatabaseHandler implements Closeable {
             registerLoanStatement = connection.prepareStatement("INSERT INTO Lån (LånetakerID, AnsattID, Starttidspunkt, Slutttidspunkt) VALUES(?, ?, GETDATE(), DATEADD(day, ?, GETDATE()));", Statement.RETURN_GENERATED_KEYS);
             registerCopyToLoanStatement = connection.prepareStatement("UPDATE Eksemplar SET LånId = ?, Utlånt=1 WHERE EksemplarID = ?");
             overdueLoansStatement = connection.prepareStatement("EXEC overDueProcedure");
+            
             addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
             deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
+            searchBorrowerStatement = connection.prepareStatement("SELECT * FROM Lånetaker WHERE Fornavn= ?");
+            
             addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
             deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
             getLibrarianByIdStatement = connection.prepareStatement("SELECT * FROM Ansatt WHERE AnsattID = ?");
