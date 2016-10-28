@@ -46,12 +46,19 @@ public class GUI extends Application
     private AddBookView addBookView;
     private AddBorrowerView addBorrowerView;
     private AddLibrarianView addLibrarianView;
+    
+    private ChooseEmployeeView employeeView;
 
-    ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
-    ObservableList<Borrower> borrowerList;
-    ObservableList<Librarian> librarianList;
-    ObservableList<Copy> copyList;
-    ObservableList<BookCopy> copyRegisteredForLoanList;
+    private ObservableList<InventoryBook> bookList = FXCollections.observableArrayList();
+    private ObservableList<Borrower> borrowerList;
+    private ObservableList<Librarian> librarianList;
+    private ObservableList<Copy> copyList;
+    private ObservableList<BookCopy> copyRegisteredForLoanList;
+    
+    private final int DEFAULT_LOAN_DURATION = 30;
+    
+    //Holds the currently logged in user.
+    private Librarian currentUser;
 
     public GUI()
     {
@@ -65,6 +72,11 @@ public class GUI extends Application
         addBookView = new AddBookView();
         addBorrowerView = new AddBorrowerView();
         addLibrarianView = new AddLibrarianView();
+        employeeView = new ChooseEmployeeView(handler);
+        currentUser = employeeView.display();
+        if(currentUser == null){
+            System.exit(0);
+        }
     }
 
     /**
@@ -818,8 +830,8 @@ public class GUI extends Application
     private void registerLoan(){
         //TODO vis error om ingen lånetaker er valgt.
         int borrowerId = tableViewLoanBorrower.getSelectionModel().getSelectedItem().getBorrowerID();
-        int librarianId = 9; //TODO finn librarian id
-        int numberOfDays = 30;
+        int librarianId = Integer.parseInt(currentUser.getEmployeeID()); //TODO finn librarian id
+        int numberOfDays = DEFAULT_LOAN_DURATION;
         List<BookCopy> copys = copyRegisteredForLoanList;
         handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
     }
