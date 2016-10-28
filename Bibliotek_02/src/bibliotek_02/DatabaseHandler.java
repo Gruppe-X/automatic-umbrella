@@ -11,12 +11,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
- * @author Robert
+ * @author Robert, Oscar
  */
 public class DatabaseHandler implements Closeable {
     

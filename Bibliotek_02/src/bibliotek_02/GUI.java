@@ -1,7 +1,6 @@
 package bibliotek_02;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javafx.application.Application;
@@ -18,7 +17,6 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
-import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 
 /**
