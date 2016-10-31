@@ -48,8 +48,11 @@ public class GUI extends Application
     private ChooseEmployeeView employeeView;
 
     private ObservableList<InventoryBook> bookList;
+    private ObservableList<InventoryBook> bookSearchList;
     private ObservableList<Borrower> borrowerList;
+    private ObservableList<Borrower> borrowerSearchList;
     private ObservableList<Librarian> librarianList;
+    private ObservableList<Librarian> librarianSearchList;
     private ObservableList<Copy> copyList;
     
     private ObservableList<BookCopy> copyRegisteredForLoanList;
@@ -64,8 +67,11 @@ public class GUI extends Application
     {
         handler = new DatabaseHandler();
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
+        borrowerSearchList = FXCollections.observableArrayList();
         bookList = FXCollections.observableArrayList(handler.listBooks());
+        bookSearchList = FXCollections.observableArrayList();
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
+        librarianSearchList = FXCollections.observableArrayList();
         copyList = FXCollections.observableArrayList(handler.listCopies());
         copyRegisteredForLoanList = FXCollections.observableArrayList();
         
@@ -200,7 +206,11 @@ public class GUI extends Application
     {
         BorderPane bottomLeftContent = new BorderPane();
         Button addButton = new Button("Legg til");
-        addButton.setOnAction(e -> addBookToLoan());
+        addButton.setOnAction(e -> {
+        addBookToLoan();
+        tableViewLoansTop.setItems(bookList);
+        searchBooks.textProperty().set("");
+        });
         Button removeButton = new Button("Fjern");
         HBox buttonsBox = new HBox(addButton, removeButton);
 
@@ -229,7 +239,11 @@ public class GUI extends Application
         //set table center.
         bottomLeftContent.setCenter(registeredCopys);
         Button registerLoanButton = new Button("Registrer Lån");
-        registerLoanButton.setOnAction(e -> registerLoan());
+        registerLoanButton.setOnAction(e -> {
+            registerLoan();
+            tableViewLoansTop.setItems(bookList);
+            searchBooks.textProperty().set("");
+        });
         bottomLeftContent.setBottom(registerLoanButton);
 
         bottomLeftContent.setPadding(new Insets(0, 10, 0, 0));
@@ -380,6 +394,24 @@ public class GUI extends Application
         VBox loansVBox = new VBox();
         searchBooks = new TextField();
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
+        searchBooks.textProperty().addListener((v, oldValue, newValue) -> {
+            if(newValue.equals("")){
+                tableViewLoansTop.setItems(bookList);
+            } else {
+                bookSearchList.clear();
+                for(InventoryBook book : bookList){
+                    if(book.getBookID().replaceAll("-", "").replaceAll(" ", "").toLowerCase().contains(newValue.toLowerCase()) ||
+                            book.getBookID().toLowerCase().contains(newValue) ||
+                            book.getBookName().toLowerCase().contains(newValue.toLowerCase()) ||
+                            book.getBookPublisher().toLowerCase().contains(newValue.toLowerCase()) ||
+                            book.getBookAuthor().toLowerCase().contains(newValue.toLowerCase())){
+                        bookSearchList.add(book);
+                    }
+                }
+                tableViewLoansTop.setItems(bookSearchList);
+            }
+        });
+        
         tableViewLoansTop = createBooksTable();
 
         loansVBox.getChildren().add(searchBooks);
@@ -488,7 +520,26 @@ public class GUI extends Application
     {
         VBox inventoryVBox = new VBox();
         tableViewInventory = new TableView();
+        
         searchInventory = new TextField();
+        searchInventory.textProperty().addListener((v, oldValue, newValue) -> {
+            if(newValue.equals("")){
+                tableViewInventory.setItems(bookList);
+            } else {
+                bookSearchList.clear();
+                for(InventoryBook book : bookList){
+                    if(book.getBookID().replaceAll("-", "").replaceAll(" ", "").toLowerCase().contains(newValue.toLowerCase()) ||
+                            book.getBookID().toLowerCase().contains(newValue) ||
+                            book.getBookName().toLowerCase().contains(newValue.toLowerCase()) ||
+                            book.getBookPublisher().toLowerCase().contains(newValue.toLowerCase()) ||
+                            book.getBookAuthor().toLowerCase().contains(newValue.toLowerCase())){
+                        bookSearchList.add(book);
+                    }
+                }
+                tableViewInventory.setItems(bookSearchList);
+            }
+        });
+        
         HBox buttonContainer = new HBox();
         Button addButton = new Button("Add");
         addButton.setOnAction(e -> addBook());
@@ -545,6 +596,21 @@ public class GUI extends Application
         updateButton.setOnAction(e -> updateBorrowerList());
 
         searchBorrower.setPromptText("Search through this lists");
+        searchBorrower.textProperty().addListener((v, oldValue, newValue) -> {
+            if (newValue.equals("")) {
+                tableViewBorrower.setItems(borrowerList);
+            } else {
+                tableViewBorrower.setItems(borrowerSearchList);
+                borrowerSearchList.clear();
+                for (Borrower borrower : borrowerList) {
+                    if (Integer.toString(borrower.getBorrowerID()).toLowerCase().equals(newValue.toLowerCase())
+                            || borrower.getFirstName().toLowerCase().contains(newValue.toLowerCase())
+                            || borrower.getLastName().toLowerCase().contains(newValue.toLowerCase())) {
+                        borrowerSearchList.add(borrower);
+                    }
+                }
+            }
+        });
 
         TableColumn lanetakerID = new TableColumn("LånetakerID");
         lanetakerID.setCellValueFactory(new PropertyValueFactory<>("BorrowerID"));
@@ -588,14 +654,21 @@ public class GUI extends Application
         removeButton.setOnAction(e -> removeLibrarian());
         Button updateButton = new Button("Update");
         updateButton.setOnAction(e -> updateBorrowerList());
-
         searchLibrarian.setPromptText("Search through this lists");
         searchLibrarian.textProperty().addListener((v, oldValue, newValue) -> {
-//            
-//            
-//                
-//            }
-            
+            if (newValue.equals("")) {
+                tableViewLibrarian.setItems(librarianList);
+            } else {
+                tableViewLibrarian.setItems(librarianSearchList);
+                librarianSearchList.clear();
+                for (Librarian librarian : librarianList) {
+                    if (librarian.getEmployeeID().toLowerCase().equals(newValue.toLowerCase())
+                            || librarian.getFirstName().toLowerCase().contains(newValue.toLowerCase())
+                            || librarian.getLastName().toLowerCase().contains(newValue.toLowerCase())) {
+                        librarianSearchList.add(librarian);
+                    }
+                }
+            }
         });
 
         TableColumn librarianIDCol = new TableColumn("AnsattID");
