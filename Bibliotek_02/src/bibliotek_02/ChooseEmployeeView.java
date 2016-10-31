@@ -90,8 +90,9 @@ public class ChooseEmployeeView {
             window.close();
         });
         cancelButton.setOnAction((ActionEvent e) -> {
-            librarian = null;
-            window.close();
+            System.exit(0);
+            //librarian = null;
+            //window.close();
         });
 
         bottomContainer.getChildren().addAll(confirmButton, cancelButton);

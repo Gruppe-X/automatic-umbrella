@@ -80,9 +80,7 @@ public class GUI extends Application {
             currentUser = employeeView.display();
 
             if (currentUser != null) {
-
                 checkID = false;
-                System.out.println("false");
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Feilmelding");
