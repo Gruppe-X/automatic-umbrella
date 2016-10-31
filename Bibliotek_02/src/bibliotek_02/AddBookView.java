@@ -3,6 +3,7 @@ package bibliotek_02;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -48,7 +49,7 @@ public class AddBookView {
     public InventoryBook display() {
         window = new Stage();
         window.setTitle("Add book");
-        window.setAlwaysOnTop(true);
+        window.setAlwaysOnTop(false);
         window.initModality(Modality.APPLICATION_MODAL);
 
         //Creates the containers for the window.
@@ -92,8 +93,25 @@ public class AddBookView {
             String author = authorField.getText();
             String edition = editionField.getText();
             String released = releasedField.getText();
+            boolean bookValid = false;
+                
+            try{
+               Integer.parseInt(editionField.getText());
+               Integer.parseInt(releasedField.getText());
+               bookValid = true;
+            }catch(NumberFormatException ne)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Feilmelding");
+                alert.setHeaderText("Ugyldig");
+                alert.setContentText("Ooops, tast inn gylding utgave og årstall");
+                alert.showAndWait();
+            }
+            if(bookValid)
+            {    
             newBook = new InventoryBook(ISBN, title, author, edition, released, publisher, "0", "0");
             window.close();
+            }
         });
         cancelButton.setOnAction((ActionEvent e) -> {
             newBook = null;
