@@ -201,7 +201,8 @@ public class GUI extends Application
         BorderPane bottomLeftContent = new BorderPane();
         Button addButton = new Button("Legg til");
         addButton.setOnAction(e -> addBookToLoan());
-        Button removeButton = new Button("Fjern");
+        Button removeButton = new Button("Angre");
+        removeButton.setOnAction(e -> updateCopyRegisteredForLoan());
         HBox buttonsBox = new HBox(addButton, removeButton);
 
         
@@ -665,7 +666,7 @@ public class GUI extends Application
         bookList.clear();
         bookList.addAll(handler.listBooks());
     }
-    
+        
     /**
      * Updates the loan borrowers list.
      */
@@ -675,10 +676,17 @@ public class GUI extends Application
     }
     
     /**
+     * Updates the tab with copys registered for loan
+     */
+    private void updateCopyRegisteredForLoan() {
+        copyRegisteredForLoanList.clear();
+    }
+    
+    /**
      * Updates all the list in the loan tab.
      */
     private void updateLoanTabLists(){
-        copyRegisteredForLoanList.clear();
+        updateCopyRegisteredForLoan();
         updateLoanBorrowers();
         updateInventoryList();
     }
