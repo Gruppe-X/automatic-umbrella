@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,6 +39,8 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement deleteLibrarianStatement;
     private PreparedStatement getLibrarianByIdStatement;
     
+    private PreparedStatement numberOfLoansOnBorrowerStatement;
+    
     public DatabaseHandler() {
         connect();
         try{
@@ -57,6 +61,8 @@ public class DatabaseHandler implements Closeable {
             addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
             deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
             getLibrarianByIdStatement = connection.prepareStatement("SELECT * FROM Ansatt WHERE AnsattID = ?");
+            
+            numberOfLoansOnBorrowerStatement = connection.prepareStatement("SELECT COUNT(Ln.LånetakerID) FROM Lånetaker L RIGHT JOIN Lån Ln ON L.LånetakerID = Ln.LånetakerID WHERE L.LånetakerID = ?");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -570,5 +576,27 @@ public class DatabaseHandler implements Closeable {
             result = false;
         }
         return result;
+    }
+    
+    public int numberOfLoansOnBorrower(Borrower borrower){
+        try {
+            numberOfLoansOnBorrowerStatement.setInt(1, borrower.getBorrowerID());
+            ResultSet result = numberOfLoansOnBorrowerStatement.executeQuery();
+            result.next();
+            return result.getInt(1);
+        } catch (SQLException ex) {
+            return -1;
+        }
+    }
+    
+    public int numberOfLoansOnBorrower(int borrowerId){
+        try {
+            numberOfLoansOnBorrowerStatement.setInt(1, borrowerId);
+            ResultSet result = numberOfLoansOnBorrowerStatement.executeQuery();
+            result.next();
+            return result.getInt(1);
+        } catch (SQLException ex) {
+            return -1;
+        }
     }
 }
