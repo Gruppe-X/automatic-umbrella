@@ -26,6 +26,7 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement bookCopyJoinStatement;
     private PreparedStatement bookCopyWithId;
     private PreparedStatement addBookStatement;
+    private PreparedStatement editBookStatement;
     private PreparedStatement deleteBookStatement;
     private PreparedStatement availableCopyStatement;
     private PreparedStatement registerLoanStatement;
@@ -33,9 +34,11 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement overdueLoansStatement;
     
     private PreparedStatement addBorrowerStatement;
+    private PreparedStatement editBorrowerStatement;
     private PreparedStatement deleteBorrowerStatement;
     
     private PreparedStatement addLibrarianStatement;
+    private PreparedStatement editLibrarianStatement;
     private PreparedStatement deleteLibrarianStatement;
     private PreparedStatement getLibrarianByIdStatement;
     
@@ -48,6 +51,7 @@ public class DatabaseHandler implements Closeable {
             bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
             bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, Antall, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
             addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?, NULL, NULL)");
+            editBookStatement = connection.prepareStatement("UPDATE Bok SET Tittel = ?, Forfatter = ?, Forlag = ?, Utgave = ?, Utgivelsesår = ? WHERE ISBN = ?");
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
             availableCopyStatement = connection.prepareStatement("SELECT * FROM Eksemplar WHERE ISBN = ? AND Utlånt = 0");
             //1=BorrowerID, 2=LibrarianID/EmployeeID, 2=Number of days to loan
@@ -56,9 +60,11 @@ public class DatabaseHandler implements Closeable {
             overdueLoansStatement = connection.prepareStatement("EXEC dbo.overDueProcedure");
             
             addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
+            editBorrowerStatement = connection.prepareStatement("UPDATE Lånetaker SET Fornavn = ?, Etternavn = ?, Telefon = ? WHERE LånetakerID = ?");
             deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
             
             addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
+            editLibrarianStatement = connection.prepareStatement("UPDATE Ansatt SET Fornavn = ?, Etternavn = ? WHERE AnsattID = ?");
             deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
             getLibrarianByIdStatement = connection.prepareStatement("SELECT * FROM Ansatt WHERE AnsattID = ?");
             
@@ -436,6 +442,23 @@ public class DatabaseHandler implements Closeable {
         return result;
     }
     
+    public boolean editBook(InventoryBook book){
+        boolean result;
+        try {
+            editBookStatement.setString(1, book.getBookName());
+            editBookStatement.setString(2, book.getBookAuthor());
+            editBookStatement.setString(3, book.getBookPublisher());
+            editBookStatement.setInt(4, Integer.parseInt(book.getBookEdition()));
+            editBookStatement.setInt(5, Integer.parseInt(book.getBookYear()));
+            editBookStatement.setString(6, book.getBookID());
+            result = editBookStatement.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            result = false;
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    
     /**
      * Adds a borrower to the borrowers table of the database. 
      * @param newBorrower
@@ -460,6 +483,22 @@ public class DatabaseHandler implements Closeable {
         }
         return result;
     }
+    
+    public boolean editBorrower(Borrower borrower){
+        boolean result;
+        try {
+            editBorrowerStatement.setString(1, borrower.getFirstName());
+            editBorrowerStatement.setString(2, borrower.getLastName());
+            editBorrowerStatement.setString(3, borrower.getTelephone());
+            editBorrowerStatement.setString(4, Integer.toString(borrower.getBorrowerID()));
+            result = editBorrowerStatement.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            result = false;
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    
     /**
      * Adds a borrower to the borrowers table of the database.
      * @param newLibrarian
@@ -479,6 +518,20 @@ public class DatabaseHandler implements Closeable {
         } catch (SQLException ex) {
             result = false;
             ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    
+    public boolean editLibrarian(Librarian librarian){
+        boolean result;
+        try {
+            editLibrarianStatement.setString(1, librarian.getFirstName());
+            editLibrarianStatement.setString(2, librarian.getLastName());
+            editLibrarianStatement.setString(3, librarian.getEmployeeID());
+            result = editLibrarianStatement.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            result = false;
             System.out.println(ex.getMessage());
         }
         return result;
