@@ -482,69 +482,7 @@ public class GUI extends Application {
         return bookTable;
     }
 
-    /**
-<<<<<<< HEAD
-=======
-     * Creates the table in the "Kopi" tab.
-     *
-     * @return Returns a HBox containing a table for the "Kopi" tab.
-     */
-    private VBox createCopyTopContent() {
-        VBox topContent = new VBox();
-        tableViewCopy = new TableView();
-        searchCopy = new TextField();
-        HBox buttonContainer = new HBox();
-        Button addButton = new Button("Add");
-        Button removeButton = new Button("Remove");
-
-        searchCopy.setPromptText("Søk etter kvitteringsNr, Lånetaker ...");
-
-        TableColumn kvittNrCol = new TableColumn("KvittNr");
-        kvittNrCol.setCellValueFactory(new PropertyValueFactory("LoanID"));
-        TableColumn datoCol = new TableColumn("Dato");
-        datoCol.setCellValueFactory(new PropertyValueFactory("StartDateTime"));
-        TableColumn navnCol = new TableColumn("Navn");
-
-        tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, navnCol);
-
-        tableViewCopy.setMinSize(450, 175);
-        tableViewCopy.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        buttonContainer.getChildren().addAll(addButton, removeButton);
-        topContent.getChildren().add(buttonContainer);
-        topContent.getChildren().add(searchCopy);
-        topContent.getChildren().add(tableViewCopy);
-
-        return topContent;
-    }
-
-    /**
-     *
-     * @return
-     */
-    private HBox createCopyBottomContent() {
-        HBox bottomContent = new HBox();
-        BorderPane botLeftCont = createCopyBottomLeftContent();
-        VBox botRightCont = createCopyBottomRightContent();
-
-        bottomContent.getChildren().addAll(botLeftCont, botRightCont);
-        HBox.setHgrow(botLeftCont, Priority.ALWAYS);
-        HBox.setHgrow(botRightCont, Priority.ALWAYS);
-
-        return bottomContent;
-    }
-
-    private BorderPane createCopyBottomLeftContent() {
-        BorderPane botLeftContent = new BorderPane();
-        return botLeftContent;
-    }
-
-    private VBox createCopyBottomRightContent() {
-        VBox botRightContent = new VBox();
-        return botRightContent;
-    }
-
-    /**
->>>>>>> master_vV
+   /**
      * Creates the table in the "Beholdning" tab.
      *
      * @return Returns a HBox containing a table for the "Beholdning" tab.
@@ -722,11 +660,6 @@ public class GUI extends Application {
         bookList.clear();
         bookList.addAll(handler.listBooks());
     }
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> master_vV
     /**
      * Updates the loan borrowers list.
      */
@@ -745,13 +678,8 @@ public class GUI extends Application {
     /**
      * Updates all the list in the loan tab.
      */
-<<<<<<< HEAD
     private void updateLoanTabLists(){
         updateCopyRegisteredForLoan();
-=======
-    private void updateLoanTabLists() {
-        copyRegisteredForLoanList.clear();
->>>>>>> master_vV
         updateLoanBorrowers();
         updateInventoryList();
     }
