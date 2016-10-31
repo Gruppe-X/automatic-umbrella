@@ -49,6 +49,8 @@ public class ChooseEmployeeView {
         window.setTitle("Login");
         window.setAlwaysOnTop(true);
         window.initModality(Modality.APPLICATION_MODAL);
+        window.setOnCloseRequest(e -> System.exit(0));
+        
 
         //Creates the containers for the window.
         BorderPane layout = new BorderPane();
@@ -66,6 +68,7 @@ public class ChooseEmployeeView {
         //size stage to scene and displays the stage.
         window.sizeToScene();
         window.showAndWait();
+        
 
         return librarian;
     }
@@ -90,8 +93,9 @@ public class ChooseEmployeeView {
             window.close();
         });
         cancelButton.setOnAction((ActionEvent e) -> {
-            librarian = null;
-            window.close();
+            System.exit(0);
+            //librarian = null;
+            //window.close();
         });
 
         bottomContainer.getChildren().addAll(confirmButton, cancelButton);
