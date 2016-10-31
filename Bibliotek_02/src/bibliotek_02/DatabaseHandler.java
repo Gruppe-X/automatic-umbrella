@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,11 +34,12 @@ public class DatabaseHandler implements Closeable {
     
     private PreparedStatement addBorrowerStatement;
     private PreparedStatement deleteBorrowerStatement;
-    private PreparedStatement searchBorrowerStatement;
     
     private PreparedStatement addLibrarianStatement;
     private PreparedStatement deleteLibrarianStatement;
     private PreparedStatement getLibrarianByIdStatement;
+    
+    private PreparedStatement numberOfLoansOnBorrowerStatement;
     
     public DatabaseHandler() {
         connect();
@@ -44,21 +47,22 @@ public class DatabaseHandler implements Closeable {
             searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
             bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
             bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, Antall, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
-            addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?)");
+            addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?, NULL, NULL)");
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
             availableCopyStatement = connection.prepareStatement("SELECT * FROM Eksemplar WHERE ISBN = ? AND Utlånt = 0");
             //1=BorrowerID, 2=LibrarianID/EmployeeID, 2=Number of days to loan
             registerLoanStatement = connection.prepareStatement("INSERT INTO Lån (LånetakerID, AnsattID, Starttidspunkt, Slutttidspunkt) VALUES(?, ?, GETDATE(), DATEADD(day, ?, GETDATE()));", Statement.RETURN_GENERATED_KEYS);
             registerCopyToLoanStatement = connection.prepareStatement("UPDATE Eksemplar SET LånId = ?, Utlånt=1 WHERE EksemplarID = ?");
-            overdueLoansStatement = connection.prepareStatement("EXEC overDueProcedure");
+            overdueLoansStatement = connection.prepareStatement("EXEC dbo.overDueProcedure");
             
             addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
             deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
-            searchBorrowerStatement = connection.prepareStatement("SELECT * FROM Lånetaker WHERE Fornavn= ?");
             
             addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
             deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
             getLibrarianByIdStatement = connection.prepareStatement("SELECT * FROM Ansatt WHERE AnsattID = ?");
+            
+            numberOfLoansOnBorrowerStatement = connection.prepareStatement("SELECT COUNT(Ln.LånetakerID) FROM Lånetaker L RIGHT JOIN Lån Ln ON L.LånetakerID = Ln.LånetakerID WHERE L.LånetakerID = ?");
         } catch (SQLException SQLEx) {
             System.out.println(SQLEx.getMessage());
             SQLEx.printStackTrace();
@@ -572,5 +576,27 @@ public class DatabaseHandler implements Closeable {
             result = false;
         }
         return result;
+    }
+    
+    public int numberOfLoansOnBorrower(Borrower borrower){
+        try {
+            numberOfLoansOnBorrowerStatement.setInt(1, borrower.getBorrowerID());
+            ResultSet result = numberOfLoansOnBorrowerStatement.executeQuery();
+            result.next();
+            return result.getInt(1);
+        } catch (SQLException ex) {
+            return -1;
+        }
+    }
+    
+    public int numberOfLoansOnBorrower(int borrowerId){
+        try {
+            numberOfLoansOnBorrowerStatement.setInt(1, borrowerId);
+            ResultSet result = numberOfLoansOnBorrowerStatement.executeQuery();
+            result.next();
+            return result.getInt(1);
+        } catch (SQLException ex) {
+            return -1;
+        }
     }
 }
