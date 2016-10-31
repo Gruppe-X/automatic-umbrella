@@ -46,7 +46,7 @@ public class ChooseEmployeeView {
      */
     public Librarian display() {
         window = new Stage();
-        window.setTitle("Login");
+        window.setTitle("Logg inn");
         window.setAlwaysOnTop(true);
         window.initModality(Modality.APPLICATION_MODAL);
         window.setOnCloseRequest(e -> System.exit(0));
@@ -82,10 +82,10 @@ public class ChooseEmployeeView {
         HBox bottomContainer = new HBox(10);
         bottomContainer.setPadding(new Insets(10, 10, 10, 10));
 
-        Button confirmButton = new Button("Login");
+        Button confirmButton = new Button("Logg inn");
         confirmButton.setDefaultButton(true);
 
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button("Avbryt");
 
         confirmButton.setOnAction((ActionEvent e) -> {
             String emplyeeId = employeeIdField.getText();
@@ -118,8 +118,8 @@ public class ChooseEmployeeView {
 
         employeeIdField = new TextField();
         
-        centerContainer.add(new Label("Enter librarian ID"), 0, 0);
-        centerContainer.add(new Label("Librarian ID"), 0, 1);
+        centerContainer.add(new Label("Skriv inn AnsattID"), 0, 0);
+        centerContainer.add(new Label("AnsattID"), 0, 1);
         centerContainer.add(employeeIdField, 1, 1);
 
         return centerContainer;

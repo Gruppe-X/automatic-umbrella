@@ -17,8 +17,8 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
-import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -220,6 +220,7 @@ public class GUI extends Application {
         searchBooks.textProperty().set("");
         });
         HBox buttonsBox = new HBox(addButton, regretButton);
+        buttonsBox.setPadding(new Insets(10, 10, 0, 0));
 
         TableView<BookCopy> registeredCopys = new TableView();
         registeredCopys.setItems(copyRegisteredForLoanList);
@@ -268,21 +269,32 @@ public class GUI extends Application {
         VBox bottomRightContent = new VBox();
         GridPane topContent = new GridPane();
 
-        topContent.setPadding(new Insets(0, 0, 10, 0));
+        topContent.setPadding(new Insets(10, 0, 0, 0));
         //topContent.setGridLinesVisible(true);
 
-        TextField firstNameField = new TextField();
-        firstNameField.setPadding(new Insets(5));
-        TextField lastNameField = new TextField();
-        lastNameField.setPadding(new Insets(5));
-        Button findBorrowerButton = new Button("Finn lånetaker");
-        Button updateBorrowerButton = new Button("Oppdater");
-        updateBorrowerButton.setOnAction(e -> updateLoanTabLists());
-        topContent.add(new Label("Lånetaker"), 0, 0);
-        topContent.add(firstNameField, 0, 1);
-        topContent.add(lastNameField, 0, 2);
-        topContent.add(findBorrowerButton, 1, 2);
-        topContent.add(updateBorrowerButton, 2, 2);
+        TextField searchField = new TextField();
+        searchField.setPromptText("Søk etter lånetaker..");
+        searchField.setPadding(new Insets(4));
+        searchField.textProperty().addListener((v, oldValue, newValue) -> {
+            if (newValue.equals("")) {
+                tableViewLoanBorrower.setItems(borrowerList);
+            } else {
+                tableViewLoanBorrower.setItems(borrowerSearchList);
+                borrowerSearchList.clear();
+                for (Borrower borrower : borrowerList) {
+                    if (Integer.toString(borrower.getBorrowerID()).toLowerCase().equals(newValue.toLowerCase())
+                            || borrower.getFirstName().toLowerCase().contains(newValue.toLowerCase())
+                            || borrower.getLastName().toLowerCase().contains(newValue.toLowerCase())) {
+                        borrowerSearchList.add(borrower);
+                    }
+                }
+            }
+        });
+        
+        Button registerBorrowerButton = new Button("Registrer");
+        registerBorrowerButton.setOnAction(e -> addBorrower());
+        topContent.add(searchField, 0, 0);
+        topContent.add(registerBorrowerButton, 1, 0);
 
         tableViewLoanBorrower = new TableView();
         TableColumn fornavnCol = new TableColumn("Fornavn");
@@ -341,9 +353,9 @@ public class GUI extends Application {
         tableViewCopy = new TableView();
         searchCopy = new TextField();
         HBox buttonContainer = new HBox();
-        Button addButton = new Button("Add");
-        Button removeButton = new Button("Remove");
-
+        Button addButton = new Button("Legg til");
+        Button removeButton = new Button("Fjern");
+        
         searchCopy.setPromptText("Søk etter kvitteringsNr, Lånetaker ...");
 
         TableColumn kvittNrCol = new TableColumn("KvittNr");
@@ -548,14 +560,14 @@ public class GUI extends Application {
         });
         
         HBox buttonContainer = new HBox();
-        Button addButton = new Button("Add");
+        Button addButton = new Button("Legg til");
         addButton.setOnAction(e -> addBook());
-        Button removeButton = new Button("Remove");
+        Button removeButton = new Button("Fjern");
         removeButton.setOnAction(e -> removeBook());
-        Button updateButton = new Button("Update");
+        Button updateButton = new Button("Oppdater");
         updateButton.setOnAction(e -> updateBorrowerList());
 
-        searchInventory.setPromptText("Search through the inventory");
+        searchInventory.setPromptText("Søk etter bøker..");
 
         TableColumn antallCol = new TableColumn("Antall");
         antallCol.setCellValueFactory(new PropertyValueFactory<>("BookQuantity"));
@@ -594,14 +606,20 @@ public class GUI extends Application {
         tableViewBorrower = new TableView();
         searchBorrower = new TextField();
         HBox buttonContainer = new HBox();
-        Button addButton = new Button("Add");
+        Button addButton = new Button("Legg til");
         addButton.setOnAction(e -> addBorrower());
-        Button removeButton = new Button("Remove");
-        removeButton.setOnAction((ActionEvent event) -> doRemoveBorrowerAlert());
-        Button updateButton = new Button("Update");
+        Button removeButton = new Button("Fjern");
+        removeButton.setOnAction((ActionEvent event) -> {
+            if(checkIfHasBorrowed() == true) {
+                doRemoveBorrowerAlert();
+            } else {
+                removeBorrower();
+            }
+        });
+        Button updateButton = new Button("Oppdater");
         updateButton.setOnAction(e -> updateBorrowerList());
         
-        searchBorrower.setPromptText("Search through this lists");
+        searchBorrower.setPromptText("Søk etter lånetaker..");
         searchBorrower.textProperty().addListener((v, oldValue, newValue) -> {
             if (newValue.equals("")) {
                 tableViewBorrower.setItems(borrowerList);
@@ -653,13 +671,13 @@ public class GUI extends Application {
         tableViewLibrarian = new TableView();
         searchLibrarian = new TextField();
         HBox buttonContainer = new HBox();
-        Button addButton = new Button("Add");
+        Button addButton = new Button("Legg til");
         addButton.setOnAction(e -> addLibrarian());
-        Button removeButton = new Button("Remove");
+        Button removeButton = new Button("Fjern");
         removeButton.setOnAction(e -> removeLibrarian());
-        Button updateButton = new Button("Update");
+        Button updateButton = new Button("Oppdater");
         updateButton.setOnAction(e -> updateBorrowerList());
-        searchLibrarian.setPromptText("Search through this lists");
+        searchLibrarian.setPromptText("Søk etter ansatt..");
         searchLibrarian.textProperty().addListener((v, oldValue, newValue) -> {
             if (newValue.equals("")) {
                 tableViewLibrarian.setItems(librarianList);
@@ -830,6 +848,7 @@ public class GUI extends Application {
             System.out.println("Failed to add borrower");
         }
         updateBorrowerList();
+        updateLoanBorrowers();
     }
 
     /**
@@ -891,6 +910,17 @@ public class GUI extends Application {
             updateBorrowerList();
         }
     }
+    
+    private boolean checkIfHasBorrowed() {
+        Borrower borrowerToCheck = tableViewBorrower.getSelectionModel().getSelectedItem();
+        boolean hasBorrowed = false;
+        if(handler.numberOfLoansOnBorrower(borrowerToCheck) > 0) {
+            hasBorrowed = true;
+        } else {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Removes a librarian from the databse and updates the list/table.
@@ -909,7 +939,7 @@ public class GUI extends Application {
     private void doRemoveBorrowerAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        alert.setHeaderText("You can't do that");
+        alert.setHeaderText("Bruker kan ikke ");
         alert.setContentText("plz no");
         alert.showAndWait();
         
