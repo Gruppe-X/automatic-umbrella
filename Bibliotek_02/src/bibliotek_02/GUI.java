@@ -43,8 +43,11 @@ public class GUI extends Application {
     private TableView<BookCopy> tableViewBookCopy;
 
     private AddBookView addBookView;
+    private EditBookView editBookView;
     private AddBorrowerView addBorrowerView;
+    private EditBorrowerView editBorrowerView;
     private AddLibrarianView addLibrarianView;
+    private EditLibrarianView editLibrarianView;
 
     private ChooseEmployeeView employeeView;
 
@@ -78,8 +81,11 @@ public class GUI extends Application {
         loanBorrowers = FXCollections.observableArrayList();
 
         addBookView = new AddBookView();
+        editBookView = new EditBookView();
         addBorrowerView = new AddBorrowerView();
+        editBorrowerView = new EditBorrowerView();
         addLibrarianView = new AddLibrarianView();
+        editLibrarianView = new EditLibrarianView();
         employeeView = new ChooseEmployeeView(handler);
 
         boolean checkID = true;
@@ -566,6 +572,12 @@ public class GUI extends Application {
         removeButton.setOnAction(e -> removeBook());
         Button updateButton = new Button("Oppdater");
         updateButton.setOnAction(e -> updateBorrowerList());
+        Button editButton = new Button("Edit");
+        editButton.setOnAction(e -> {
+            if(tableViewInventory.getSelectionModel().getSelectedItem() != null){
+                editBook(tableViewInventory.getSelectionModel().getSelectedItem());
+            }
+        });
 
         searchInventory.setPromptText("Søk etter bøker..");
 
@@ -588,12 +600,33 @@ public class GUI extends Application {
 
         tableViewInventory.setItems(bookList);
         tableViewInventory.setMinSize(450, 175);
-        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton);
+        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton, editButton);
         inventoryVBox.getChildren().add(buttonContainer);
         inventoryVBox.getChildren().add(searchInventory);
         inventoryVBox.getChildren().add(tableViewInventory);
 
         return inventoryVBox;
+    }
+    
+    private void editBook(InventoryBook book){
+        InventoryBook editedBook = editBookView.display(book);
+        if (editedBook != null) {
+            boolean success = handler.editBook(editedBook);
+            if (success) {
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Successfull edit");
+                successAlert.setHeaderText("Successfull edit");
+                successAlert.setContentText("Book was successfully edited.");
+                successAlert.show();
+                updateBookList();
+            } else {
+                Alert failure = new Alert(Alert.AlertType.ERROR);
+                failure.setTitle("Failed edit");
+                failure.setHeaderText("Failed edit");
+                failure.setContentText("Something went wrong with edit.");
+                failure.show();
+            }
+        }
     }
 
     /**
@@ -618,7 +651,13 @@ public class GUI extends Application {
         });
         Button updateButton = new Button("Oppdater");
         updateButton.setOnAction(e -> updateBorrowerList());
-        
+
+        Button editButton = new Button("Edit");
+        editButton.setOnAction(e -> {
+            if(tableViewBorrower.getSelectionModel().getSelectedItem() != null){
+                editBorrower(tableViewBorrower.getSelectionModel().getSelectedItem());
+            }
+        });
         searchBorrower.setPromptText("Søk etter lånetaker..");
         searchBorrower.textProperty().addListener((v, oldValue, newValue) -> {
             if (newValue.equals("")) {
@@ -653,12 +692,31 @@ public class GUI extends Application {
         tableViewBorrower.setItems(borrowerList);
         tableViewBorrower.setMinSize(450, 175);
         tableViewBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton);
+        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton, editButton);
         borrowerVBox.getChildren().add(buttonContainer);
         borrowerVBox.getChildren().add(searchBorrower);
         borrowerVBox.getChildren().add(tableViewBorrower);
 
         return borrowerVBox;
+    }
+    
+    private void editBorrower(Borrower borrower){
+        Borrower editedBorrower = editBorrowerView.display(borrower);
+        boolean success = handler.editBorrower(editedBorrower);
+        if (success) {
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Successfull edit");
+                successAlert.setHeaderText("Successfull edit");
+                successAlert.setContentText("Borrower was successfully edited.");
+                successAlert.show();
+                updateBorrowerList();
+            } else {
+                Alert failure = new Alert(Alert.AlertType.ERROR);
+                failure.setTitle("Failed edit");
+                failure.setHeaderText("Failed edit");
+                failure.setContentText("Something went wrong with edit.");
+                failure.show();
+            }
     }
 
     /**
@@ -677,6 +735,13 @@ public class GUI extends Application {
         removeButton.setOnAction(e -> removeLibrarian());
         Button updateButton = new Button("Oppdater");
         updateButton.setOnAction(e -> updateBorrowerList());
+
+        Button editButton = new Button("Edit");
+        editButton.setOnAction(e -> {
+            if(tableViewLibrarian.getSelectionModel().getSelectedItem() != null){
+                editLibrarian(tableViewLibrarian.getSelectionModel().getSelectedItem());
+            }
+        });
         searchLibrarian.setPromptText("Søk etter ansatt..");
         searchLibrarian.textProperty().addListener((v, oldValue, newValue) -> {
             if (newValue.equals("")) {
@@ -708,12 +773,31 @@ public class GUI extends Application {
         tableViewLibrarian.setItems(librarianList);
         tableViewLibrarian.setMinSize(450, 175);
         tableViewLibrarian.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton);
+        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton, editButton);
         librarianVBox.getChildren().add(buttonContainer);
         librarianVBox.getChildren().add(searchLibrarian);
         librarianVBox.getChildren().add(tableViewLibrarian);
 
         return librarianVBox;
+    }
+    
+    private void editLibrarian(Librarian librarian){
+        Librarian editedLibrarian = editLibrarianView.display(librarian);
+        boolean success = handler.editLibrarian(editedLibrarian);
+        if (success) {
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Successfull edit");
+                successAlert.setHeaderText("Successfull edit");
+                successAlert.setContentText("Borrower was successfully edited.");
+                successAlert.show();
+                updateLibrarianList();
+            } else {
+                Alert failure = new Alert(Alert.AlertType.ERROR);
+                failure.setTitle("Failed edit");
+                failure.setHeaderText("Failed edit");
+                failure.setContentText("Something went wrong with edit.");
+                failure.show();
+            }
     }
 
     // -------- UPDATE METHODS --------
