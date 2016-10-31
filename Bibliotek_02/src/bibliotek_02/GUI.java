@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import static javafx.application.Application.launch;
+import javafx.event.ActionEvent;
 
 /**
  *
@@ -39,6 +40,7 @@ public class GUI extends Application {
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewBorrower;
     private TableView<Borrower> tableViewLoanBorrower;
+    private TableView<BookCopy> tableViewBookCopy;
 
     private AddBookView addBookView;
     private AddBorrowerView addBorrowerView;
@@ -210,14 +212,14 @@ public class GUI extends Application {
     private BorderPane createLoansBottomLeftContent() {
         BorderPane bottomLeftContent = new BorderPane();
         Button addButton = new Button("Legg til");
-        Button removeButton = new Button("Angre");
-        removeButton.setOnAction(e -> updateCopyRegisteredForLoan());
+        Button regretButton = new Button("Angre");
+        regretButton.setOnAction(e -> updateCopyRegisteredForLoan());
         addButton.setOnAction(e -> {
         addBookToLoan();
         tableViewLoansTop.setItems(bookList);
         searchBooks.textProperty().set("");
         });
-        HBox buttonsBox = new HBox(addButton, removeButton);
+        HBox buttonsBox = new HBox(addButton, regretButton);
 
         TableView<BookCopy> registeredCopys = new TableView();
         registeredCopys.setItems(copyRegisteredForLoanList);
@@ -595,10 +597,10 @@ public class GUI extends Application {
         Button addButton = new Button("Add");
         addButton.setOnAction(e -> addBorrower());
         Button removeButton = new Button("Remove");
-        removeButton.setOnAction(e -> removeBorrower());
+        removeButton.setOnAction((ActionEvent event) -> doRemoveBorrowerAlert());
         Button updateButton = new Button("Update");
         updateButton.setOnAction(e -> updateBorrowerList());
-
+        
         searchBorrower.setPromptText("Search through this lists");
         searchBorrower.textProperty().addListener((v, oldValue, newValue) -> {
             if (newValue.equals("")) {
@@ -901,6 +903,18 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * 
+     */
+    private void doRemoveBorrowerAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("You can't do that");
+        alert.setContentText("plz no");
+        alert.showAndWait();
+        
+    }
+    
     /**
      * Exit the application. Displays a confirmation dialog.
      */
