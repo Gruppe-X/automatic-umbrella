@@ -146,7 +146,6 @@ public class GUI extends Application
         
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         tabPane.getSelectionModel().selectedItemProperty().addListener(l -> updateAllList());
-        tabPane.getSelectionModel().selectedItemProperty().addListener(l -> updateLoanTabLists());
 
         return tabPane;
     }
@@ -694,6 +693,11 @@ public class GUI extends Application
         updateInventoryList();
     }
     
+    private void updateLoanTab() {
+        updateLoanBorrowers();
+        updateInventoryList();
+    }
+    
     /**
      * Updates all the lists
      */
@@ -703,6 +707,7 @@ public class GUI extends Application
         updateBorrowerList();
         updateLibrarianList();
         updateCopyList();
+        updateLoanTab();
     }
     
     
