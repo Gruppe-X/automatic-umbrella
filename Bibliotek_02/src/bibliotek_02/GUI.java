@@ -513,12 +513,8 @@ public class GUI extends Application {
         bookTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         return bookTable;
     }
-
-<<<<<<< HEAD
-   /**
-=======
+    
     /**
->>>>>>> 9058d4e7b49faeedc18e1f4fcfb56f0a80a0144e
      * Creates the table in the "Beholdning" tab.
      *
      * @return Returns a HBox containing a table for the "Beholdning" tab.
@@ -737,10 +733,6 @@ public class GUI extends Application {
         bookList.clear();
         bookList.addAll(handler.listBooks());
     }
-<<<<<<< HEAD
-=======
-    
->>>>>>> 9058d4e7b49faeedc18e1f4fcfb56f0a80a0144e
     /**
      * Updates the loan borrowers list.
      */
@@ -761,10 +753,6 @@ public class GUI extends Application {
      */
     private void updateLoanTabLists(){
         updateCopyRegisteredForLoan();
-<<<<<<< HEAD
-=======
-        copyRegisteredForLoanList.clear();
->>>>>>> 9058d4e7b49faeedc18e1f4fcfb56f0a80a0144e
         updateLoanBorrowers();
         updateInventoryList();
     }
