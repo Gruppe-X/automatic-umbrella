@@ -753,7 +753,6 @@ public class GUI extends Application {
      */
     private void updateLoanTabLists(){
         updateCopyRegisteredForLoan();
-        copyRegisteredForLoanList.clear();
         updateLoanBorrowers();
         updateInventoryList();
     }
