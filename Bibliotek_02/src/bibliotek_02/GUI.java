@@ -23,8 +23,7 @@ import static javafx.application.Application.launch;
  *
  * @author Thomas Todal, Oscar Wika
  */
-public class GUI extends Application
-{
+public class GUI extends Application {
 
     private Stage primaryStage;
 
@@ -44,49 +43,63 @@ public class GUI extends Application
     private AddBookView addBookView;
     private AddBorrowerView addBorrowerView;
     private AddLibrarianView addLibrarianView;
-    
+
     private ChooseEmployeeView employeeView;
 
     private ObservableList<InventoryBook> bookList;
     private ObservableList<Borrower> borrowerList;
     private ObservableList<Librarian> librarianList;
     private ObservableList<Copy> copyList;
-    
+
     private ObservableList<BookCopy> copyRegisteredForLoanList;
     private ObservableList<Borrower> loanBorrowers;
-    
+
     private final int DEFAULT_LOAN_DURATION = 30;
-    
+
     //Holds the currently logged in user.
     private Librarian currentUser;
 
-    public GUI()
-    {
+    public GUI() {
         handler = new DatabaseHandler();
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
         bookList = FXCollections.observableArrayList(handler.listBooks());
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
         copyList = FXCollections.observableArrayList(handler.listCopies());
         copyRegisteredForLoanList = FXCollections.observableArrayList();
-        
+
         loanBorrowers = FXCollections.observableArrayList();
 
         addBookView = new AddBookView();
         addBorrowerView = new AddBorrowerView();
         addLibrarianView = new AddLibrarianView();
         employeeView = new ChooseEmployeeView(handler);
-        currentUser = employeeView.display();
-        if(currentUser == null){
-            System.exit(0);
+
+        boolean checkID = true;
+
+        while (checkID) {
+            currentUser = employeeView.display();
+
+            if (currentUser != null) {
+
+                checkID = false;
+                System.out.println("false");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Feilmelding");
+                alert.setHeaderText("Ugyldig ID");
+                alert.setContentText("Ooops, tast inn en gyldig ID ");
+                alert.showAndWait();
+            }
+
         }
+
     }
 
     /**
-     * 
-     * @param args 
+     *
+     * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         launch(args);
     }
 
@@ -94,19 +107,17 @@ public class GUI extends Application
      * a
      */
     @Override
-    public void stop()
-    {
+    public void stop() {
         System.exit(0);
     }
 
     /**
-     * 
+     *
      * @param primaryStage
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
-    public void start(Stage primaryStage) throws Exception
-    {
+    public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         // Window
         BorderPane mainBorderPane = new BorderPane();
@@ -135,15 +146,14 @@ public class GUI extends Application
      *
      * @return Returns the tab pane.
      */
-    private TabPane createTabPane()
-    {
+    private TabPane createTabPane() {
         Tab loans = createLoansTab();
         Tab book = createCopyTab();
         Tab bookCopy = createInventoryTab();
         Tab borrower = createBorrowerTab();
         Tab librarian = createLibrarianTab();
         TabPane tabPane = new TabPane(loans, book, bookCopy, borrower, librarian);
-        
+
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         tabPane.getSelectionModel().selectedItemProperty().addListener(l -> updateAllList());
         tabPane.getSelectionModel().selectedItemProperty().addListener(l -> updateLoanTabLists());
@@ -156,31 +166,29 @@ public class GUI extends Application
      *
      * @return The "Loans" tab.
      */
-    private Tab createLoansTab()
-    {
+    private Tab createLoansTab() {
         Tab loansTab = new Tab("Utlån");
         BorderPane loansBorderPane = new BorderPane();
         VBox loansContent = new VBox();
-        
+
         VBox loansTopContent = createLoansTopContent();
         HBox loansBottomContent = createLoansBottomContent();
-        
+
         loansTab.setContent(loansBorderPane);
         loansBorderPane.setCenter(loansContent);
         loansContent.getChildren().addAll(loansTopContent, loansBottomContent);
-        
+
         VBox.setVgrow(loansTopContent, Priority.ALWAYS);
         VBox.setVgrow(loansBottomContent, Priority.ALWAYS);
-        
+
         return loansTab;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    private HBox createLoansBottomContent()
-    {
+    private HBox createLoansBottomContent() {
         HBox bottomContent = new HBox();
         BorderPane botLeftCont = createLoansBottomLeftContent();
         VBox botRightCont = createLoansBottomRightContent();
@@ -193,25 +201,23 @@ public class GUI extends Application
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    private BorderPane createLoansBottomLeftContent()
-    {
+    private BorderPane createLoansBottomLeftContent() {
         BorderPane bottomLeftContent = new BorderPane();
         Button addButton = new Button("Legg til");
         addButton.setOnAction(e -> addBookToLoan());
         Button removeButton = new Button("Fjern");
         HBox buttonsBox = new HBox(addButton, removeButton);
 
-        
         TableView<BookCopy> registeredCopys = new TableView();
         registeredCopys.setItems(copyRegisteredForLoanList);
-        
+
         /*
         TableView<BookCopy> registeredBooks = new TableView();
         registeredBooks.setItems(copyRegisteredForLoanList);
-        */
+         */
         TableColumn copyIdCol = new TableColumn("Eksemplar ID");
         copyIdCol.setCellValueFactory(new PropertyValueFactory<>("CopyID"));
         TableColumn ISBNCol = new TableColumn("ISBN");
@@ -221,7 +227,7 @@ public class GUI extends Application
         TableColumn forfatterCol = new TableColumn("Forfatter");
         forfatterCol.setCellValueFactory(new PropertyValueFactory<>("BookAuthor"));
         registeredCopys.getColumns().addAll(copyIdCol, ISBNCol, tittelCol, forfatterCol);
-        
+
         registeredCopys.setMinWidth(240);
         registeredCopys.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -239,12 +245,12 @@ public class GUI extends Application
     }
 
     /**
-     * Creates content in bottom right of loans tab
-     * Includes Searchbar to search for borrowers and table of borrowers matching search.
+     * Creates content in bottom right of loans tab Includes Searchbar to search
+     * for borrowers and table of borrowers matching search.
+     *
      * @return VBox with bottom right content.
      */
-    private VBox createLoansBottomRightContent()
-    {
+    private VBox createLoansBottomRightContent() {
         VBox bottomRightContent = new VBox();
         GridPane topContent = new GridPane();
 
@@ -274,7 +280,7 @@ public class GUI extends Application
         tableViewLoanBorrower.getColumns().addAll(fornavnCol, etternavnCol, telefonCol);
         loanBorrowers.addAll(borrowerList);
         tableViewLoanBorrower.setItems(loanBorrowers);
-        
+
         tableViewLoanBorrower.setMinWidth(240);
         tableViewLoanBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableViewLoanBorrower.setMinHeight(50);
@@ -286,13 +292,13 @@ public class GUI extends Application
 
         return bottomRightContent;
     }
+
     /**
      * Creates the "Copy" tab.
      *
      * @return Returns the "Copy" tab.
      */
-    private Tab createCopyTab()
-    {
+    private Tab createCopyTab() {
         Tab copyTab = new Tab("Kopi");
         BorderPane copyBorderPane = new BorderPane();
         VBox copyContent = new VBox();
@@ -303,7 +309,7 @@ public class GUI extends Application
         copyTab.setContent(copyBorderPane);
         copyBorderPane.setCenter(copyContent);
         copyContent.getChildren().addAll(copyTopContent, copyBottomContent);
-        
+
         VBox.setVgrow(copyTopContent, Priority.ALWAYS);
         VBox.setVgrow(copyBottomContent, Priority.ALWAYS);
 
@@ -315,8 +321,7 @@ public class GUI extends Application
      *
      * @return Returns the "Inventory" tab.
      */
-    private Tab createInventoryTab()
-    {
+    private Tab createInventoryTab() {
         Tab inventoryTab = new Tab("Beholdning");
         BorderPane inventoryBorderPane = new BorderPane();
 
@@ -335,8 +340,7 @@ public class GUI extends Application
      *
      * @return Returns the "Borrower" tab.
      */
-    private Tab createBorrowerTab()
-    {
+    private Tab createBorrowerTab() {
         Tab borrowerTab = new Tab("Låntaker");
         BorderPane borrowerBorderPane = new BorderPane();
 
@@ -355,8 +359,7 @@ public class GUI extends Application
      *
      * @return Returns the "Librarian" tab.
      */
-    private Tab createLibrarianTab()
-    {
+    private Tab createLibrarianTab() {
         Tab librarianTab = new Tab("Bibliotekar");
         BorderPane librarianBorderPane = new BorderPane();
 
@@ -375,8 +378,7 @@ public class GUI extends Application
      *
      * @return loansVBox the VBox containing the structure of the 'Utlån' tab.
      */
-    private VBox createLoansTopContent()
-    {
+    private VBox createLoansTopContent() {
         VBox loansVBox = new VBox();
         searchBooks = new TextField();
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
@@ -389,17 +391,16 @@ public class GUI extends Application
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    private TableView<InventoryBook> createBooksTable()
-    {
+    private TableView<InventoryBook> createBooksTable() {
         TableView<InventoryBook> bookTable = new TableView<>();
         bookTable.setItems(bookList);
-        
+
         TableColumn availableQuantityCol = new TableColumn("Tilgjenglig Antall");
         availableQuantityCol.setCellValueFactory(new PropertyValueFactory<>("BookAvailableQuantity"));
-        
+
         TableColumn ISBNCol = new TableColumn("ISBN");
         ISBNCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
 
@@ -408,7 +409,7 @@ public class GUI extends Application
 
         TableColumn forfatterCol = new TableColumn("Forfatter");
         forfatterCol.setCellValueFactory(new PropertyValueFactory<>("BookAuthor"));
-        
+
         bookTable.getColumns().addAll(availableQuantityCol, ISBNCol, tittelCol, forfatterCol);
         bookTable.setMinHeight(225);
         bookTable.setMinWidth(300);
@@ -421,8 +422,7 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Kopi" tab.
      */
-    private VBox createCopyTopContent()
-    {
+    private VBox createCopyTopContent() {
         VBox topContent = new VBox();
         tableViewCopy = new TableView();
         searchCopy = new TextField();
@@ -449,32 +449,29 @@ public class GUI extends Application
 
         return topContent;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    private HBox createCopyBottomContent()
-    {
+    private HBox createCopyBottomContent() {
         HBox bottomContent = new HBox();
         BorderPane botLeftCont = createCopyBottomLeftContent();
         VBox botRightCont = createCopyBottomRightContent();
-        
+
         bottomContent.getChildren().addAll(botLeftCont, botRightCont);
         HBox.setHgrow(botLeftCont, Priority.ALWAYS);
         HBox.setHgrow(botRightCont, Priority.ALWAYS);
-        
+
         return bottomContent;
     }
-    
-    private BorderPane createCopyBottomLeftContent()
-    {
+
+    private BorderPane createCopyBottomLeftContent() {
         BorderPane botLeftContent = new BorderPane();
         return botLeftContent;
     }
-    
-    private VBox createCopyBottomRightContent()
-    {
+
+    private VBox createCopyBottomRightContent() {
         VBox botRightContent = new VBox();
         return botRightContent;
     }
@@ -484,8 +481,7 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Beholdning" tab.
      */
-    private VBox createInventoryVBox()
-    {
+    private VBox createInventoryVBox() {
         VBox inventoryVBox = new VBox();
         tableViewInventory = new TableView();
         searchInventory = new TextField();
@@ -531,8 +527,7 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Låntaker" tab.
      */
-    private VBox createBorrowerVBox()
-    {
+    private VBox createBorrowerVBox() {
         VBox borrowerVBox = new VBox();
         tableViewBorrower = new TableView();
         searchBorrower = new TextField();
@@ -548,7 +543,7 @@ public class GUI extends Application
 
         TableColumn lanetakerID = new TableColumn("LånetakerID");
         lanetakerID.setCellValueFactory(new PropertyValueFactory<>("BorrowerID"));
-        
+
         TableColumn fornavnCol = new TableColumn("Fornavn");
         fornavnCol.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
 
@@ -576,8 +571,7 @@ public class GUI extends Application
      *
      * @return Returns a HBox containing a table for the "Bibliotekar" tab.
      */
-    private VBox createLibrarianVBox()
-    {
+    private VBox createLibrarianVBox() {
         VBox librarianVBox = new VBox();
         tableViewLibrarian = new TableView();
         searchLibrarian = new TextField();
@@ -595,7 +589,7 @@ public class GUI extends Application
 //            
 //                
 //            }
-            
+
         });
 
         TableColumn librarianIDCol = new TableColumn("AnsattID");
@@ -619,40 +613,36 @@ public class GUI extends Application
 
         return librarianVBox;
     }
-    
+
     // -------- UPDATE METHODS --------
     /**
      * Updates the list of books.
      */
-    private void updateBookList()
-    {
+    private void updateBookList() {
         bookList.clear();
         bookList.addAll(handler.listBooks());
     }
-    
+
     /**
      * Updates the list of borrowers.
      */
-    private void updateBorrowerList()
-    {
+    private void updateBorrowerList() {
         borrowerList.clear();
         borrowerList.addAll(handler.listBorrowers());
     }
-    
+
     /**
      * Updates the list of librarians
      */
-    private void updateLibrarianList()
-    {
+    private void updateLibrarianList() {
         librarianList.clear();
         librarianList.addAll(handler.listLibrarians());
     }
-    
+
     /**
-     * 
+     *
      */
-    private void updateCopyList()
-    {
+    private void updateCopyList() {
         copyList.clear();
         copyList.addAll(handler.listCopies());
     }
@@ -660,45 +650,41 @@ public class GUI extends Application
     /**
      * Updates the inventory list.
      */
-    private void updateInventoryList()
-    {
+    private void updateInventoryList() {
         bookList.clear();
         bookList.addAll(handler.listBooks());
     }
-    
+
     /**
      * Updates the loan borrowers list.
      */
-    private void updateLoanBorrowers(){
+    private void updateLoanBorrowers() {
         loanBorrowers.clear();
         loanBorrowers.addAll(borrowerList);
     }
-    
+
     /**
      * Updates all the list in the loan tab.
      */
-    private void updateLoanTabLists(){
+    private void updateLoanTabLists() {
         copyRegisteredForLoanList.clear();
         updateLoanBorrowers();
         updateInventoryList();
     }
-    
+
     /**
      * Updates all the lists
      */
-    private void updateAllList()
-    {
+    private void updateAllList() {
         updateBookList();
         updateBorrowerList();
         updateLibrarianList();
         updateCopyList();
     }
-    
-    
 
     // -------- ADD METHODS -------- //
     /**
-     * 
+     *
      */
     private void addBookToLoan() {
         //copyRegisteredForLoanList.add(tableViewLoansTop.getSelectionModel().getSelectedItem());
@@ -707,27 +693,26 @@ public class GUI extends Application
         BookCopy selectedCopy = null;
         int i = 0;
         boolean looping = true;
-        while(i<selectedCopys.size() && looping){
-            if(!copyRegisteredForLoanList.contains(selectedCopys.get(i))){
+        while (i < selectedCopys.size() && looping) {
+            if (!copyRegisteredForLoanList.contains(selectedCopys.get(i))) {
                 selectedCopy = selectedCopys.get(i);
                 looping = false;
             }
             i++;
         }
-        if(selectedCopy == null){
+        if (selectedCopy == null) {
             //TODO Display error
         } else {
             copyRegisteredForLoanList.add(selectedCopy);
         }
-        
+
     }
-    
+
     /**
      * Adds a book to the database and updates the list/table.
      */
     //TODO legg til feilmelding
-    private void addBook()
-    {
+    private void addBook() {
         InventoryBook newBook = addBookView.display();
         if (newBook != null && handler.addBook(newBook)) {
             System.out.println(newBook.getBookName() + " was added");
@@ -736,17 +721,15 @@ public class GUI extends Application
         }
         updateBookList();
     }
-    
+
     /**
      * Adds a borrower to the database and updates the list/table.
      */
-    private void addBorrower()
-    {
+    private void addBorrower() {
         Borrower newBorrower = addBorrowerView.display();
-        if(newBorrower != null && handler.addBorrower(newBorrower)){
+        if (newBorrower != null && handler.addBorrower(newBorrower)) {
             System.out.println(newBorrower.getFirstName() + " was added");
-        }
-        else {
+        } else {
             System.out.println("Failed to add borrower");
         }
         updateBorrowerList();
@@ -755,33 +738,31 @@ public class GUI extends Application
     /**
      * Adds a librarian to the database and updates the list/table.
      */
-    private void addLibrarian()
-    {
+    private void addLibrarian() {
         Librarian newLibrarian = addLibrarianView.display();
-        if(newLibrarian != null && handler.addLibrarian(newLibrarian)){
+        if (newLibrarian != null && handler.addLibrarian(newLibrarian)) {
             System.out.println(newLibrarian.getFirstName() + " was added");
-        }
-        else {
+        } else {
             System.out.println("Failed to add employee");
         }
         updateLibrarianList();
     }
-    
+
     /**
-     * 
+     *
      * @param borrowerId
      * @param librarianId
      * @param numberOfDays
-     * @param copys 
+     * @param copys
      */
-    private void registerLoan(int borrowerId, int librarianId, int numberOfDays, List<BookCopy> copys){
+    private void registerLoan(int borrowerId, int librarianId, int numberOfDays, List<BookCopy> copys) {
         handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
     }
-    
+
     /**
-     * 
+     *
      */
-    private void registerLoan(){
+    private void registerLoan() {
         //TODO vis error om ingen lånetaker er valgt.
         int borrowerId = tableViewLoanBorrower.getSelectionModel().getSelectedItem().getBorrowerID();
         int librarianId = Integer.parseInt(currentUser.getEmployeeID()); //TODO finn librarian id
@@ -790,27 +771,25 @@ public class GUI extends Application
         handler.registerLoan(borrowerId, librarianId, numberOfDays, copys);
         updateLoanTabLists();
     }
-    
+
     // -------- REMOVE METHODS -------- //
     /**
      * Removes a book from the database and updates the list/table.
      */
-    private void removeBook()
-    {
+    private void removeBook() {
         InventoryBook bookToDelete = tableViewInventory.getSelectionModel().getSelectedItem();
-        if(bookToDelete != null){
+        if (bookToDelete != null) {
             handler.deleteBook(bookToDelete);
             updateBookList();
         }
     }
-    
+
     /**
      * Removes a borrower from the database and updates the list/table.
      */
-    private void removeBorrower()
-    {
+    private void removeBorrower() {
         Borrower borrowerToDelete = tableViewBorrower.getSelectionModel().getSelectedItem();
-        if(borrowerToDelete != null){
+        if (borrowerToDelete != null) {
             handler.deleteBorrower(borrowerToDelete);
             updateBorrowerList();
         }
@@ -819,20 +798,18 @@ public class GUI extends Application
     /**
      * Removes a librarian from the databse and updates the list/table.
      */
-    private void removeLibrarian()
-    {
+    private void removeLibrarian() {
         Librarian librarianToDelete = tableViewLibrarian.getSelectionModel().getSelectedItem();
-        if(librarianToDelete != null){
+        if (librarianToDelete != null) {
             handler.deleteLibrarian(librarianToDelete);
             updateLibrarianList();
-        } 
+        }
     }
-    
+
     /**
      * Exit the application. Displays a confirmation dialog.
      */
-    private void doExitApplication()
-    {
+    private void doExitApplication() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Avslutt");
         alert.setHeaderText("Er du sikker på at du vil avslutte programmet?");
@@ -849,7 +826,7 @@ public class GUI extends Application
         Button noButton = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
         noButton.setDefaultButton(false);
         noButton.setText("Nei");
-        
+
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.initOwner(primaryStage);
         Optional<ButtonType> result = alert.showAndWait();
