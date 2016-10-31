@@ -517,7 +517,7 @@ public class GUI extends Application {
         bookTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         return bookTable;
     }
-
+    
     /**
      * Creates the table in the "Beholdning" tab.
      *
@@ -737,7 +737,6 @@ public class GUI extends Application {
         bookList.clear();
         bookList.addAll(handler.listBooks());
     }
-    
     /**
      * Updates the loan borrowers list.
      */
@@ -758,7 +757,6 @@ public class GUI extends Application {
      */
     private void updateLoanTabLists(){
         updateCopyRegisteredForLoan();
-        copyRegisteredForLoanList.clear();
         updateLoanBorrowers();
         updateInventoryList();
     }
