@@ -161,7 +161,7 @@ public class DatabaseHandler implements Closeable {
     }
     
     public ResultSet getReceipts(){
-        return getResultSet("SELECT * FROM Lån");
+        return getResultSet("SELECT * FROM Lån L RIGHT JOIN Lånetaker T ON L.LånetakerID = T.LånetakerID");
     }
     
     public ResultSet getBooks(){
