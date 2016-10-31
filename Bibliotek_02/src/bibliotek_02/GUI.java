@@ -331,7 +331,7 @@ public class GUI extends Application
         TableColumn datoCol = new TableColumn("Dato");
         datoCol.setCellValueFactory(new PropertyValueFactory("StartDateTime"));
         TableColumn navnCol = new TableColumn("Navn");
-        navnCol.setCellValueFactory(new PropertyValueFactory("SurnameFirstName"));
+        navnCol.setCellValueFactory(new PropertyValueFactory("LastFirstName"));
 
         tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, navnCol);
 
