@@ -8,14 +8,17 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Copy {
     
-    private final  SimpleStringProperty loanID;
-    private final  SimpleStringProperty borrowerID;
-    private final  SimpleStringProperty librarianID;
-    private final  SimpleStringProperty startDateTime;
-    private final  SimpleStringProperty endDateTime;
-    private final  SimpleStringProperty handedIn;
+    private final SimpleStringProperty loanID;
+    private final SimpleStringProperty borrowerID;
+    private final SimpleStringProperty librarianID;
+    private final SimpleStringProperty startDateTime;
+    private final SimpleStringProperty endDateTime;
+    private final SimpleStringProperty handedIn;
+    private final SimpleStringProperty firstName;
+    private final SimpleStringProperty lastName;
+    private final SimpleStringProperty phoneNum;
     
-    Copy(String loanID, String borrowerID, String librarianID, String startDateTime, String endDateTime, String handedIn)
+    Copy(String loanID, String borrowerID, String librarianID, String startDateTime, String endDateTime, String handedIn, String firstName, String lastName, String phoneNum)
     {
         this.loanID = new SimpleStringProperty(loanID);
         this.borrowerID = new SimpleStringProperty(borrowerID);
@@ -23,6 +26,9 @@ public class Copy {
         this.startDateTime = new SimpleStringProperty(startDateTime);
         this.endDateTime = new SimpleStringProperty(endDateTime);
         this.handedIn = new SimpleStringProperty(handedIn);
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
+        this.phoneNum = new SimpleStringProperty(phoneNum);
     }
 
     /**
@@ -127,5 +133,44 @@ public class Copy {
     public void setHandedIn(String handedIn)
     {
         this.handedIn.set(handedIn);
-    }  
+    }
+    
+    public String getFirstName()
+    {
+        return firstName.get();
+    }
+    
+    public void setFirstName(String firstName)
+    {
+        this.firstName.set(firstName);
+    }
+    
+    public String getLastName()
+    {
+        return lastName.get();
+    }
+    
+    public void setLastName(String lastName)
+    {
+        this.lastName.set(lastName);
+    }
+    
+    public String getPhoneNum()
+    {
+        return phoneNum.get();
+    }
+    
+    public void setPhoneNum(String phoneNum)
+    {
+        this.phoneNum.set(phoneNum);
+    }
+    
+    public String getLastFirstName()
+    {
+        String name = lastName.get();
+        name += ", ";
+        name += firstName.get();
+        
+        return name;
+    }
 }

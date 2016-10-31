@@ -312,6 +312,72 @@ public class GUI extends Application
     }
 
     /**
+     * Creates the table in the "Kopi" tab.
+     *
+     * @return Returns a HBox containing a table for the "Kopi" tab.
+     */
+    private VBox createCopyTopContent()
+    {
+        VBox topContent = new VBox();
+        tableViewCopy = new TableView();
+        searchCopy = new TextField();
+        HBox buttonContainer = new HBox();
+        Button addButton = new Button("Add");
+        Button removeButton = new Button("Remove");
+
+        searchCopy.setPromptText("Søk etter kvitteringsNr, Lånetaker ...");
+
+        TableColumn kvittNrCol = new TableColumn("KvittNr");
+        kvittNrCol.setCellValueFactory(new PropertyValueFactory("LoanID"));
+        TableColumn datoCol = new TableColumn("Dato");
+        datoCol.setCellValueFactory(new PropertyValueFactory("StartDateTime"));
+        TableColumn navnCol = new TableColumn("Navn");
+        navnCol.setCellValueFactory(new PropertyValueFactory("LastFirstName"));
+
+        tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, navnCol);
+
+        tableViewCopy.setItems(copyList);
+        
+        tableViewCopy.setMinSize(450, 175);
+        tableViewCopy.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        buttonContainer.getChildren().addAll(addButton, removeButton);
+        topContent.getChildren().add(buttonContainer);
+        topContent.getChildren().add(searchCopy);
+        topContent.getChildren().add(tableViewCopy);
+
+        return topContent;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    private HBox createCopyBottomContent()
+    {
+        HBox bottomContent = new HBox();
+        BorderPane botLeftCont = createCopyBottomLeftContent();
+        VBox botRightCont = createCopyBottomRightContent();
+        
+        bottomContent.getChildren().addAll(botLeftCont, botRightCont);
+        HBox.setHgrow(botLeftCont, Priority.ALWAYS);
+        HBox.setHgrow(botRightCont, Priority.ALWAYS);
+        
+        return bottomContent;
+    }
+    
+    private BorderPane createCopyBottomLeftContent()
+    {
+        BorderPane botLeftContent = new BorderPane();
+        return botLeftContent;
+    }
+    
+    private VBox createCopyBottomRightContent()
+    {
+        VBox botRightContent = new VBox();
+        return botRightContent;
+    }
+
+    /**
      * Creates the "Inventory" tab.
      *
      * @return Returns the "Inventory" tab.
@@ -415,69 +481,6 @@ public class GUI extends Application
         bookTable.setMinWidth(300);
         bookTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         return bookTable;
-    }
-
-    /**
-     * Creates the table in the "Kopi" tab.
-     *
-     * @return Returns a HBox containing a table for the "Kopi" tab.
-     */
-    private VBox createCopyTopContent()
-    {
-        VBox topContent = new VBox();
-        tableViewCopy = new TableView();
-        searchCopy = new TextField();
-        HBox buttonContainer = new HBox();
-        Button addButton = new Button("Add");
-        Button removeButton = new Button("Remove");
-
-        searchCopy.setPromptText("Søk etter kvitteringsNr, Lånetaker ...");
-
-        TableColumn kvittNrCol = new TableColumn("KvittNr");
-        kvittNrCol.setCellValueFactory(new PropertyValueFactory("LoanID"));
-        TableColumn datoCol = new TableColumn("Dato");
-        datoCol.setCellValueFactory(new PropertyValueFactory("StartDateTime"));
-        TableColumn navnCol = new TableColumn("Navn");
-
-        tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, navnCol);
-
-        tableViewCopy.setMinSize(450, 175);
-        tableViewCopy.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        buttonContainer.getChildren().addAll(addButton, removeButton);
-        topContent.getChildren().add(buttonContainer);
-        topContent.getChildren().add(searchCopy);
-        topContent.getChildren().add(tableViewCopy);
-
-        return topContent;
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    private HBox createCopyBottomContent()
-    {
-        HBox bottomContent = new HBox();
-        BorderPane botLeftCont = createCopyBottomLeftContent();
-        VBox botRightCont = createCopyBottomRightContent();
-        
-        bottomContent.getChildren().addAll(botLeftCont, botRightCont);
-        HBox.setHgrow(botLeftCont, Priority.ALWAYS);
-        HBox.setHgrow(botRightCont, Priority.ALWAYS);
-        
-        return bottomContent;
-    }
-    
-    private BorderPane createCopyBottomLeftContent()
-    {
-        BorderPane botLeftContent = new BorderPane();
-        return botLeftContent;
-    }
-    
-    private VBox createCopyBottomRightContent()
-    {
-        VBox botRightContent = new VBox();
-        return botRightContent;
     }
 
     /**
