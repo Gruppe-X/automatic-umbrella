@@ -44,7 +44,7 @@ public class DatabaseHandler implements Closeable {
             searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
             bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
             bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, Antall, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
-            addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?)");
+            addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?, NULL, NULL)");
             deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
             availableCopyStatement = connection.prepareStatement("SELECT * FROM Eksemplar WHERE ISBN = ? AND Utlånt = 0");
             //1=BorrowerID, 2=LibrarianID/EmployeeID, 2=Number of days to loan
