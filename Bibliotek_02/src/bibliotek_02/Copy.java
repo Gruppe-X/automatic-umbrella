@@ -173,4 +173,14 @@ public class Copy {
         
         return name;
     }
+    
+    public String getDaysLeft()
+    {
+        return "yes"; //TODO fix this
+    }
+    
+    public String getAllGood()
+    {
+        return "I DON'T KNOW MAN"; //TODO fix this too
+    }
 }

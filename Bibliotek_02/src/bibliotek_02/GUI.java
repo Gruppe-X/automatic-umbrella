@@ -349,10 +349,14 @@ public class GUI extends Application {
         kvittNrCol.setCellValueFactory(new PropertyValueFactory("LoanID"));
         TableColumn datoCol = new TableColumn("Dato");
         datoCol.setCellValueFactory(new PropertyValueFactory("StartDateTime"));
+        TableColumn daysLeftCol = new TableColumn("Dager igjen");
+        daysLeftCol.setCellValueFactory(new PropertyValueFactory("DaysLeft"));
         TableColumn navnCol = new TableColumn("Navn");
         navnCol.setCellValueFactory(new PropertyValueFactory("LastFirstName"));
+        TableColumn allGoodCol = new TableColumn("Tilbakelevert");
+        allGoodCol.setCellValueFactory(new PropertyValueFactory("AllGood"));
 
-        tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, navnCol);
+        tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, daysLeftCol, navnCol, allGoodCol);
 
         tableViewCopy.setItems(copyList);
         
