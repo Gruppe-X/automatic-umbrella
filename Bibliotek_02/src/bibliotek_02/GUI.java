@@ -617,6 +617,10 @@ public class GUI extends Application {
         return inventoryVBox;
     }
     
+    /**
+     * 
+     * @param book 
+     */
     private void editBook(InventoryBook book){
         InventoryBook editedBook = editBookView.display(book);
         if (editedBook != null) {
@@ -711,6 +715,10 @@ public class GUI extends Application {
         return borrowerVBox;
     }
     
+    /**
+     * 
+     * @param borrower 
+     */
     private void editBorrower(Borrower borrower) {
         Borrower editedBorrower = editBorrowerView.display(borrower);
         if (editedBorrower != null) {
@@ -793,7 +801,10 @@ public class GUI extends Application {
 
         return librarianVBox;
     }
-    
+    /**
+     * 
+     * @param librarian 
+     */
     private void editLibrarian(Librarian librarian) {
         Librarian editedLibrarian = editLibrarianView.display(librarian);
         if (editedLibrarian != null) {
@@ -880,6 +891,9 @@ public class GUI extends Application {
         updateInventoryList();
     }
     
+    /**
+     * 
+     */
     private void updateLoanTab() {
         updateLoanBorrowers();
         updateInventoryList();
@@ -1010,6 +1024,10 @@ public class GUI extends Application {
         }
     }
     
+    /**
+     * 
+     * @return 
+     */
     private boolean checkIfHasBorrowed() {
         Borrower borrowerToCheck = tableViewBorrower.getSelectionModel().getSelectedItem();
         boolean hasBorrowed = false;

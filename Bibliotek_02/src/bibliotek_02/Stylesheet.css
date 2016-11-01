@@ -2,62 +2,74 @@
     Created on : 27.sep.2016, 10:59:40
     Author     : Oscar Wika
 */
-/*
+
+
 .root {
     -fx-background-color: #1e222d;
-    -fx-text-fill: #8D9FB7;
+    -fx-text-fill: #6EA5D5;
 }
- Tab Pane 
- Background color of the tab pane 
+/* Tab Pane */
+/* Background color of the tab pane */
+
 
 .tab-header-area .tab-header-background {
-    
+    -fx-background-color: #1e222d;
 }
 
- Color of the tabs above the table 
+
+/* Color of the tabs above the table */
 .tab-pane .tab {
     -fx-background-color: #1e222d;
 }
 
- Color of the text in the tab 
+
+/* Color of the text in the tab */
 .tab-label {
-    -fx-text-fill: white;
+    -fx-text-fill: #6EA5D5;
 }
 
- Color when mouseover on the tabs above the table 
+
+/* Color when mouseover on the tabs above the table */
 .tab-pane .tab:hover {
 }
 
- Color of the currently selected tab
+
+/* Color of the currently selected tab*/
 .tab-pane .tab:selected { 
 }
 
- Background color of the window 
+
+/* Background color of the window */
 .tab-pane {
     -fx-background-color: #1e222d;
 }
 
- Background color of the table (If it is empty)
+
+/* Background color of the table (If it is empty)*/
 .tab-pane .table-view {
     
 }
 
- Color of the rows in the tables 
+
+/* Color of the rows in the tables */
 .table-row-cell {
     
 }
 
- Color of the odd numbered rows in the tables 
+
+/* Color of the odd numbered rows in the tables */
 .table-row-cell:odd {
     
 }
 
- Text color in the table 
+
+/* Text color in the table */
 .table-view .table-cell{
     
 }
 
-.button {
+
+/*.button {
       -fx-background-color: 
           #707070,
           linear-gradient(#fcfcfc, #f3f3f3),
@@ -67,9 +79,10 @@
       -fx-padding: 2 20 2 20;
       -fx-text-fill: black;
       -fx-font-size: 12px;
+*/
 
 
-.button:hover {
+/*.button:hover {
        -fx-background-color: 
            #707070,
            linear-gradient(#fcfcfc, #f3f3f3),
@@ -79,66 +92,85 @@
        -fx-padding: 2 20 2 20;  
        -fx-text-fill: black;
        -fx-font-size: 12px;
-}
+}*/
+
 
 .button {
     -fx-background-color: #1e222d;
-    -fx-text-fill: #4d75a4;
+    -fx-text-fill: #6EA5D5;
     -fx-border-color: #4d75a4;
 }
 
+
 .text-field { 
     -fx-background-color: #1e222d;
+    -fx-text-fill: #6EA5D5;
 }
+
 
 .button:pressed {
     -fx-background-color:green;
 }
 
+
 .table-view {
    -fx-background-color: transparent;
 }
+
 
 .table-view:focused {
     -fx-background-color: transparent;
 }
 
- Table Column Colors 
+
+/* Table Column Colors */
 .table-view .column-header-background {
     -fx-background-color: linear-gradient(#333337 0%, #333337 100%);
 }
 
+
 .table-view .column-header-background .label{
     -fx-background-color: transparent;
-    -fx-text-fill: #1086d4;
+    -fx-text-fill: whitesmoke;
 }
+
 
 .table-view .column-header {
     -fx-background-color: transparent;
 }
 
+
 .table-view .table-cell{
     -fx-text-fill: white;
 }
 
- Table row cell styles 
+
+/* Table row cell styles */
 .table-row-cell{
     -fx-background-color: -fx-table-cell-border-color, #616161;
     -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em;  0 
+    -fx-padding: 0.0em; /* 0 */
 }
+
 
 .table-row-cell:odd{
     -fx-background-color: -fx-table-cell-border-color, #424242;
     -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em;  0   
+    -fx-padding: 0.0em; /* 0 */  
 }
 
-.table-row-cell:selected {
-    -fx-background-color: #005797;
+.table-row-cell:hover {
+    -fx-background-color: #00ff00;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
+
+.table-row-cell:selected {
+    -fx-background-color: #970000;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
+
 
 .table-view > .virtual-flow > .scroll-bar:vertical,
 .table-view > .virtual-flow > .scroll-bar:vertical > .track,
@@ -150,11 +182,14 @@
 }
 
 
+
+
 .table-view > .virtual-flow > .scroll-bar > .increment-button, 
 .table-view > .virtual-flow > .scroll-bar > .decrement-button {
     -fx-opacity: 0;
 }
 
+
 .table-view .filler {
     -fx-background-color:#00ff00;
-}*/
+}
