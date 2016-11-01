@@ -40,7 +40,7 @@ public class AddBorrowerView {
      */
     public Borrower display() {
         window = new Stage();
-        window.setTitle("Add borrower");
+        window.setTitle("Legg til lånetaker");
         window.setAlwaysOnTop(true);
         window.initModality(Modality.APPLICATION_MODAL);
 
@@ -73,10 +73,10 @@ public class AddBorrowerView {
         HBox bottomContainer = new HBox(10);
         bottomContainer.setPadding(new Insets(10, 10, 10, 10));
 
-        Button confirmButton = new Button("Add borrower");
+        Button confirmButton = new Button("Legg til");
         confirmButton.setDefaultButton(true);
 
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button("Avbryt");
 
         confirmButton.setOnAction((ActionEvent e) -> {
             String firstName = firstNameField.getText();

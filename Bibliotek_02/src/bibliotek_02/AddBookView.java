@@ -48,7 +48,7 @@ public class AddBookView {
      */
     public InventoryBook display() {
         window = new Stage();
-        window.setTitle("Add book");
+        window.setTitle("Legg til bok");
         window.setAlwaysOnTop(false);
         window.initModality(Modality.APPLICATION_MODAL);
 
@@ -81,10 +81,10 @@ public class AddBookView {
         HBox bottomContainer = new HBox(10);
         bottomContainer.setPadding(new Insets(10, 10, 10, 10));
 
-        Button confirmButton = new Button("Add book");
+        Button confirmButton = new Button("Legg til");
         confirmButton.setDefaultButton(true);
 
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button("Avbryt");
 
         confirmButton.setOnAction((ActionEvent e) -> {
             String ISBN = ISBNField.getText();

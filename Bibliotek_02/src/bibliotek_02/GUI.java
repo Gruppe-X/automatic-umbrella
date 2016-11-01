@@ -19,6 +19,7 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.event.ActionEvent;
 import static javafx.application.Application.launch;
+import javafx.geometry.Pos;
 
 /**
  *
@@ -227,7 +228,9 @@ public class GUI extends Application {
     private BorderPane createLoansBottomLeftContent() {
         BorderPane bottomLeftContent = new BorderPane();
         Button addButton = new Button("Legg til");
+        addButton.setTooltip(new Tooltip("Legg til bok i kurven(?)"));
         Button regretButton = new Button("Angre");
+        regretButton.setTooltip(new Tooltip("Avbrytt bestilling"));
         regretButton.setOnAction(e -> updateCopyRegisteredForLoan());
         addButton.setOnAction(e -> {
         addBookToLoan();
@@ -261,6 +264,7 @@ public class GUI extends Application {
         //set table center.
         bottomLeftContent.setCenter(registeredCopys);
         Button registerLoanButton = new Button("Registrer Lån");
+        registerLoanButton.setTooltip(new Tooltip("Registrer lån på en kunde"));
         registerLoanButton.setOnAction(e -> {
             registerLoan();
             tableViewLoansTop.setItems(bookList);
@@ -307,6 +311,7 @@ public class GUI extends Application {
         });
         
         Button registerBorrowerButton = new Button("Registrer");
+        registerBorrowerButton.setTooltip(new Tooltip("Legg til ny lånetaker"));
         registerBorrowerButton.setOnAction(e -> addBorrower());
         topContent.add(searchField, 0, 0);
         topContent.add(registerBorrowerButton, 1, 0);
@@ -365,11 +370,14 @@ public class GUI extends Application {
     private VBox createCopyTopContent()
     {
         VBox topContent = new VBox();
+        BorderPane mainButtonContainer = new BorderPane();
+        HBox buttonContainer = new HBox();
+        HBox updateButtonContainer = new HBox();
+        Button updateButton = new Button("Oppdater");
+        updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
+        updateButton.setOnAction(e -> updateLoanTabLists());
         tableViewCopy = new TableView();
         searchCopy = new TextField();
-        HBox buttonContainer = new HBox();
-        Button addButton = new Button("Legg til");
-        Button removeButton = new Button("Fjern");
         
         searchCopy.setPromptText("Søk etter kvitteringsNr, Lånetaker ...");
 
@@ -390,8 +398,10 @@ public class GUI extends Application {
         
         tableViewCopy.setMinSize(450, 175);
         tableViewCopy.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        buttonContainer.getChildren().addAll(addButton, removeButton);
-        topContent.getChildren().add(buttonContainer);
+        updateButtonContainer.getChildren().add(updateButton);
+        mainButtonContainer.setLeft(buttonContainer);
+        mainButtonContainer.setRight(updateButtonContainer);
+        topContent.getChildren().add(mainButtonContainer);
         topContent.getChildren().add(searchCopy);
         topContent.getChildren().add(tableViewCopy);
 
@@ -471,7 +481,7 @@ public class GUI extends Application {
      * @return Returns the "Librarian" tab.
      */
     private Tab createLibrarianTab() {
-        Tab librarianTab = new Tab("Bibliotekar");
+        Tab librarianTab = new Tab("Ansatt");
         BorderPane librarianBorderPane = new BorderPane();
 
         VBox librarianVBox = createLibrarianVBox();
@@ -491,6 +501,12 @@ public class GUI extends Application {
      */
     private VBox createLoansTopContent() {
         VBox loansVBox = new VBox();
+        BorderPane mainButtonContainer = new BorderPane();
+        HBox buttonContainer = new HBox();
+        HBox updateButtonContainer = new HBox();
+        Button updateButton = new Button("Oppdater");
+        updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
+        updateButton.setOnAction(e -> updateLoanTabLists());
         searchBooks = new TextField();
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
         searchBooks.textProperty().addListener((v, oldValue, newValue) -> {
@@ -512,7 +528,10 @@ public class GUI extends Application {
         });
         
         tableViewLoansTop = createBooksTable();
-
+        updateButtonContainer.getChildren().add(updateButton);
+        mainButtonContainer.setLeft(buttonContainer);
+        mainButtonContainer.setRight(updateButtonContainer);
+        loansVBox.getChildren().add(mainButtonContainer);
         loansVBox.getChildren().add(searchBooks);
         loansVBox.getChildren().add(tableViewLoansTop);
 
@@ -553,6 +572,9 @@ public class GUI extends Application {
      */
     private VBox createInventoryVBox() {
         VBox inventoryVBox = new VBox();
+        BorderPane mainButtonContainer = new BorderPane();
+        HBox buttonContainer = new HBox();
+        HBox updateButtonContainer = new HBox();
         tableViewInventory = new TableView();
         
         searchInventory = new TextField();
@@ -574,14 +596,18 @@ public class GUI extends Application {
             }
         });
         
-        HBox buttonContainer = new HBox();
         Button addButton = new Button("Legg til");
+        addButton.setTooltip(new Tooltip("Legg til lånetaker"));
+        
         addButton.setOnAction(e -> addBook());
         Button removeButton = new Button("Fjern");
+        removeButton.setTooltip(new Tooltip("Fjern lånetaker"));
         removeButton.setOnAction(e -> removeBook());
         Button updateButton = new Button("Oppdater");
+        updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
         updateButton.setOnAction(e -> updateBorrowerList());
-        Button editButton = new Button("Edit");
+        Button editButton = new Button("Rediger");
+        editButton.setTooltip(new Tooltip("Rediger lånetaker"));
         editButton.setOnAction(e -> {
             if(tableViewInventory.getSelectionModel().getSelectedItem() != null){
                 editBook(tableViewInventory.getSelectionModel().getSelectedItem());
@@ -609,8 +635,12 @@ public class GUI extends Application {
 
         tableViewInventory.setItems(bookList);
         tableViewInventory.setMinSize(450, 175);
-        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton, editButton);
-        inventoryVBox.getChildren().add(buttonContainer);
+        tableViewInventory.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        buttonContainer.getChildren().addAll(addButton, removeButton, editButton);
+        updateButtonContainer.getChildren().add(updateButton);
+        mainButtonContainer.setLeft(buttonContainer);
+        mainButtonContainer.setRight(updateButtonContainer);
+        inventoryVBox.getChildren().add(mainButtonContainer);
         inventoryVBox.getChildren().add(searchInventory);
         inventoryVBox.getChildren().add(tableViewInventory);
 
@@ -627,16 +657,16 @@ public class GUI extends Application {
             boolean success = handler.editBook(editedBook);
             if (success) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Successfull edit");
-                successAlert.setHeaderText("Successfull edit");
-                successAlert.setContentText("Book was successfully edited.");
+                successAlert.setTitle("Redigering fullført");
+                successAlert.setHeaderText("Redigering fullført");
+                successAlert.setContentText("Boken ble vellykket redigert.");
                 successAlert.show();
                 updateBookList();
             } else {
                 Alert failure = new Alert(Alert.AlertType.ERROR);
-                failure.setTitle("Failed edit");
-                failure.setHeaderText("Failed edit");
-                failure.setContentText("Something went wrong with edit.");
+                failure.setTitle("Feil");
+                failure.setHeaderText("Kunne ikke redigere");
+                failure.setContentText("Noe gikk galt, boken ble ikke redigert.");
                 failure.show();
             }
         }
@@ -649,12 +679,18 @@ public class GUI extends Application {
      */
     private VBox createBorrowerVBox() {
         VBox borrowerVBox = new VBox();
+        BorderPane mainButtonContainer = new BorderPane();
+        HBox buttonContainer = new HBox();
+        HBox updateButtonContainer = new HBox();
         tableViewBorrower = new TableView();
         searchBorrower = new TextField();
-        HBox buttonContainer = new HBox();
         Button addButton = new Button("Legg til");
+        Tooltip addToolTip = new Tooltip("Legg til lånetaker");
+        addToolTip.getStyleClass().add("addTool");
+        addButton.setTooltip(addToolTip);
         addButton.setOnAction(e -> addBorrower());
         Button removeButton = new Button("Fjern");
+        removeButton.setTooltip(new Tooltip("Fjern lånetaker"));
         removeButton.setOnAction((ActionEvent event) -> {
             if (tableViewBorrower.getSelectionModel().getSelectedItem() != null) {
                 if (checkIfHasBorrowed() == true) {
@@ -665,9 +701,11 @@ public class GUI extends Application {
             }
         });
         Button updateButton = new Button("Oppdater");
+        updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
         updateButton.setOnAction(e -> updateBorrowerList());
 
-        Button editButton = new Button("Edit");
+        Button editButton = new Button("Rediger");
+        editButton.setTooltip(new Tooltip("Rediger lånetaker"));
         editButton.setOnAction(e -> {
             if(tableViewBorrower.getSelectionModel().getSelectedItem() != null){
                 editBorrower(tableViewBorrower.getSelectionModel().getSelectedItem());
@@ -707,8 +745,11 @@ public class GUI extends Application {
         tableViewBorrower.setItems(borrowerList);
         tableViewBorrower.setMinSize(450, 175);
         tableViewBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton, editButton);
-        borrowerVBox.getChildren().add(buttonContainer);
+        buttonContainer.getChildren().addAll(addButton, removeButton, editButton);
+        updateButtonContainer.getChildren().add(updateButton);
+        mainButtonContainer.setLeft(buttonContainer);
+        mainButtonContainer.setRight(updateButtonContainer);
+        borrowerVBox.getChildren().add(mainButtonContainer);
         borrowerVBox.getChildren().add(searchBorrower);
         borrowerVBox.getChildren().add(tableViewBorrower);
 
@@ -725,16 +766,16 @@ public class GUI extends Application {
             boolean success = handler.editBorrower(editedBorrower);
             if (success) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Successfull edit");
-                successAlert.setHeaderText("Successfull edit");
-                successAlert.setContentText("Borrower was successfully edited.");
+                successAlert.setTitle("Redigering fullført");
+                successAlert.setHeaderText("Redigering fullført");
+                successAlert.setContentText("Lånetaker ble vellykket redigert.");
                 successAlert.show();
                 updateBorrowerList();
             } else {
                 Alert failure = new Alert(Alert.AlertType.ERROR);
-                failure.setTitle("Failed edit");
-                failure.setHeaderText("Failed edit");
-                failure.setContentText("Something went wrong with edit.");
+                failure.setTitle("Feil");
+                failure.setHeaderText("Kunne ikke redigere");
+                failure.setContentText("Noe gikk galt, kunden ble ikke redigert.");
                 failure.show();
             }
         }
@@ -747,17 +788,23 @@ public class GUI extends Application {
      */
     private VBox createLibrarianVBox() {
         VBox librarianVBox = new VBox();
+        BorderPane mainButtonContainer = new BorderPane();
+        HBox buttonContainer = new HBox();
+        HBox updateButtonContainer = new HBox();
         tableViewLibrarian = new TableView();
         searchLibrarian = new TextField();
-        HBox buttonContainer = new HBox();
         Button addButton = new Button("Legg til");
+        addButton.setTooltip(new Tooltip("Legg til ny ansatt"));
         addButton.setOnAction(e -> addLibrarian());
         Button removeButton = new Button("Fjern");
+        removeButton.setTooltip(new Tooltip("Fjern ansatt"));
         removeButton.setOnAction(e -> removeLibrarian());
         Button updateButton = new Button("Oppdater");
+        updateButton.setTooltip(new Tooltip("Oppdater tabell"));
         updateButton.setOnAction(e -> updateBorrowerList());
 
-        Button editButton = new Button("Edit");
+        Button editButton = new Button("Rediger");
+        editButton.setTooltip(new Tooltip("Rediger ansatt"));
         editButton.setOnAction(e -> {
             if(tableViewLibrarian.getSelectionModel().getSelectedItem() != null){
                 editLibrarian(tableViewLibrarian.getSelectionModel().getSelectedItem());
@@ -794,8 +841,11 @@ public class GUI extends Application {
         tableViewLibrarian.setItems(librarianList);
         tableViewLibrarian.setMinSize(450, 175);
         tableViewLibrarian.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        buttonContainer.getChildren().addAll(addButton, removeButton, updateButton, editButton);
-        librarianVBox.getChildren().add(buttonContainer);
+        buttonContainer.getChildren().addAll(addButton, removeButton, editButton);
+        updateButtonContainer.getChildren().add(updateButton);
+        mainButtonContainer.setLeft(buttonContainer);
+        mainButtonContainer.setRight(updateButtonContainer);
+        librarianVBox.getChildren().add(mainButtonContainer);
         librarianVBox.getChildren().add(searchLibrarian);
         librarianVBox.getChildren().add(tableViewLibrarian);
 
@@ -811,16 +861,16 @@ public class GUI extends Application {
             boolean success = handler.editLibrarian(editedLibrarian);
             if (success) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Successfull edit");
-                successAlert.setHeaderText("Successfull edit");
-                successAlert.setContentText("Borrower was successfully edited.");
+                successAlert.setTitle("Redigering fullført");
+                successAlert.setHeaderText("Redigering fullført");
+                successAlert.setContentText("Ansatt ble vellykket redigert.");
                 successAlert.show();
                 updateLibrarianList();
             } else {
                 Alert failure = new Alert(Alert.AlertType.ERROR);
-                failure.setTitle("Failed edit");
-                failure.setHeaderText("Failed edit");
-                failure.setContentText("Something went wrong with edit.");
+                failure.setTitle("Feil");
+                failure.setHeaderText("Kunne ikke redigere");
+                failure.setContentText("Noe gikk galt, ansatt ble ikke redigert.");
                 failure.show();
             }
         }

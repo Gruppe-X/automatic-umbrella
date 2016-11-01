@@ -40,7 +40,7 @@ public class AddLibrarianView {
      */
     public Librarian display() {
         window = new Stage();
-        window.setTitle("Add Librarian");
+        window.setTitle("Legg til ansatt");
         window.setAlwaysOnTop(true);
         window.initModality(Modality.APPLICATION_MODAL);
 
@@ -73,12 +73,12 @@ public class AddLibrarianView {
         HBox bottomContainer = new HBox(10);
         bottomContainer.setPadding(new Insets(10, 10, 10, 10));
 
-        Button confirmButton = new Button("Add librarian");
+        Button confirmButton = new Button("Legg til");
         confirmButton.setDefaultButton(true);
 
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button("Avbryt");
 
-        confirmButton.setOnAction((ActionEvent e) -> {;
+        confirmButton.setOnAction((ActionEvent e) -> {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             newLibrarian = new Librarian(firstName, lastName);
