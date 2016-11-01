@@ -1,6 +1,7 @@
 package bibliotek_02;
 
 import java.sql.Timestamp;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -14,21 +15,21 @@ public class Copy {
     private final SimpleStringProperty librarianID;
     private final Timestamp startDateTimestamp;
     private final Timestamp endDateTimestamp;
-    private final SimpleStringProperty handedIn;
+    private final SimpleBooleanProperty handedIn;
     private final SimpleStringProperty firstName;
     private final SimpleStringProperty lastName;
     private final SimpleStringProperty phoneNum;
     private final SimpleStringProperty startDateTime;
     private final SimpleStringProperty endDateTime;
     
-    Copy(String loanID, String borrowerID, String librarianID, Timestamp startDateTime, Timestamp endDateTime, String handedIn, String firstName, String lastName, String phoneNum)
+    Copy(String loanID, String borrowerID, String librarianID, Timestamp startDateTime, Timestamp endDateTime, Boolean handedIn, String firstName, String lastName, String phoneNum)
     {
         this.loanID = new SimpleStringProperty(loanID);
         this.borrowerID = new SimpleStringProperty(borrowerID);
         this.librarianID = new SimpleStringProperty(librarianID);
         this.startDateTimestamp = startDateTime;
         this.endDateTimestamp = endDateTime;
-        this.handedIn = new SimpleStringProperty(handedIn);
+        this.handedIn = new SimpleBooleanProperty(handedIn);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.phoneNum = new SimpleStringProperty(phoneNum);
@@ -128,14 +129,14 @@ public class Copy {
      */
     public String getHandedIn()
     {
-        return handedIn.get();
+        return Boolean.toString(handedIn.get());
     }
 
     /**
      * 
      * @param handedIn 
      */
-    public void setHandedIn(String handedIn)
+    public void setHandedIn(boolean handedIn)
     {
         this.handedIn.set(handedIn);
     }
@@ -213,11 +214,20 @@ public class Copy {
      */
     public String getDaysLeft()
     {
+        String returnString;
         long timeLeft;
+        
         timeLeft = (endDateTimestamp.getTime() - System.currentTimeMillis());
         timeLeft = timeLeft/(24*60*60*1000);
         timeLeft = timeLeft-(timeLeft%1);
-        return Long.toString(timeLeft);
+        
+        if (timeLeft < 0) {
+            returnString = "Over tiden";
+        } else {
+        returnString = Long.toString(timeLeft);
+        }
+        
+        return returnString;
     }
     
     /**
@@ -226,6 +236,14 @@ public class Copy {
      */
     public String getAllGood()
     {
-        return "I DON'T KNOW MAN"; //TODO fix this too
+        String returnString = "";
+        
+        if (handedIn.get()) {
+            returnString = "Ja";
+        } else {
+            returnString = "Nei";
+        }
+        
+        return returnString;
     }
 }
