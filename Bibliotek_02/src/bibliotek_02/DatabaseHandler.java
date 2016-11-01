@@ -11,8 +11,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -45,49 +43,21 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement numberOfLoansOnBorrowerStatement;
     
     public DatabaseHandler() {
-        connect();
-        try{
-            searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
-            bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
-            bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, Antall, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
-            addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?, NULL, NULL)");
-            editBookStatement = connection.prepareStatement("UPDATE Bok SET Tittel = ?, Forfatter = ?, Forlag = ?, Utgave = ?, Utgivelsesår = ? WHERE ISBN = ?");
-            deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
-            availableCopyStatement = connection.prepareStatement("SELECT * FROM Eksemplar WHERE ISBN = ? AND Utlånt = 0");
-            //1=BorrowerID, 2=LibrarianID/EmployeeID, 2=Number of days to loan
-            registerLoanStatement = connection.prepareStatement("INSERT INTO Lån (LånetakerID, AnsattID, Starttidspunkt, Slutttidspunkt) VALUES(?, ?, GETDATE(), DATEADD(day, ?, GETDATE()));", Statement.RETURN_GENERATED_KEYS);
-            registerCopyToLoanStatement = connection.prepareStatement("UPDATE Eksemplar SET LånId = ?, Utlånt=1 WHERE EksemplarID = ?");
-            overdueLoansStatement = connection.prepareStatement("EXEC dbo.overDueProcedure");
-            
-            addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
-            editBorrowerStatement = connection.prepareStatement("UPDATE Lånetaker SET Fornavn = ?, Etternavn = ?, Telefon = ? WHERE LånetakerID = ?");
-            deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
-            
-            addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
-            editLibrarianStatement = connection.prepareStatement("UPDATE Ansatt SET Fornavn = ?, Etternavn = ? WHERE AnsattID = ?");
-            deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
-            getLibrarianByIdStatement = connection.prepareStatement("SELECT * FROM Ansatt WHERE AnsattID = ?");
-            
-            numberOfLoansOnBorrowerStatement = connection.prepareStatement("SELECT COUNT(Ln.LånetakerID) FROM Lånetaker L RIGHT JOIN Lån Ln ON L.LånetakerID = Ln.LånetakerID WHERE L.LånetakerID = ?");
-        } catch (SQLException SQLEx) {
-            System.out.println(SQLEx.getMessage());
-            SQLEx.printStackTrace();
-        }
+        
     }
     
     /**
      * Connects the database handler to the sql server.
      * @return boolean true if connection were successfull, otherwise false.
      */
-    private boolean connect() {
+    public boolean connect() {
         boolean success;
         try{
             connection = DriverManager.getConnection(connString);
+            createStatements();
             success = true;
         } catch (SQLException SQLEx) {
             success = false;
-            System.out.println(SQLEx.getMessage());
-            SQLEx.printStackTrace();
         }
         return success;
     }
@@ -99,6 +69,32 @@ public class DatabaseHandler implements Closeable {
         } catch (SQLException ex) {
             throw new RuntimeException();
         }
+    }
+    
+    private void createStatements() throws SQLException {
+        searchStatement = connection.prepareStatement("SELECT * FROM ? WHERE ? = ?");
+        bookCopyJoinStatement = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN");
+        bookCopyWithId = connection.prepareStatement("SELECT B.ISBN, Tittel, Forlag, Forfatter, Utgave, Utgivelsesår, Antall, E.EksemplarID, E.Utlånt FROM Bok B RIGHT JOIN Eksemplar E ON B.ISBN = E.ISBN WHERE B.ISBN = ?");
+        addBookStatement = connection.prepareStatement("INSERT INTO Bok VALUES(?, ?, ?, ?, ?, ?, NULL, NULL)");
+        editBookStatement = connection.prepareStatement("UPDATE Bok SET Tittel = ?, Forfatter = ?, Forlag = ?, Utgave = ?, Utgivelsesår = ? WHERE ISBN = ?");
+        deleteBookStatement = connection.prepareStatement("DELETE FROM Bok WHERE ISBN = ?");
+        availableCopyStatement = connection.prepareStatement("SELECT * FROM Eksemplar WHERE ISBN = ? AND Utlånt = 0");
+        //1=BorrowerID, 2=LibrarianID/EmployeeID, 2=Number of days to loan
+        registerLoanStatement = connection.prepareStatement("INSERT INTO Lån (LånetakerID, AnsattID, Starttidspunkt, Slutttidspunkt) VALUES(?, ?, GETDATE(), DATEADD(day, ?, GETDATE()));", Statement.RETURN_GENERATED_KEYS);
+        registerCopyToLoanStatement = connection.prepareStatement("UPDATE Eksemplar SET LånId = ?, Utlånt=1 WHERE EksemplarID = ?");
+        overdueLoansStatement = connection.prepareStatement("EXEC dbo.overDueProcedure");
+
+        addBorrowerStatement = connection.prepareStatement("INSERT INTO Lånetaker VALUES(?, ?, ?)");
+        editBorrowerStatement = connection.prepareStatement("UPDATE Lånetaker SET Fornavn = ?, Etternavn = ?, Telefon = ? WHERE LånetakerID = ?");
+        deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
+
+        addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
+        editLibrarianStatement = connection.prepareStatement("UPDATE Ansatt SET Fornavn = ?, Etternavn = ? WHERE AnsattID = ?");
+        deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
+        getLibrarianByIdStatement = connection.prepareStatement("SELECT * FROM Ansatt WHERE AnsattID = ?");
+
+        numberOfLoansOnBorrowerStatement = connection.prepareStatement("SELECT COUNT(Ln.LånetakerID) FROM Lånetaker L RIGHT JOIN Lån Ln ON L.LånetakerID = Ln.LånetakerID WHERE L.LånetakerID = ?");
+
     }
     
     /**

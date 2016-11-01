@@ -40,7 +40,6 @@ public class GUI extends Application {
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewBorrower;
     private TableView<Borrower> tableViewLoanBorrower;
-    private TableView<BookCopy> tableViewBookCopy;
 
     private AddBookView addBookView;
     private EditBookView editBookView;
@@ -69,27 +68,42 @@ public class GUI extends Application {
 
     public GUI() {
         handler = new DatabaseHandler();
+        if(!handler.connect()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Feilmelding");
+            alert.setHeaderText("Kan ikke koble til databasen");
+            alert.setContentText("Kan ikke koble til databasen, sjekk nettverks tilkoblingen");
+            alert.showAndWait();
+            System.exit(0);
+        }
+        
         borrowerList = FXCollections.observableArrayList(handler.listBorrowers());
         borrowerSearchList = FXCollections.observableArrayList();
+        
         bookList = FXCollections.observableArrayList(handler.listBooks());
         bookSearchList = FXCollections.observableArrayList();
+        
         librarianList = FXCollections.observableArrayList(handler.listLibrarians());
         librarianSearchList = FXCollections.observableArrayList();
+        
         copyList = FXCollections.observableArrayList(handler.listCopies());
+        
         copyRegisteredForLoanList = FXCollections.observableArrayList();
-
         loanBorrowers = FXCollections.observableArrayList();
-
+        
+        
         addBookView = new AddBookView();
         editBookView = new EditBookView();
+        
         addBorrowerView = new AddBorrowerView();
         editBorrowerView = new EditBorrowerView();
+        
         addLibrarianView = new AddLibrarianView();
         editLibrarianView = new EditLibrarianView();
+        
         employeeView = new ChooseEmployeeView(handler);
 
         boolean checkID = true;
-
         while (checkID) {
             currentUser = employeeView.display();
 
@@ -102,9 +116,7 @@ public class GUI extends Application {
                 alert.setContentText("Ooops, tast inn en gyldig ID ");
                 alert.showAndWait();
             }
-
         }
-
     }
 
     /**
@@ -135,9 +147,7 @@ public class GUI extends Application {
         BorderPane mainBorderPane = new BorderPane();
         // Menu
         TabPane tabPane = createTabPane();
-
         mainBorderPane.setCenter(tabPane);
-
         Scene scene = new Scene(mainBorderPane);
         scene.getStylesheets().add(getClass().getResource("Stylesheet.css").toExternalForm());
         primaryStage.setTitle("Bibliotek X");
@@ -145,7 +155,6 @@ public class GUI extends Application {
         primaryStage.setMinHeight(720);
         primaryStage.setMinWidth(1280);
         primaryStage.show();
-
         // Close window confirmation
         primaryStage.setOnCloseRequest(e -> {
             e.consume();
