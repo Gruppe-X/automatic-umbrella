@@ -1,5 +1,7 @@
 package bibliotek_02;
 
+import java.sql.Timestamp;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -11,24 +13,28 @@ public class Copy {
     private final SimpleStringProperty loanID;
     private final SimpleStringProperty borrowerID;
     private final SimpleStringProperty librarianID;
-    private final SimpleStringProperty startDateTime;
-    private final SimpleStringProperty endDateTime;
-    private final SimpleStringProperty handedIn;
+    private final Timestamp startDateTimestamp;
+    private final Timestamp endDateTimestamp;
+    private final SimpleBooleanProperty handedIn;
     private final SimpleStringProperty firstName;
     private final SimpleStringProperty lastName;
     private final SimpleStringProperty phoneNum;
+    private final SimpleStringProperty startDateTime;
+    private final SimpleStringProperty endDateTime;
     
-    Copy(String loanID, String borrowerID, String librarianID, String startDateTime, String endDateTime, String handedIn, String firstName, String lastName, String phoneNum)
+    Copy(String loanID, String borrowerID, String librarianID, Timestamp startDateTime, Timestamp endDateTime, Boolean handedIn, String firstName, String lastName, String phoneNum)
     {
         this.loanID = new SimpleStringProperty(loanID);
         this.borrowerID = new SimpleStringProperty(borrowerID);
         this.librarianID = new SimpleStringProperty(librarianID);
-        this.startDateTime = new SimpleStringProperty(startDateTime);
-        this.endDateTime = new SimpleStringProperty(endDateTime);
-        this.handedIn = new SimpleStringProperty(handedIn);
+        this.startDateTimestamp = startDateTime;
+        this.endDateTimestamp = endDateTime;
+        this.handedIn = new SimpleBooleanProperty(handedIn);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.phoneNum = new SimpleStringProperty(phoneNum);
+        this.startDateTime = new SimpleStringProperty(startDateTimestamp.toString());
+        this.endDateTime = new SimpleStringProperty(endDateTimestamp.toString());
     }
 
     /**
@@ -121,50 +127,78 @@ public class Copy {
      * 
      * @return 
      */
-    public String getHandedIn()
+    public String getHandedInBoolesn()
     {
-        return handedIn.get();
+        return Boolean.toString(handedIn.get());
     }
 
     /**
      * 
      * @param handedIn 
      */
-    public void setHandedIn(String handedIn)
+    public void setHandedInBoolean(boolean handedIn)
     {
         this.handedIn.set(handedIn);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getFirstName()
     {
         return firstName.get();
     }
     
+    /**
+     * 
+     * @param firstName 
+     */
     public void setFirstName(String firstName)
     {
         this.firstName.set(firstName);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getLastName()
     {
         return lastName.get();
     }
     
+    /**
+     * 
+     * @param lastName 
+     */
     public void setLastName(String lastName)
     {
         this.lastName.set(lastName);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getPhoneNum()
     {
         return phoneNum.get();
     }
     
+    /**
+     * 
+     * @param phoneNum 
+     */
     public void setPhoneNum(String phoneNum)
     {
         this.phoneNum.set(phoneNum);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getLastFirstName()
     {
         String name = lastName.get();
@@ -174,13 +208,42 @@ public class Copy {
         return name;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getDaysLeft()
     {
-        return "yes"; //TODO fix this
+        String returnString;
+        long timeLeft;
+        
+        timeLeft = (endDateTimestamp.getTime() - System.currentTimeMillis());
+        timeLeft = timeLeft/(24*60*60*1000);
+        timeLeft = timeLeft-(timeLeft%1);
+        
+        if (timeLeft < 0) {
+            returnString = "Over tiden";
+        } else {
+        returnString = Long.toString(timeLeft);
+        }
+        
+        return returnString;
     }
     
-    public String getAllGood()
+    /**
+     * 
+     * @return 
+     */
+    public String getHandedIn()
     {
-        return "I DON'T KNOW MAN"; //TODO fix this too
+        String returnString;
+        
+        if (handedIn.get()) {
+            returnString = "Ja";
+        } else {
+            returnString = "Nei";
+        }
+        
+        return returnString;
     }
 }

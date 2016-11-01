@@ -390,7 +390,7 @@ public class GUI extends Application {
         TableColumn navnCol = new TableColumn("Navn");
         navnCol.setCellValueFactory(new PropertyValueFactory("LastFirstName"));
         TableColumn allGoodCol = new TableColumn("Tilbakelevert");
-        allGoodCol.setCellValueFactory(new PropertyValueFactory("AllGood"));
+        allGoodCol.setCellValueFactory(new PropertyValueFactory("HandedIn"));
 
         tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, daysLeftCol, navnCol, allGoodCol);
 
