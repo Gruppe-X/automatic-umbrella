@@ -1,5 +1,6 @@
 package bibliotek_02;
 
+import java.sql.Timestamp;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -11,24 +12,28 @@ public class Copy {
     private final SimpleStringProperty loanID;
     private final SimpleStringProperty borrowerID;
     private final SimpleStringProperty librarianID;
-    private final SimpleStringProperty startDateTime;
-    private final SimpleStringProperty endDateTime;
+    private final Timestamp startDateTimestamp;
+    private final Timestamp endDateTimestamp;
     private final SimpleStringProperty handedIn;
     private final SimpleStringProperty firstName;
     private final SimpleStringProperty lastName;
     private final SimpleStringProperty phoneNum;
+    private final SimpleStringProperty startDateTime;
+    private final SimpleStringProperty endDateTime;
     
-    Copy(String loanID, String borrowerID, String librarianID, String startDateTime, String endDateTime, String handedIn, String firstName, String lastName, String phoneNum)
+    Copy(String loanID, String borrowerID, String librarianID, Timestamp startDateTime, Timestamp endDateTime, String handedIn, String firstName, String lastName, String phoneNum)
     {
         this.loanID = new SimpleStringProperty(loanID);
         this.borrowerID = new SimpleStringProperty(borrowerID);
         this.librarianID = new SimpleStringProperty(librarianID);
-        this.startDateTime = new SimpleStringProperty(startDateTime);
-        this.endDateTime = new SimpleStringProperty(endDateTime);
+        this.startDateTimestamp = startDateTime;
+        this.endDateTimestamp = endDateTime;
         this.handedIn = new SimpleStringProperty(handedIn);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.phoneNum = new SimpleStringProperty(phoneNum);
+        this.startDateTime = new SimpleStringProperty(startDateTimestamp.toString());
+        this.endDateTime = new SimpleStringProperty(endDateTimestamp.toString());
     }
 
     /**
@@ -135,36 +140,64 @@ public class Copy {
         this.handedIn.set(handedIn);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getFirstName()
     {
         return firstName.get();
     }
     
+    /**
+     * 
+     * @param firstName 
+     */
     public void setFirstName(String firstName)
     {
         this.firstName.set(firstName);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getLastName()
     {
         return lastName.get();
     }
     
+    /**
+     * 
+     * @param lastName 
+     */
     public void setLastName(String lastName)
     {
         this.lastName.set(lastName);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getPhoneNum()
     {
         return phoneNum.get();
     }
     
+    /**
+     * 
+     * @param phoneNum 
+     */
     public void setPhoneNum(String phoneNum)
     {
         this.phoneNum.set(phoneNum);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getLastFirstName()
     {
         String name = lastName.get();
@@ -174,11 +207,23 @@ public class Copy {
         return name;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getDaysLeft()
     {
-        return "yes"; //TODO fix this
+        long timeLeft;
+        timeLeft = (endDateTimestamp.getTime() - System.currentTimeMillis());
+        timeLeft = timeLeft/(24*60*60*1000);
+        timeLeft = timeLeft-(timeLeft%1);
+        return Long.toString(timeLeft);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getAllGood()
     {
         return "I DON'T KNOW MAN"; //TODO fix this too

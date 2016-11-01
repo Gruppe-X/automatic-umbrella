@@ -314,7 +314,11 @@ public class DatabaseHandler implements Closeable {
         
         try {
             while (copySet.next()) {
-                copies.add(new Copy(copySet.getString(1), copySet.getString(2), copySet.getString(3), copySet.getString(4), copySet.getString(5), copySet.getString(6), copySet.getString(7), copySet.getString(8), copySet.getString(9)));
+                System.out.println(copySet.getString(4));
+                System.out.println(copySet.getString(5));
+                System.out.println(copySet.getTimestamp(4).toString());
+                System.out.println(copySet.getTimestamp(5).toString());
+                copies.add(new Copy(copySet.getString(1), copySet.getString(2), copySet.getString(3), copySet.getTimestamp(4), copySet.getTimestamp(5), copySet.getString(6), copySet.getString(7), copySet.getString(8), copySet.getString(9)));
             }
         } catch ( SQLException ex) {
                 //TODO
