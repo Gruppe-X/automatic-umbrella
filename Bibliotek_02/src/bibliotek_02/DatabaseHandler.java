@@ -167,7 +167,7 @@ public class DatabaseHandler implements Closeable {
     }
     
     public ResultSet getReceipts(){
-        return getResultSet("SELECT LånID, L.LånetakerID, AnsattID, Starttidspunkt, Slutttidspunkt, Levert, Fornavn, Etternavn, Telefon FROM Lån L RIGHT JOIN Lånetaker T ON L.LånetakerID = T.LånetakerID");
+        return getResultSet("SELECT LånID, L.LånetakerID, AnsattID, Starttidspunkt, Slutttidspunkt, Levert, Fornavn, Etternavn, Telefon FROM Lån L INNER JOIN Lånetaker T ON L.LånetakerID = T.LånetakerID");
     }
     
     public ResultSet getBooks(){
@@ -314,10 +314,6 @@ public class DatabaseHandler implements Closeable {
         
         try {
             while (copySet.next()) {
-                System.out.println(copySet.getString(4));
-                System.out.println(copySet.getString(5));
-                System.out.println(copySet.getTimestamp(4).toString());
-                System.out.println(copySet.getTimestamp(5).toString());
                 copies.add(new Copy(copySet.getString(1), copySet.getString(2), copySet.getString(3), copySet.getTimestamp(4), copySet.getTimestamp(5), copySet.getString(6), copySet.getString(7), copySet.getString(8), copySet.getString(9)));
             }
         } catch ( SQLException ex) {
