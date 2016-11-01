@@ -643,10 +643,12 @@ public class GUI extends Application {
         addButton.setOnAction(e -> addBorrower());
         Button removeButton = new Button("Fjern");
         removeButton.setOnAction((ActionEvent event) -> {
-            if(checkIfHasBorrowed() == true) {
-                doRemoveBorrowerAlert();
-            } else {
-                removeBorrower();
+            if (tableViewBorrower.getSelectionModel().getSelectedItem() != null) {
+                if (checkIfHasBorrowed() == true) {
+                    doRemoveBorrowerAlert();
+                } else {
+                    removeBorrower();
+                }
             }
         });
         Button updateButton = new Button("Oppdater");
@@ -700,10 +702,11 @@ public class GUI extends Application {
         return borrowerVBox;
     }
     
-    private void editBorrower(Borrower borrower){
+    private void editBorrower(Borrower borrower) {
         Borrower editedBorrower = editBorrowerView.display(borrower);
-        boolean success = handler.editBorrower(editedBorrower);
-        if (success) {
+        if (editedBorrower != null) {
+            boolean success = handler.editBorrower(editedBorrower);
+            if (success) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Successfull edit");
                 successAlert.setHeaderText("Successfull edit");
@@ -717,6 +720,7 @@ public class GUI extends Application {
                 failure.setContentText("Something went wrong with edit.");
                 failure.show();
             }
+        }
     }
 
     /**
@@ -781,10 +785,11 @@ public class GUI extends Application {
         return librarianVBox;
     }
     
-    private void editLibrarian(Librarian librarian){
+    private void editLibrarian(Librarian librarian) {
         Librarian editedLibrarian = editLibrarianView.display(librarian);
-        boolean success = handler.editLibrarian(editedLibrarian);
-        if (success) {
+        if (editedLibrarian != null) {
+            boolean success = handler.editLibrarian(editedLibrarian);
+            if (success) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Successfull edit");
                 successAlert.setHeaderText("Successfull edit");
@@ -798,6 +803,7 @@ public class GUI extends Application {
                 failure.setContentText("Something went wrong with edit.");
                 failure.show();
             }
+        }
     }
 
     // -------- UPDATE METHODS --------
