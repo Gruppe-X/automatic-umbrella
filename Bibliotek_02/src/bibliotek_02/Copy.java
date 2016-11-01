@@ -127,7 +127,7 @@ public class Copy {
      * 
      * @return 
      */
-    public String getHandedIn()
+    public String getHandedInBoolesn()
     {
         return Boolean.toString(handedIn.get());
     }
@@ -136,7 +136,7 @@ public class Copy {
      * 
      * @param handedIn 
      */
-    public void setHandedIn(boolean handedIn)
+    public void setHandedInBoolean(boolean handedIn)
     {
         this.handedIn.set(handedIn);
     }
@@ -234,9 +234,9 @@ public class Copy {
      * 
      * @return 
      */
-    public String getAllGood()
+    public String getHandedIn()
     {
-        String returnString = "";
+        String returnString;
         
         if (handedIn.get()) {
             returnString = "Ja";
