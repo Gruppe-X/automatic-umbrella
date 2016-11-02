@@ -5,8 +5,8 @@
 
 
 .root {
-    -fx-background-color: red;
-    -fx-text-fill: #78B6EC;
+    -fx-background-color: #283244;
+    -fx-text-fill: #283244;
 }
 
 /* Tab Pane */

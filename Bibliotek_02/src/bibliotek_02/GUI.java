@@ -1105,9 +1105,9 @@ public class GUI extends Application {
      */
     private void doRemoveBorrowerAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Bruker kan ikke ");
-        alert.setContentText("plz no");
+        alert.setTitle("Feil");
+        alert.setHeaderText("Bruker kan ikke slettes");
+        alert.setContentText("Denne bruker er koplet til et lån.");
         alert.showAndWait();
         
     }
