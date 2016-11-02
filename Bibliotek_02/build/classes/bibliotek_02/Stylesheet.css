@@ -119,18 +119,6 @@
     -fx-border-left-color: #161B25;
 }
 
-.addTool {
-    -fx-background-color: #007c16;
-}
-
-.removeTool {
-    -fx-background-color: #7c1000;
-}
-
-.editTool {
-    -fx-background-color: #00107c;
-}
-
 .text-field { 
     -fx-background-color: #1e222d;
     -fx-text-fill: #6EA5D5;

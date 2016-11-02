@@ -684,17 +684,11 @@ public class GUI extends Application {
         HBox updateButtonContainer = new HBox();
         tableViewBorrower = new TableView();
         searchBorrower = new TextField();
-        
         Button addButton = new Button("Legg til");
-        Tooltip addToolTip = new Tooltip("Legg til lånetaker");
-        addToolTip.getStyleClass().add("addTool");
-        addButton.setTooltip(addToolTip);
+        addButton.setTooltip(new Tooltip("Legg til lånetaker"));
         addButton.setOnAction(e -> addBorrower());
-        
         Button removeButton = new Button("Fjern");
-        Tooltip removeTooltip = new Tooltip("Fjern lånetaker");
-        removeTooltip.getStyleClass().add("removeTool");
-        removeButton.setTooltip(removeTooltip);
+        removeButton.setTooltip(new Tooltip("Fjern lånetaker"));
         removeButton.setOnAction((ActionEvent event) -> {
             if (tableViewBorrower.getSelectionModel().getSelectedItem() != null) {
                 if (checkIfHasBorrowed() == true) {
@@ -707,11 +701,9 @@ public class GUI extends Application {
         Button updateButton = new Button("Oppdater");
         updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
         updateButton.setOnAction(e -> updateBorrowerList());
-        
+
         Button editButton = new Button("Rediger");
-        Tooltip editTooltip = new Tooltip("Rediger lånetaker");
-        editTooltip.getStyleClass().add("editTool");
-        editButton.setTooltip(editTooltip);
+        editButton.setTooltip(new Tooltip("Rediger lånetaker"));
         editButton.setOnAction(e -> {
             if(tableViewBorrower.getSelectionModel().getSelectedItem() != null){
                 editBorrower(tableViewBorrower.getSelectionModel().getSelectedItem());
