@@ -88,7 +88,7 @@ public class DatabaseHandler implements Closeable {
         editBorrowerStatement = connection.prepareStatement("UPDATE Lånetaker SET Fornavn = ?, Etternavn = ?, Telefon = ? WHERE LånetakerID = ?");
         deleteBorrowerStatement = connection.prepareStatement("DELETE FROM Lånetaker WHERE LånetakerID = ?");
 
-        addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?)");
+        addLibrarianStatement = connection.prepareStatement("INSERT INTO Ansatt VALUES(?, ?, 0)");
         editLibrarianStatement = connection.prepareStatement("UPDATE Ansatt SET Fornavn = ?, Etternavn = ? WHERE AnsattID = ?");
         deleteLibrarianStatement = connection.prepareStatement("DELETE FROM Ansatt WHERE AnsattID = ?");
         getLibrarianByIdStatement = connection.prepareStatement("SELECT * FROM Ansatt WHERE AnsattID = ?");
