@@ -266,9 +266,25 @@ public class GUI extends Application {
         Button registerLoanButton = new Button("Registrer Lån");
         registerLoanButton.setTooltip(new Tooltip("Registrer lån på en kunde"));
         registerLoanButton.setOnAction(e -> {
+            if(copyRegisteredForLoanList.isEmpty() ||tableViewLoanBorrower.getSelectionModel().getSelectedItem() == null)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Feilmelding");
+                alert.setHeaderText("Ugyldig Registrering");
+                alert.setContentText("Ooops, mangler bok eller lånetaker ");
+                alert.showAndWait();
+            }
+            else
+            {
             registerLoan();
             tableViewLoansTop.setItems(bookList);
             searchBooks.textProperty().set("");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Informasjon Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("Utlån vellykket");
+            alert.showAndWait();
+            }
         });
         bottomLeftContent.setBottom(registerLoanButton);
 
