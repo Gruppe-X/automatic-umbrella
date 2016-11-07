@@ -19,7 +19,6 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.event.ActionEvent;
 import static javafx.application.Application.launch;
-import javafx.geometry.Pos;
 
 /**
  *
