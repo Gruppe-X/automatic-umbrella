@@ -264,7 +264,7 @@ public class DatabaseHandler implements Closeable {
         ResultSet librarianSet = getEmployees();
         try {
             while(librarianSet.next()){
-                librarians.add(new Librarian(librarianSet.getString(1), librarianSet.getString(2), librarianSet.getString(3)));
+                librarians.add(new Librarian(librarianSet.getString(1), librarianSet.getString(2), librarianSet.getString(3), librarianSet.getBoolean(4)));
             }
         } catch (SQLException ex) {
             //TODO
@@ -283,7 +283,7 @@ public class DatabaseHandler implements Closeable {
             getLibrarianByIdStatement.setString(1, id);
             ResultSet librarianSet = getLibrarianByIdStatement.executeQuery();
             librarianSet.next();
-            librarian = new Librarian(librarianSet.getString(1), librarianSet.getString(2), librarianSet.getString(3));
+            librarian = new Librarian(librarianSet.getString(1), librarianSet.getString(2), librarianSet.getString(3), librarianSet.getBoolean(4));
         } catch (SQLException ex) {
             librarian = null;
         }
