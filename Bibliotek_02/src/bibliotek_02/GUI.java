@@ -20,6 +20,8 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.event.ActionEvent;
 import static javafx.application.Application.launch;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 
 /**
@@ -37,7 +39,7 @@ public class GUI extends Application {
     private TextField searchBorrower;
     private TextField searchLibrarian;
     private TableView<InventoryBook> tableViewLoansTop;
-    private TableView tableViewCopy;
+    private TableView<Copy> tableViewCopy;
     private TableView<InventoryBook> tableViewInventory;
     private TableView<Librarian> tableViewLibrarian;
     private TableView<Borrower> tableViewBorrower;
@@ -158,7 +160,7 @@ public class GUI extends Application {
         scene.getStylesheets().add(getClass().getResource("Stylesheet.css").toExternalForm());
         primaryStage.setTitle("Bibliotek X");
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(720);
+        //primaryStage.setMinHeight(720);
         primaryStage.setMinWidth(1280);
         setUser(currentUser);
         primaryStage.show();
@@ -389,18 +391,20 @@ public class GUI extends Application {
      */
     private Tab createCopyTab() {
         Tab copyTab = new Tab("Kopi");
+        
         BorderPane copyBorderPane = new BorderPane();
         VBox copyContent = new VBox();
 
         VBox copyTopContent = createCopyTopContent();
-        HBox copyBottomContent = createCopyBottomContent();
+        //HBox copyBottomContent = createCopyBottomContent();
 
         copyTab.setContent(copyBorderPane);
         copyBorderPane.setCenter(copyContent);
-        copyContent.getChildren().addAll(copyTopContent, copyBottomContent);
+        //copyContent.getChildren().addAll(copyTopContent, copyBottomContent);
+        copyContent.getChildren().addAll(copyTopContent);
 
         VBox.setVgrow(copyTopContent, Priority.ALWAYS);
-        VBox.setVgrow(copyBottomContent, Priority.ALWAYS);
+        //VBox.setVgrow(copyBottomContent, Priority.ALWAYS);
 
         return copyTab;
     }
@@ -416,9 +420,9 @@ public class GUI extends Application {
         BorderPane mainButtonContainer = new BorderPane();
         HBox buttonContainer = new HBox();
         HBox updateButtonContainer = new HBox();
-        Button updateButton = new Button("Oppdater");
-        updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
-        updateButton.setOnAction(e -> updateLoanTabLists());
+        Button returnButton = new Button("Returner");
+        returnButton.setTooltip(new Tooltip("Markerer lånet som returnert"));
+        returnButton.setOnAction(e -> returnLoan());
         tableViewCopy = new TableView();
         searchCopy = new TextField();
         
@@ -438,17 +442,22 @@ public class GUI extends Application {
         tableViewCopy.getColumns().addAll(kvittNrCol, datoCol, daysLeftCol, navnCol, allGoodCol);
 
         tableViewCopy.setItems(copyList);
-        
-        tableViewCopy.setMinSize(450, 175);
         tableViewCopy.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        updateButtonContainer.getChildren().add(updateButton);
+        buttonContainer.getChildren().add(returnButton);
         mainButtonContainer.setLeft(buttonContainer);
         mainButtonContainer.setRight(updateButtonContainer);
         topContent.getChildren().add(mainButtonContainer);
         topContent.getChildren().add(searchCopy);
         topContent.getChildren().add(tableViewCopy);
-
+        
+        VBox.setVgrow(tableViewCopy, Priority.ALWAYS);
         return topContent;
+    }
+    
+    private void returnLoan(){
+        int loanId = Integer.parseInt(tableViewCopy.getSelectionModel().getSelectedItem().getLoanID());
+        handler.returtLoan(loanId);
+        updateAllList();
     }
     
     /**
@@ -493,9 +502,9 @@ public class GUI extends Application {
         //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         inventoryTab.setContent(inventoryBorderPane);
-        inventoryBorderPane.setTop(inventoryVBox);
+        inventoryBorderPane.setCenter(inventoryVBox);
         //inventoryBorderPane.setBottom(loansBorderPaneBottom);
-
+        
         return inventoryTab;
     }
 
@@ -512,7 +521,7 @@ public class GUI extends Application {
         //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         borrowerTab.setContent(borrowerBorderPane);
-        borrowerBorderPane.setTop(borrowerVBox);
+        borrowerBorderPane.setCenter(borrowerVBox);
         //borrowerBorderPane.setBottom(loansBorderPaneBottom);
 
         return borrowerTab;
@@ -531,7 +540,7 @@ public class GUI extends Application {
         //BorderPane loansBorderPaneBottom = createLoansBorderPaneBottom();
 
         librarianTab.setContent(librarianBorderPane);
-        librarianBorderPane.setTop(librarianVBox);
+        librarianBorderPane.setCenter(librarianVBox);
         //librarianBorderPane.setBottom(loansBorderPaneBottom);
 
         return librarianTab;
@@ -547,9 +556,9 @@ public class GUI extends Application {
         BorderPane mainButtonContainer = new BorderPane();
         HBox buttonContainer = new HBox();
         HBox updateButtonContainer = new HBox();
-        Button updateButton = new Button("Oppdater");
-        updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
-        updateButton.setOnAction(e -> updateLoanTabLists());
+        //Button updateButton = new Button("Oppdater");
+        //updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
+        //updateButton.setOnAction(e -> updateLoanTabLists());
         searchBooks = new TextField();
         searchBooks.setPromptText("Søk etter Bok-ID, ISBN, Tittel, Forfatter...");
         searchBooks.textProperty().addListener((v, oldValue, newValue) -> {
@@ -571,13 +580,13 @@ public class GUI extends Application {
         });
         
         tableViewLoansTop = createBooksTable();
-        updateButtonContainer.getChildren().add(updateButton);
+        //updateButtonContainer.getChildren().add(updateButton);
         mainButtonContainer.setLeft(buttonContainer);
         mainButtonContainer.setRight(updateButtonContainer);
         loansVBox.getChildren().add(mainButtonContainer);
         loansVBox.getChildren().add(searchBooks);
         loansVBox.getChildren().add(tableViewLoansTop);
-
+        VBox.setVgrow(tableViewLoansTop, Priority.ALWAYS);
         return loansVBox;
     }
 
@@ -647,9 +656,9 @@ public class GUI extends Application {
         adminControls.add(removeButton);
         removeButton.setTooltip(new Tooltip("Fjern bok"));
         removeButton.setOnAction(e -> removeBook());
-        Button updateButton = new Button("Oppdater");
-        updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
-        updateButton.setOnAction(e -> updateBorrowerList());
+        //Button updateButton = new Button("Oppdater");
+        //updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
+        //updateButton.setOnAction(e -> updateBorrowerList());
         Button editButton = new Button("Rediger");
         adminControls.add(editButton);
         editButton.setTooltip(new Tooltip("Rediger bok"));
@@ -679,16 +688,17 @@ public class GUI extends Application {
         tableViewInventory.getColumns().addAll(antallCol, tittelCol, forfatterCol, forlagCol, ISBNCol);
 
         tableViewInventory.setItems(bookList);
-        tableViewInventory.setMinSize(450, 175);
+        //tableViewInventory.setMinSize(450, 175);
         tableViewInventory.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         buttonContainer.getChildren().addAll(addButton, removeButton, editButton);
-        updateButtonContainer.getChildren().add(updateButton);
+        //updateButtonContainer.getChildren().add(updateButton);
         mainButtonContainer.setLeft(buttonContainer);
         mainButtonContainer.setRight(updateButtonContainer);
         inventoryVBox.getChildren().add(mainButtonContainer);
         inventoryVBox.getChildren().add(searchInventory);
         inventoryVBox.getChildren().add(tableViewInventory);
-
+        
+        VBox.setVgrow(tableViewInventory, Priority.ALWAYS);
         return inventoryVBox;
     }
     
@@ -744,9 +754,9 @@ public class GUI extends Application {
                 }
             }
         });
-        Button updateButton = new Button("Oppdater");
-        updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
-        updateButton.setOnAction(e -> updateBorrowerList());
+//        Button updateButton = new Button("Oppdater");
+//        updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
+//        updateButton.setOnAction(e -> updateBorrowerList());
 
         Button editButton = new Button("Rediger");
         editButton.setTooltip(new Tooltip("Rediger lånetaker"));
@@ -787,16 +797,16 @@ public class GUI extends Application {
         tableViewBorrower.getColumns().addAll(lanetakerID, fornavnCol, etternavnCol, telefonCol);
 
         tableViewBorrower.setItems(borrowerList);
-        tableViewBorrower.setMinSize(450, 175);
+        //tableViewBorrower.setMinSize(450, 175);
         tableViewBorrower.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         buttonContainer.getChildren().addAll(addButton, removeButton, editButton);
-        updateButtonContainer.getChildren().add(updateButton);
+//        updateButtonContainer.getChildren().add(updateButton);
         mainButtonContainer.setLeft(buttonContainer);
         mainButtonContainer.setRight(updateButtonContainer);
         borrowerVBox.getChildren().add(mainButtonContainer);
         borrowerVBox.getChildren().add(searchBorrower);
         borrowerVBox.getChildren().add(tableViewBorrower);
-
+        VBox.setVgrow(tableViewBorrower, Priority.ALWAYS);
         return borrowerVBox;
     }
     
@@ -845,9 +855,9 @@ public class GUI extends Application {
         adminControls.add(removeButton);
         removeButton.setTooltip(new Tooltip("Fjern ansatt"));
         removeButton.setOnAction(e -> removeLibrarian());
-        Button updateButton = new Button("Oppdater");
-        updateButton.setTooltip(new Tooltip("Oppdater tabell"));
-        updateButton.setOnAction(e -> updateBorrowerList());
+//        Button updateButton = new Button("Oppdater");
+//        updateButton.setTooltip(new Tooltip("Oppdater tabell"));
+//        updateButton.setOnAction(e -> updateBorrowerList());
 
         Button editButton = new Button("Rediger");
         adminControls.add(editButton);
@@ -886,16 +896,16 @@ public class GUI extends Application {
         tableViewLibrarian.getColumns().addAll(librarianIDCol, fornavnCol, etternavnCol);
 
         tableViewLibrarian.setItems(librarianList);
-        tableViewLibrarian.setMinSize(450, 175);
+        //tableViewLibrarian.setMinSize(450, 175);
         tableViewLibrarian.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         buttonContainer.getChildren().addAll(addButton, removeButton, editButton);
-        updateButtonContainer.getChildren().add(updateButton);
+//        updateButtonContainer.getChildren().add(updateButton);
         mainButtonContainer.setLeft(buttonContainer);
         mainButtonContainer.setRight(updateButtonContainer);
         librarianVBox.getChildren().add(mainButtonContainer);
         librarianVBox.getChildren().add(searchLibrarian);
         librarianVBox.getChildren().add(tableViewLibrarian);
-
+        VBox.setVgrow(tableViewLibrarian, Priority.ALWAYS);
         return librarianVBox;
     }
     /**

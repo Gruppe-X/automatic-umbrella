@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,6 +41,9 @@ public class DatabaseHandler implements Closeable {
     private PreparedStatement editLibrarianStatement;
     private PreparedStatement deleteLibrarianStatement;
     private PreparedStatement getLibrarianByIdStatement;
+    
+    private PreparedStatement returnLoanStatement;
+    private PreparedStatement returnCopyStatement;
     
     private PreparedStatement numberOfLoansOnBorrowerStatement;
     
@@ -94,7 +99,9 @@ public class DatabaseHandler implements Closeable {
         getLibrarianByIdStatement = connection.prepareStatement("SELECT * FROM Ansatt WHERE AnsattID = ?");
 
         numberOfLoansOnBorrowerStatement = connection.prepareStatement("SELECT COUNT(Ln.LånetakerID) FROM Lånetaker L RIGHT JOIN Lån Ln ON L.LånetakerID = Ln.LånetakerID WHERE L.LånetakerID = ?");
-
+        
+        returnLoanStatement = connection.prepareStatement("UPDATE Lån SET Levert = 1 WHERE LånID = ?");
+        returnCopyStatement = connection.prepareStatement("UPDATE Eksemplar SET LånId = NULL, Utlånt = 0 WHERE LånId = ?");
     }
     
     /**
@@ -647,5 +654,27 @@ public class DatabaseHandler implements Closeable {
         } catch (SQLException ex) {
             return -1;
         }
+    }
+    
+    public boolean returtLoan(int loanId){
+        boolean success = false;
+        try{
+            connection.setAutoCommit(false);
+            returnLoanStatement.setInt(1, loanId);
+            returnLoanStatement.executeUpdate();
+            returnCopyStatement.setInt(1, loanId);
+            returnCopyStatement.executeUpdate();
+            connection.commit();
+        } catch (SQLException SQLEx){
+            success = false;
+            System.out.println(SQLEx.getMessage());
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                success = false;
+            }
+        }
+        return success;
     }
 }
