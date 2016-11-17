@@ -1,6 +1,7 @@
 package bibliotek_02;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javafx.application.Application;
@@ -19,6 +20,7 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.event.ActionEvent;
 import static javafx.application.Application.launch;
+import javafx.scene.Node;
 
 /**
  *
@@ -60,6 +62,8 @@ public class GUI extends Application {
 
     private ObservableList<BookCopy> copyRegisteredForLoanList;
     private ObservableList<Borrower> loanBorrowers;
+    
+    private List<Node> adminControls;
 
     private final int DEFAULT_LOAN_DURATION = 30;
 
@@ -102,6 +106,8 @@ public class GUI extends Application {
         editLibrarianView = new EditLibrarianView();
         
         employeeView = new ChooseEmployeeView(handler);
+        
+        adminControls = new ArrayList<>();
 
         boolean checkID = true;
         while (checkID) {
@@ -154,12 +160,34 @@ public class GUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(720);
         primaryStage.setMinWidth(1280);
+        setUser(currentUser);
         primaryStage.show();
         // Close window confirmation
         primaryStage.setOnCloseRequest(e -> {
             e.consume();
             doExitApplication();
         });
+    }
+    
+    private void setUser(Librarian user){
+        if(user.isAdmin()){
+            enableAdminControls();
+        } else {
+            disableAdminControls();
+        }
+        currentUser = user;
+    }
+    
+    private void enableAdminControls(){
+        for(Node node : adminControls){
+            node.setDisable(false);
+        }
+    }
+    
+    private void disableAdminControls(){
+        for(Node node : adminControls){
+            node.setDisable(true);
+        }
     }
 
     /**
@@ -612,17 +640,19 @@ public class GUI extends Application {
         });
         
         Button addButton = new Button("Legg til");
-        addButton.setTooltip(new Tooltip("Legg til lånetaker"));
-        
+        addButton.setTooltip(new Tooltip("Legg til bok"));
+        adminControls.add(addButton);
         addButton.setOnAction(e -> addBook());
         Button removeButton = new Button("Fjern");
-        removeButton.setTooltip(new Tooltip("Fjern lånetaker"));
+        adminControls.add(removeButton);
+        removeButton.setTooltip(new Tooltip("Fjern bok"));
         removeButton.setOnAction(e -> removeBook());
         Button updateButton = new Button("Oppdater");
         updateButton.setTooltip(new Tooltip("Oppdater tabellen"));
         updateButton.setOnAction(e -> updateBorrowerList());
         Button editButton = new Button("Rediger");
-        editButton.setTooltip(new Tooltip("Rediger lånetaker"));
+        adminControls.add(editButton);
+        editButton.setTooltip(new Tooltip("Rediger bok"));
         editButton.setOnAction(e -> {
             if(tableViewInventory.getSelectionModel().getSelectedItem() != null){
                 editBook(tableViewInventory.getSelectionModel().getSelectedItem());
@@ -703,6 +733,7 @@ public class GUI extends Application {
         addButton.setTooltip(new Tooltip("Legg til lånetaker"));
         addButton.setOnAction(e -> addBorrower());
         Button removeButton = new Button("Fjern");
+        adminControls.add(removeButton);
         removeButton.setTooltip(new Tooltip("Fjern lånetaker"));
         removeButton.setOnAction((ActionEvent event) -> {
             if (tableViewBorrower.getSelectionModel().getSelectedItem() != null) {
@@ -807,9 +838,11 @@ public class GUI extends Application {
         tableViewLibrarian = new TableView();
         searchLibrarian = new TextField();
         Button addButton = new Button("Legg til");
+        adminControls.add(addButton);
         addButton.setTooltip(new Tooltip("Legg til ny ansatt"));
         addButton.setOnAction(e -> addLibrarian());
         Button removeButton = new Button("Fjern");
+        adminControls.add(removeButton);
         removeButton.setTooltip(new Tooltip("Fjern ansatt"));
         removeButton.setOnAction(e -> removeLibrarian());
         Button updateButton = new Button("Oppdater");
@@ -817,6 +850,7 @@ public class GUI extends Application {
         updateButton.setOnAction(e -> updateBorrowerList());
 
         Button editButton = new Button("Rediger");
+        adminControls.add(editButton);
         editButton.setTooltip(new Tooltip("Rediger ansatt"));
         editButton.setOnAction(e -> {
             if(tableViewLibrarian.getSelectionModel().getSelectedItem() != null){
