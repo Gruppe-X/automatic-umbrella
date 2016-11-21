@@ -4,49 +4,61 @@
 */
 
 
-/*.root {
-    -fx-background-color: #283244;
-    -fx-text-fill: #283244;
-}
 
+
+/*.root {
+    -fx-background-color: #1e222d;
+    -fx-text-fill: #78B6EC;
+}
  Tab Pane 
  Background color of the tab pane 
+
+
+
+
 .tab-header-area .tab-header-background {
-    -fx-background-color: #283244;
+    -fx-background-color: #1e222d;
 }
+
+
 
 
  Color of the tabs above the table 
 .tab-pane .tab {
-    -fx-background-color: #222B3A;
-    -fx-text-fill: #CFD0D3;
+    -fx-background-color: #1e222d;
 }
+
+
 
 
  Color of the text in the tab 
 .tab-label {
-    -fx-text-fill: #CFD0D3;
+    -fx-text-fill: #78B6EC;
 }
+
+
 
 
  Color when mouseover on the tabs above the table 
 .tab-pane .tab:hover {
-    -fx-background-color: #1E2533;
-    -fx-text-fill: #CFD0D3;
 }
+
+
 
 
  Color of the currently selected tab
 .tab-pane .tab:selected { 
-    -fx-background-color: #202837;
-    -fx-text-fill: #CFD0D3;
 }
+
+
 
 
  Background color of the window 
 .tab-pane {
-    -fx-background-color: #283244;
+    -fx-background-color: #1e222d;
 }
+
+
 
 
  Background color of the table (If it is empty)
@@ -55,10 +67,14 @@
 }
 
 
+
+
  Color of the rows in the tables 
 .table-row-cell {
     
 }
+
+
 
 
  Color of the odd numbered rows in the tables 
@@ -67,10 +83,14 @@
 }
 
 
+
+
  Text color in the table 
 .table-view .table-cell{
     
 }
+
+
 
 
 .button {
@@ -86,6 +106,8 @@
 }
 
 
+
+
 .button:hover {
        -fx-background-color: 
            #707070,
@@ -98,40 +120,46 @@
        -fx-font-size: 12px;
 }
 
- ---- BUTTONS ---- 
+
+
+
 .button {
-    -fx-background-color: #222B3A;
-    -fx-text-fill: #CFD0D3;
-    -fx-border-color: #47505F;
+    -fx-background-color: #1e222d;
+    -fx-text-fill: #6EA5D5;
+    -fx-border-color: #4d75a4;
 }
+
 
 .button:hover {
-    -fx-background-color: #1E2533;
-    -fx-text-fill: #CFD0D3;
-    -fx-border-color: #5D6572;
+    -fx-background-color: #0066cc;
+    -fx-text-fill: #00ff00;
+    -fx-border-color: pink;
 }
 
+
 .button:pressed {
-    -fx-background-color: #202837;
-    -fx-text-fill: #CFD0D3;
-    -fx-border-color: #3D4656;
-    -fx-border-top-color: #161B25;
-    -fx-border-left-color: #161B25;
+    -fx-background-color:green;
 }
+
 
 .text-field { 
     -fx-background-color: #1e222d;
     -fx-text-fill: #6EA5D5;
 }
 
+
 .table-view {
    -fx-background-color: transparent;
 }
 
 
+
+
 .table-view:focused {
     -fx-background-color: transparent;
 }
+
+
 
 
  Table Column Colors 
@@ -140,10 +168,14 @@
 }
 
 
+
+
 .table-view .column-header-background .label{
     -fx-background-color: transparent;
     -fx-text-fill: whitesmoke;
 }
+
+
 
 
 .table-view .column-header {
@@ -151,40 +183,48 @@
 }
 
 
+
+
 .table-view .table-cell{
-    -fx-text-fill: #6EA5D5;
+    -fx-text-fill: white;
 }
+
+
 
 
  Table row cell styles 
 .table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color, #1D222C;
+    -fx-background-color: -fx-table-cell-border-color, #181818;
     -fx-table-cell-border-color: transparent;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;  0 
 }
 
 
+
+
 .table-row-cell:odd{
-    -fx-background-color: -fx-table-cell-border-color, #1D222C;
+    -fx-background-color: -fx-table-cell-border-color, #181818;
     -fx-table-cell-border-color: transparent;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;  0   
 }
 
+
 .table-row-cell:hover {
-    -fx-background-color: #242932;
-    -fx-table-cell-border-color: #4A4E56;
+    -fx-background-color: #282828;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
 
+
 .table-row-cell:selected {
-    -fx-background-color: #192D47;
-    -fx-table-cell-border-color: #256CAB;
+    -fx-background-color: #333333;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
+
+
 
 
 .table-view > .virtual-flow > .scroll-bar:vertical,
@@ -199,10 +239,16 @@
 
 
 
+
+
+
+
 .table-view > .virtual-flow > .scroll-bar > .increment-button, 
 .table-view > .virtual-flow > .scroll-bar > .decrement-button {
     -fx-opacity: 0;
 }
+
+
 
 
 .table-view .filler {
