@@ -1049,9 +1049,11 @@ public class GUI extends Application {
     //TODO legg til feilmelding
     private void addBook() {
         InventoryBook newBook = addBookView.display();
-//        if (newBook != null && handler.addBook(newBook)) {
-//            System.out.println(newBook.getBookName() + " was added");
-//        }
+        if (newBook != null && handler.addBook(newBook)) {
+            System.out.println(newBook.getBookName() + " was added");
+        } else {
+            //System.out.println("Failed to add book");
+        }
         updateBookList();
     }
 
@@ -1060,9 +1062,11 @@ public class GUI extends Application {
      */
     private void addBorrower() {
         Borrower newBorrower = addBorrowerView.display();
-//        if (newBorrower != null && handler.addBorrower(newBorrower)) {
-//            System.out.println(newBorrower.getFirstName() + " was added");
-//        }
+        if (newBorrower != null && handler.addBorrower(newBorrower)) {
+            System.out.println(newBorrower.getFirstName() + " was added");
+        } else {
+            //System.out.println("Failed to add borrower");
+        }
         updateBorrowerList();
         updateLoanBorrowers();
     }
@@ -1072,9 +1076,11 @@ public class GUI extends Application {
      */
     private void addLibrarian() {
         Librarian newLibrarian = addLibrarianView.display();
-//        if (newLibrarian != null && handler.addLibrarian(newLibrarian)) {
-//            System.out.println(newLibrarian.getFirstName() + " was added");
-//        }
+        if (newLibrarian != null && handler.addLibrarian(newLibrarian)) {
+            System.out.println(newLibrarian.getFirstName() + " was added");
+        } else {
+            //System.out.println("Failed to add employee");
+        }
         updateLibrarianList();
     }
 
