@@ -1052,7 +1052,7 @@ public class GUI extends Application {
         if (newBook != null && handler.addBook(newBook)) {
             System.out.println(newBook.getBookName() + " was added");
         } else {
-            System.out.println("Failed to add book");
+            //System.out.println("Failed to add book");
         }
         updateBookList();
     }
@@ -1065,7 +1065,7 @@ public class GUI extends Application {
         if (newBorrower != null && handler.addBorrower(newBorrower)) {
             System.out.println(newBorrower.getFirstName() + " was added");
         } else {
-            System.out.println("Failed to add borrower");
+            //System.out.println("Failed to add borrower");
         }
         updateBorrowerList();
         updateLoanBorrowers();
@@ -1079,7 +1079,7 @@ public class GUI extends Application {
         if (newLibrarian != null && handler.addLibrarian(newLibrarian)) {
             System.out.println(newLibrarian.getFirstName() + " was added");
         } else {
-            System.out.println("Failed to add employee");
+            //System.out.println("Failed to add employee");
         }
         updateLibrarianList();
     }
