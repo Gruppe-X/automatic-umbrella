@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 public class DatabaseHandler implements Closeable {
     
     private final String connString = "jdbc:sqlserver://roberris-prosjektx.uials.no;databaseName=Bibliotek;username=sa;password=password123";
+    //private final String connString = "jdbc:sqlserver://localhost;databaseName=BibliotekScriptTest;username=sa;password=password123";
     private Connection connection;
     private PreparedStatement searchStatement;
     private PreparedStatement bookCopyJoinStatement;
@@ -228,7 +229,6 @@ public class DatabaseHandler implements Closeable {
     }
     
     public List<BookCopy> getAvailableCopys(InventoryBook book){
-        System.out.println(book.getBookID());
         List<BookCopy> selectedCopys = new ArrayList<>();
         ResultSet results;
         try{
