@@ -28,7 +28,7 @@ public class Librarian {
     
     public Librarian(String employeeFirstName, String employeeLastName)
     {
-        this(employeeFirstName, employeeLastName, null);
+        this(null, employeeFirstName, employeeLastName);
     }
     
     /**

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Logger;    
 
 /**
  *
@@ -20,7 +20,8 @@ import java.util.logging.Logger;
  */
 public class DatabaseHandler implements Closeable {
     
-    private final String connString = "jdbc:sqlserver://roberris-prosjektx.uials.no;databaseName=Bibliotek;username=sa;password=password123";
+    private final String connString = "jdbc:sqlserver://localhost;databaseName=Bibliotek;user=test;password=test123";
+    //private final String connString = "jdbc:sqlserver://roberris-prosjektx.uials.no;databaseName=Bibliotek;username=sa;password=password123";
     private Connection connection;
     private PreparedStatement searchStatement;
     private PreparedStatement bookCopyJoinStatement;

@@ -1198,7 +1198,7 @@ public class GUI extends Application {
             try {
                 handler.close();
             } catch (IOException ex) {
-                //Could not close SQL connection.... TODO
+                    //Could not close SQL connection.... TODO
             }
             System.exit(0);
         } else {
